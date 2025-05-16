@@ -9,7 +9,7 @@ module.exports = {
     },
     mode: "development",
     resolve: {
-        extentions: [".ts", ".js"],
+        extensions: [".ts", ".js"],
     },
     devServer: {
         static: {
