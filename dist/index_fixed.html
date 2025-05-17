@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- 外部スタイルシートを読み込み -->
+    <link rel="stylesheet" href="css/styles.css">
+    <!-- Highlight.jsスタイルを読み込み -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.7.0/build/styles/github.min.css">
+    <title>Xibo Agent</title>
+    <!-- エラーハンドリングを追加 -->
+    <script>
+        // グローバルエラーハンドリング
+        window.onerror = function(message, source, lineno, colno, error) {
+            console.error('グローバルエラー:', message, 'at', source, lineno, colno, error);
+            // エラーメッセージをUIに表示（DOMがロードされている場合）
+            if (document.readyState === 'complete' || document.readyState === 'interactive') {
+                const messageArea = document.getElementById('message-area');
+                if (messageArea) {
+                    const errorEl = document.createElement('div');
+                    errorEl.className = 'system-message';
+                    errorEl.textContent = `エラーが発生しました: ${message}`;
+                    messageArea.appendChild(errorEl);
+                }
+            }
+            return false;
+        };
+    </script>
+</head>
+<body>
+    <div class="container">
+        <div class="nav-sidebar">
+            <div class="logo-area">
+                <div class="logo-text">Xibo Agent</div>
+            </div>
+            <button id="new-chat-btn" class="new-chat-btn">新規会話</button>
+            <div id="chat-history" class="chat-history">
+                <!-- 会話履歴はJSで動的に追加される -->
+            </div>
+            <button id="settings-btn" class="settings-btn">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="3"></circle>
+                    <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+                </svg>
+                <span class="settings-text">設定</span>
+            </button>
+        </div>
+        
+        <div class="main-content">
+            <div id="message-area" class="message-area">
+                <!-- 初期メッセージ -->
+                <div class="system-message">システムを読み込み中...</div>
+            </div>
+            <div class="input-area">
+                <textarea id="message-input" placeholder="メッセージを入力..." rows="1"></textarea>
+                <button id="send-message-btn">送信</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 設定モーダル -->
+    <div id="settings-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">設定</h2>
+                <span class="close-modal">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="setting-group">
+                    <label class="setting-label" for="server-url">接続先URL</label>
+                    <input type="text" id="server-url" class="setting-input" placeholder="http://localhost:4111">
+                </div>
+                <div class="setting-group">
+                    <label class="setting-label" for="display-mode">表示モード</label>
+                    <select id="display-mode" class="setting-select">
+                        <option value="light">ライトモード</option>
+                        <option value="dark">ダークモード</option>
+                    </select>
+                </div>
+                <div class="setting-group">
+                    <label class="setting-label" for="language">言語</label>
+                    <select id="language" class="setting-select">
+                        <option value="ja">日本語</option>
+                        <option value="en">英語</option>
+                    </select>
+                </div>
+                <div class="setting-group">
+                    <label class="setting-label" for="max-history">会話履歴の最大数</label>
+                    <input type="number" id="max-history" class="setting-input" min="1" max="100" value="20">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="modal-btn cancel-btn" id="cancel-settings">キャンセル</button>
+                <button class="modal-btn save-btn" id="save-settings">保存</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 外部ライブラリを読み込み -->
+    <script src="https://cdn.jsdelivr.net/npm/markdown-it@13.0.1/dist/markdown-it.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.7.0/build/highlight.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    
+    <!-- 会話履歴保存用の簡易実装（後で実装変更予定） -->
+    <script>
+        window.saveMessageToConversation = function(text, role) {
+            console.log('会話を保存: ' + role + ': ' + text);
+            // TODO: 実際の会話履歴保存処理
+        };
+    </script>
+    
+    <!-- モジュール化されたJavaScriptファイルを読み込み (順序が重要) -->
+    <script src="js/config.js"></script>
+    <script src="js/markdown.js"></script>
+    <script src="js/message.js"></script>
+    <script src="js/ui.js"></script>
+    
+    <!-- markdown-itの初期化 -->
+    <script>
+        try {
+            // markdown-itのインスタンスを作成
+            window.md = window.markdownit({
+                html: true,
+                linkify: true,
+                typographer: true,
+                breaks: true,
+                highlight: function (str, lang) {
+                    if (lang && hljs && hljs.getLanguage(lang)) {
+                        try {
+                            return '<pre class="hljs"><code>' + 
+                                hljs.highlight(str, { language: lang }).value + 
+                                '</code></pre>';
+                        } catch (err) {
+                            console.error('Highlight.js エラー:', err);
+                        }
+                    }
+                    return '<pre class="hljs"><code>' + window.md.utils.escapeHtml(str) + '</code></pre>';
+                }
+            });
+            
+            // Mermaidの初期化
+            if (window.mermaid) {
+                window.mermaid.initialize({ 
+                    startOnLoad: false,
+                    theme: 'forest',
+                    securityLevel: 'loose',
+                    logLevel: 'error'
+                });
+            }
+        } catch (e) {
+            console.error('マークダウン初期化エラー:', e);
+        }
+    </script>
+    
+    <!-- 初期化スクリプト -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('DOM読み込み完了');
+            
+            // テストメッセージを表示（500ms待機）
+            setTimeout(function() {
+                try {
+                    const messageArea = document.getElementById('message-area');
+                    if (messageArea) {
+                        messageArea.innerHTML = ''; // 初期メッセージをクリア
+                        
+                        // xiboMessageが初期化されていれば、そのAPIを使用
+                        if (window.xiboMessage && typeof window.xiboMessage.addMessage === 'function') {
+                            window.xiboMessage.addMessage('Xibo Agentへようこそ', 'system');
+                            window.xiboMessage.addMessage('何かお手伝いできることはありますか？', 'assistant');
+                        } else {
+                            // 直接DOMに追加
+                            const systemMsg = document.createElement('div');
+                            systemMsg.className = 'system-message';
+                            systemMsg.textContent = 'Xibo Agentへようこそ';
+                            messageArea.appendChild(systemMsg);
+                            
+                            const assistantMsg = document.createElement('div');
+                            assistantMsg.className = 'message-bubble assistant-message';
+                            assistantMsg.textContent = '何かお手伝いできることはありますか？';
+                            messageArea.appendChild(assistantMsg);
+                        }
+                    }
+                    
+                    // 送信ボタンのイベント設定
+                    const sendBtn = document.getElementById('send-message-btn');
+                    const msgInput = document.getElementById('message-input');
+                    
+                    if (sendBtn && msgInput) {
+                        sendBtn.addEventListener('click', function() {
+                            const text = msgInput.value.trim();
+                            if (!text) return;
+                            
+                            if (window.xiboUI && typeof window.xiboUI.sendMessage === 'function') {
+                                window.xiboUI.sendMessage(text);
+                            } else if (window.xiboMessage && typeof window.xiboMessage.addMessage === 'function') {
+                                // 最低限のメッセージ表示機能
+                                window.xiboMessage.addMessage(text, 'user');
+                                msgInput.value = '';
+                                
+                                // デモ応答
+                                setTimeout(function() {
+                                    window.xiboMessage.addMessage('テスト応答です。通常はサーバーからの応答がここに表示されます。', 'assistant');
+                                }, 1000);
+                            } else {
+                                // フォールバック
+                                const userMsg = document.createElement('div');
+                                userMsg.className = 'message-bubble user-message';
+                                userMsg.textContent = text;
+                                messageArea.appendChild(userMsg);
+                                msgInput.value = '';
+                                
+                                // デモ応答
+                                setTimeout(function() {
+                                    const assistantMsg = document.createElement('div');
+                                    assistantMsg.className = 'message-bubble assistant-message';
+                                    assistantMsg.textContent = 'テスト応答です。通常はサーバーからの応答がここに表示されます。';
+                                    messageArea.appendChild(assistantMsg);
+                                }, 1000);
+                            }
+                        });
+                        
+                        // エンターキー対応
+                        msgInput.addEventListener('keydown', function(e) {
+                            if (e.key === 'Enter' && !e.shiftKey) {
+                                e.preventDefault();
+                                sendBtn.click();
+                            }
+                        });
+                    }
+                } catch (e) {
+                    console.error('初期化エラー:', e);
+                }
+            }, 500);
+        });
+    </script>
+</body>
+</html> 

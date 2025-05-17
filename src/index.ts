@@ -382,7 +382,10 @@ document.addEventListener('DOMContentLoaded', () => {
             const deleteBtn = document.createElement('button');
             deleteBtn.className = 'delete-chat-btn';
             deleteBtn.title = 'この会話を削除';
-            deleteBtn.innerHTML = '<span>×</span>';
+            deleteBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="3 6 5 6 21 6"></polyline>
+                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+            </svg>`;
             deleteBtn.addEventListener('click', (e) => {
                 e.stopPropagation();
                 if (confirm(`「${conversation.title || '無題の会話'}」を削除しますか？`)) {
@@ -717,6 +720,11 @@ document.addEventListener('DOMContentLoaded', () => {
             sendMessageBtn.disabled = true;
             messageInput.disabled = true;
             
+            // ストリーミング応答用のメッセージ要素を作成
+            const streamMsgEl = (window as any).createStreamingMessage 
+                ? (window as any).createStreamingMessage('', 'assistant')
+                : null;
+            
             // エージェントにメッセージを送信
             const generateRequest = {
                 messages: [
@@ -727,69 +735,173 @@ document.addEventListener('DOMContentLoaded', () => {
                 ]
             };
             
-            // まず直接APIリクエストで試行
+            // まずストリーミングエンドポイントを試す
             try {
-                const directResponse = await directApiRequest(
-                    `${baseUrl}${currentEndpoint}`,
-                    'POST',
-                    generateRequest
-                );
+                // ストリーミングエンドポイント（EventSourceを使用）
+                const streamUrl = `${baseUrl}${API_ENDPOINTS.ALTERNATIVE}`;
+                const queryParams = new URLSearchParams({
+                    stream: 'true'
+                }).toString();
                 
-                if (directResponse && directResponse.text) {
-                    addMessage(directResponse.text, 'assistant');
-                } else {
-                    throw new Error('応答のテキストフィールドがありません');
+                const fullStreamUrl = `${streamUrl}?${queryParams}`;
+                
+                debug('ストリーミング接続を試みます', fullStreamUrl);
+                
+                // コンテンツの組み立て用
+                let fullContent = '';
+                
+                // リクエストを送信してFetchを使用したストリーミング処理
+                const response = await fetch(fullStreamUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(generateRequest)
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`ストリーミングHTTPエラー: ${response.status}`);
                 }
-            } catch (directError) {
-                debug('APIリクエストエラー', directError);
                 
-                // 代替エンドポイントを試す
-                try {
-                    const altEndpoint = changeEndpoint(API_ENDPOINTS.ALTERNATIVE);
-                    addMessage(`代替エンドポイントを試します...`, 'system');
+                if (!response.body) {
+                    throw new Error('ストリーミングレスポンスにbodyがありません');
+                }
+                
+                // ストリームからデータを読み込む
+                const reader = response.body.getReader();
+                const decoder = new TextDecoder('utf-8');
+                
+                let done = false;
+                while (!done) {
+                    const { value, done: readerDone } = await reader.read();
+                    done = readerDone;
                     
-                    const altResponse = await directApiRequest(
-                        `${baseUrl}${altEndpoint}`,
+                    if (value) {
+                        const chunk = decoder.decode(value, { stream: !done });
+                        
+                        try {
+                            // チャンクを解析
+                            const isSSEFormat = chunk.includes('f:{') || chunk.includes('0:"') || chunk.includes('e:{');
+                            
+                            if (isSSEFormat && typeof (window as any).parseSSEChunk === 'function') {
+                                // SSE形式のチャンクを解析
+                                const parsedChunk = (window as any).parseSSEChunk(chunk);
+                                
+                                // 解析されたコンテンツを追加
+                                if (parsedChunk) {
+                                    fullContent += parsedChunk;
+                                    
+                                    // ストリーミングメッセージを更新
+                                    if (streamMsgEl) {
+                                        streamMsgEl.update(fullContent);
+                                    }
+                                }
+                            } else {
+                                // 通常のテキスト処理
+                                fullContent += chunk;
+                                
+                                // ストリーミングメッセージを更新
+                                if (streamMsgEl) {
+                                    streamMsgEl.update(fullContent);
+                                }
+                            }
+                        } catch (parseError) {
+                            debug('ストリーミングデータ解析エラー', parseError);
+                            // 解析に失敗した場合は生のチャンクを追加
+                            fullContent += chunk;
+                            
+                            // ストリーミングメッセージを更新
+                            if (streamMsgEl) {
+                                streamMsgEl.update(fullContent);
+                            }
+                        }
+                    }
+                }
+                
+                // ストリーミング完了
+                debug('ストリーミング完了', fullContent.length);
+                
+                // ストリーミングメッセージを完了状態に
+                if (streamMsgEl) {
+                    streamMsgEl.complete(fullContent);
+                } else {
+                    // ストリーミング非対応の場合は通常のメッセージ表示
+                    addMessage(fullContent, 'assistant');
+                }
+                
+                return; // 成功したので終了
+            } catch (streamError) {
+                debug('ストリーミングエラー、通常APIにフォールバック', streamError);
+                
+                // ストリーミングメッセージがあれば削除
+                if (streamMsgEl && streamMsgEl.element) {
+                    streamMsgEl.element.remove();
+                }
+                
+                // 通常の直接APIリクエストを試行
+                try {
+                    const directResponse = await directApiRequest(
+                        `${baseUrl}${currentEndpoint}`,
                         'POST',
                         generateRequest
                     );
                     
-                    if (altResponse && altResponse.text) {
-                        addMessage(altResponse.text, 'assistant');
+                    if (directResponse && directResponse.text) {
+                        addMessage(directResponse.text, 'assistant');
                     } else {
-                        // フォールバックを試す
-                        const fallbackEndpoint = changeEndpoint(API_ENDPOINTS.FALLBACK);
-                        addMessage(`フォールバックエンドポイントを試します...`, 'system');
+                        throw new Error('応答のテキストフィールドがありません');
+                    }
+                } catch (directError) {
+                    debug('APIリクエストエラー', directError);
+                    
+                    // 代替エンドポイントを試す
+                    try {
+                        const altEndpoint = changeEndpoint(API_ENDPOINTS.ALTERNATIVE);
+                        addMessage(`代替エンドポイントを試します...`, 'system');
                         
-                        const fallbackResponse = await directApiRequest(
-                            `${baseUrl}${fallbackEndpoint}`,
+                        const altResponse = await directApiRequest(
+                            `${baseUrl}${altEndpoint}`,
                             'POST',
                             generateRequest
                         );
                         
-                        if (fallbackResponse && fallbackResponse.text) {
-                            addMessage(fallbackResponse.text, 'assistant');
+                        if (altResponse && altResponse.text) {
+                            addMessage(altResponse.text, 'assistant');
                         } else {
-                            addMessage('すべてのAPIエンドポイントが応答しませんでした。サーバー設定を確認してください。', 'system');
+                            // フォールバックを試す
+                            const fallbackEndpoint = changeEndpoint(API_ENDPOINTS.FALLBACK);
+                            addMessage(`フォールバックエンドポイントを試します...`, 'system');
+                            
+                            const fallbackResponse = await directApiRequest(
+                                `${baseUrl}${fallbackEndpoint}`,
+                                'POST',
+                                generateRequest
+                            );
+                            
+                            if (fallbackResponse && fallbackResponse.text) {
+                                addMessage(fallbackResponse.text, 'assistant');
+                            } else {
+                                addMessage('すべてのAPIエンドポイントが応答しませんでした。サーバー設定を確認してください。', 'system');
+                            }
                         }
-                    }
-                } catch (altError) {
-                    debug('代替/フォールバックエンドポイントエラー', altError);
-                    addMessage('すべてのAPIエンドポイントでエラーが発生しました。', 'system');
-                    
-                    // 通常のエージェントAPIでも試してみる
-                    addMessage('通常のエージェントAPIを試します...', 'system');
-                    try {
-                        const response = await agent.generate(generateRequest);
+                    } catch (altError) {
+                        debug('代替/フォールバックエンドポイントエラー', altError);
+                        addMessage('すべてのAPIエンドポイントでエラーが発生しました。', 'system');
                         
-                        if (response && response.text) {
-                            addMessage(response.text, 'assistant');
-                        } else {
-                            addMessage('エージェントからの応答が無効です', 'system');
+                        // 通常のエージェントAPIでも試してみる
+                        addMessage('通常のエージェントAPIを試します...', 'system');
+                        try {
+                            const response = await agent.generate(generateRequest);
+                            
+                            if (response && response.text) {
+                                addMessage(response.text, 'assistant');
+                            } else {
+                                addMessage('エージェントからの応答が無効です', 'system');
+                            }
+                        } catch (agentError) {
+                            debug('エージェントAPI呼び出しエラー', agentError);
+                            addMessage(`エージェントAPI呼び出しエラー: ${agentError instanceof Error ? agentError.message : '不明なエラー'}`, 'system');
                         }
-                    } catch (agentError) {
-                        debug('エージェントAPI呼び出しエラー', agentError);
-                        addMessage(`エージェントAPI呼び出しエラー: ${agentError instanceof Error ? agentError.message : '不明なエラー'}`, 'system');
                     }
                 }
             }
@@ -963,4 +1075,33 @@ document.addEventListener('DOMContentLoaded', () => {
     // グローバルに設定更新関数を公開（HTML側から呼び出せるようにする）
     (window as any).updateXiboConfig = updateConfig;
     (window as any).getXiboConfig = () => config;
+
+    /**
+     * SSEストリーミングデータを解析する関数
+     * @param {string} chunk - 受信したSSEストリーミングデータ
+     * @returns {string} - 解析されたメッセージ内容
+     */
+    function parseSSEChunk(chunk: string): string {
+        // f:, 0:, e:, d: のような形式で始まる行を処理
+        const lines = chunk.split('\n');
+        let parsedContent = '';
+
+        for (const line of lines) {
+            // 行の先頭が特定のプレフィックスで始まるか確認
+            if (line.startsWith('0:')) {
+                // 0: はメッセージ本文を示す
+                // 0:"メッセージ内容" の形式から内容部分を抽出
+                const content = line.substring(2);
+                // 内容が引用符で囲まれている場合は引用符を削除
+                if (content.startsWith('"') && content.endsWith('"')) {
+                    parsedContent += content.substring(1, content.length - 1);
+                } else {
+                    parsedContent += content;
+                }
+            }
+            // f: (メッセージID)、e: (終了ステータス)、d: (追加データ) は無視
+        }
+
+        return parsedContent;
+    }
 }); 
