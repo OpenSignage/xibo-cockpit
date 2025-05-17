@@ -1,0 +1,1044 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- 外部スタイルシートを読み込み -->
+    <link rel="stylesheet" href="css/styles.css">
+    <!-- Highlight.jsスタイルを読み込み -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.7.0/build/styles/github.min.css">
+    <title>Xibo Agent</title>
+    <!-- エラーハンドリングを追加 -->
+    <script>
+        // グローバルエラーハンドリング
+        window.onerror = function(message, source, lineno, colno, error) {
+            console.error('グローバルエラー:', message, 'at', source, lineno, colno, error);
+            // エラーメッセージをUIに表示（DOMがロードされている場合）
+            if (document.readyState === 'complete' || document.readyState === 'interactive') {
+                const messageArea = document.getElementById('message-area');
+                if (messageArea) {
+                    const errorEl = document.createElement('div');
+                    errorEl.className = 'system-message';
+                    errorEl.textContent = `エラーが発生しました: ${message}`;
+                    messageArea.appendChild(errorEl);
+                }
+            }
+            return false;
+        };
+    </script>
+</head>
+<body>
+    <div class="container">
+        <div class="nav-sidebar">
+            <div class="logo-area">
+                <div class="logo-text">Xibo Agent</div>
+            </div>
+            <button id="new-chat-btn" class="new-chat-btn">新規会話</button>
+            <div id="chat-history" class="chat-history">
+                <!-- 会話履歴はJSで動的に追加される -->
+            </div>
+            <button id="settings-btn" class="settings-btn">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="3"></circle>
+                    <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+                </svg>
+                <span class="settings-text">設定</span>
+            </button>
+        </div>
+        
+        <div class="main-content">
+            <div id="message-area" class="message-area">
+                <!-- 初期メッセージ -->
+                <div class="system-message">システムを読み込み中...</div>
+            </div>
+            <div class="input-area">
+                <textarea id="message-input" placeholder="メッセージを入力..." rows="1"></textarea>
+                <button id="send-message-btn">送信</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 設定モーダル -->
+    <div id="settings-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">設定</h2>
+                <span class="close-modal">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="setting-group">
+                    <label class="setting-label" for="server-url">接続先URL</label>
+                    <input type="text" id="server-url" class="setting-input" placeholder="http://localhost:4111">
+                </div>
+                <div class="setting-group">
+                    <label class="setting-label" for="display-mode">表示モード</label>
+                    <select id="display-mode" class="setting-select">
+                        <option value="light">ライトモード</option>
+                        <option value="dark">ダークモード</option>
+                    </select>
+                </div>
+                <div class="setting-group">
+                    <label class="setting-label" for="language">言語</label>
+                    <select id="language" class="setting-select">
+                        <option value="ja">日本語</option>
+                        <option value="en">英語</option>
+                    </select>
+                </div>
+                <div class="setting-group">
+                    <label class="setting-label" for="max-history">会話履歴の最大数</label>
+                    <input type="number" id="max-history" class="setting-input" min="1" max="100" value="20">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="modal-btn cancel-btn" id="cancel-settings">キャンセル</button>
+                <button class="modal-btn save-btn" id="save-settings">保存</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 外部ライブラリを読み込み -->
+    <script src="https://cdn.jsdelivr.net/npm/markdown-it@13.0.1/dist/markdown-it.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.7.0/build/highlight.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    
+    <!-- 会話履歴保存用のグローバル関数 -->
+    <script>
+        // 会話タイトルを作成する関数
+        function createConversationTitle(message) {
+            if (!message || typeof message !== 'string') {
+                return '新しい会話';
+            }
+            
+            // マークダウンコード部分を除去
+            let cleanMessage = message.replace(/```[\s\S]*?```/g, '');
+            
+            // 最初の行を取得
+            const firstLine = cleanMessage.split('\n')[0];
+            
+            // マークダウンの見出し記号を削除
+            const titleText = firstLine.replace(/^#+\s+/, '');
+            
+            // 30文字で切り詰め
+            return titleText.substring(0, 30) + (titleText.length > 30 ? '...' : '');
+        }
+        
+        window.saveMessageToConversation = function(text, role) {
+            if (!text || typeof text !== 'string' || text.trim() === '') {
+                console.warn('保存できない無効なメッセージ:', text);
+                return;
+            }
+            
+            console.log('会話を保存: ' + role + ': ' + text);
+            
+            try {
+                // 会話履歴をローカルストレージに保存
+                const conversationId = localStorage.getItem('current_conversation_id') || 'default';
+                
+                // 現在の会話履歴を取得
+                let conversations = localStorage.getItem('xibo_conversations');
+                conversations = conversations ? JSON.parse(conversations) : {};
+                
+                // 現在の会話が存在しなければ作成
+                if (!conversations[conversationId]) {
+                    // 新しい会話のタイトルはメッセージから生成
+                    const title = role === 'user' ? createConversationTitle(text) : '新しい会話';
+                    
+                    conversations[conversationId] = {
+                        id: conversationId,
+                        title: title,
+                        messages: [],
+                        createdAt: Date.now()
+                    };
+                } else if (role === 'user' && conversations[conversationId].messages.length === 0) {
+                    // 最初のユーザーメッセージがある場合は、タイトルを更新
+                    conversations[conversationId].title = createConversationTitle(text);
+                }
+                
+                // 重複確認（同じ内容・ロールのメッセージが連続で追加されるのを防止）
+                const lastMessage = conversations[conversationId].messages.length > 0 ? 
+                    conversations[conversationId].messages[conversations[conversationId].messages.length - 1] : null;
+                
+                if (lastMessage && lastMessage.role === role && lastMessage.content === text) {
+                    console.log('重複メッセージなので保存しません');
+                    return;
+                }
+                
+                // メッセージを追加
+                conversations[conversationId].messages.push({
+                    role: role,
+                    content: text,
+                    timestamp: Date.now()
+                });
+                
+                // 最新の日時で更新
+                conversations[conversationId].createdAt = Date.now();
+                
+                // 会話履歴を保存
+                localStorage.setItem('xibo_conversations', JSON.stringify(conversations));
+                
+                // 会話履歴を表示
+                updateChatHistory();
+            } catch (error) {
+                console.error('会話の保存に失敗しました:', error);
+            }
+        };
+        
+        // 会話履歴を表示する関数
+        function updateChatHistory() {
+            try {
+                const chatHistory = document.getElementById('chat-history');
+                if (!chatHistory) return;
+                
+                // 会話履歴を取得
+                let conversations = localStorage.getItem('xibo_conversations');
+                conversations = conversations ? JSON.parse(conversations) : {};
+                
+                // 現在の会話ID
+                const currentId = localStorage.getItem('current_conversation_id') || 'default';
+                
+                // 会話履歴をクリア
+                chatHistory.innerHTML = '';
+                
+                // 会話を日付の新しい順に並べ替え
+                const conversationList = Object.values(conversations).sort((a, b) => {
+                    return b.createdAt - a.createdAt;
+                });
+                
+                // 設定から最大履歴数を取得
+                let maxHistory = 20;
+                if (window.xiboConfig && typeof window.xiboConfig.getXiboConfig === 'function') {
+                    const config = window.xiboConfig.getXiboConfig();
+                    maxHistory = config.maxHistory || 20;
+                }
+                
+                // 最大数を超える会話を削除
+                if (conversationList.length > maxHistory) {
+                    const toRemove = conversationList.slice(maxHistory);
+                    toRemove.forEach(conv => {
+                        delete conversations[conv.id];
+                    });
+                    localStorage.setItem('xibo_conversations', JSON.stringify(conversations));
+                }
+                
+                // 表示する会話を制限
+                const displayConversations = conversationList.slice(0, maxHistory);
+                
+                // 会話履歴のヘッダーを追加
+                if (displayConversations.length > 0) {
+                    const historyHeader = document.createElement('div');
+                    historyHeader.className = 'history-header';
+                    
+                    const headerTitle = document.createElement('div');
+                    headerTitle.className = 'history-title';
+                    headerTitle.textContent = '会話履歴';
+                    
+                    const clearAllBtn = document.createElement('button');
+                    clearAllBtn.className = 'clear-all-btn';
+                    clearAllBtn.title = 'すべての履歴を削除';
+                    clearAllBtn.innerHTML = '<span>🗑️</span>';
+                    clearAllBtn.addEventListener('click', function(e) {
+                        e.stopPropagation();
+                        if (confirm('すべての会話履歴を削除しますか？この操作は元に戻せません。')) {
+                            // すべての会話を削除
+                            localStorage.removeItem('xibo_conversations');
+                            localStorage.removeItem('current_conversation_id');
+                            // メッセージエリアをクリア
+                            const messageArea = document.getElementById('message-area');
+                            if (messageArea) {
+                                messageArea.innerHTML = '';
+                                
+                                // 初期メッセージを表示
+                                const systemMsg = document.createElement('div');
+                                systemMsg.className = 'system-message';
+                                systemMsg.textContent = 'すべての会話履歴を削除しました';
+                                messageArea.appendChild(systemMsg);
+                            }
+                            // 会話履歴を更新
+                            updateChatHistory();
+                        }
+                    });
+                    
+                    historyHeader.appendChild(headerTitle);
+                    historyHeader.appendChild(clearAllBtn);
+                    chatHistory.appendChild(historyHeader);
+                }
+                
+                // 会話がなければメッセージを表示
+                if (displayConversations.length === 0) {
+                    const emptyMessage = document.createElement('div');
+                    emptyMessage.className = 'chat-item empty';
+                    emptyMessage.textContent = '会話履歴がありません';
+                    chatHistory.appendChild(emptyMessage);
+                    return;
+                }
+                
+                // 会話履歴を表示
+                displayConversations.forEach(conv => {
+                    const chatItem = document.createElement('div');
+                    chatItem.className = 'chat-item';
+                    if (conv.id === currentId) {
+                        chatItem.classList.add('active');
+                    }
+                    
+                    // 会話タイトル（保存されたタイトルまたは最初のユーザーメッセージから）
+                    let title = conv.title || '新しい会話';
+                    if (!title && conv.messages && conv.messages.length > 0) {
+                        const firstUserMsg = conv.messages.find(m => m.role === 'user');
+                        if (firstUserMsg) {
+                            title = createConversationTitle(firstUserMsg.content);
+                        }
+                    }
+                    
+                    // タイトル用のspan
+                    const titleSpan = document.createElement('span');
+                    titleSpan.className = 'chat-title';
+                    titleSpan.textContent = title;
+                    chatItem.appendChild(titleSpan);
+                    
+                    // 削除ボタン
+                    const deleteBtn = document.createElement('button');
+                    deleteBtn.className = 'delete-chat-btn';
+                    deleteBtn.title = 'この会話を削除';
+                    deleteBtn.innerHTML = `
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="3 6 5 6 21 6"></polyline>
+                            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                        </svg>
+                    `;
+                    
+                    // 削除ボタンのクリックイベント
+                    deleteBtn.addEventListener('click', function(e) {
+                        e.stopPropagation(); // 親要素のクリックを防止
+                        if (confirm(`「${title}」を削除しますか？`)) {
+                            // 会話を削除
+                            delete conversations[conv.id];
+                            localStorage.setItem('xibo_conversations', JSON.stringify(conversations));
+                            
+                            // 削除した会話が現在表示中の会話だった場合
+                            if (conv.id === currentId) {
+                                // 他の会話があれば最初の会話を表示
+                                const remainingConvs = Object.values(conversations);
+                                if (remainingConvs.length > 0) {
+                                    loadConversation(remainingConvs[0].id);
+                                } else {
+                                    // 会話がなければメッセージエリアをクリア
+                                    localStorage.removeItem('current_conversation_id');
+                                    const messageArea = document.getElementById('message-area');
+                                    if (messageArea) {
+                                        messageArea.innerHTML = '';
+                                        
+                                        // 初期メッセージを表示
+                                        const systemMsg = document.createElement('div');
+                                        systemMsg.className = 'system-message';
+                                        systemMsg.textContent = '会話履歴を削除しました';
+                                        messageArea.appendChild(systemMsg);
+                                    }
+                                }
+                            }
+                            
+                            // 会話履歴を更新
+                            updateChatHistory();
+                        }
+                    });
+                    
+                    chatItem.appendChild(deleteBtn);
+                    chatItem.dataset.id = conv.id;
+                    
+                    // クリックイベント
+                    chatItem.addEventListener('click', function() {
+                        loadConversation(conv.id);
+                    });
+                    
+                    chatHistory.appendChild(chatItem);
+                });
+            } catch (error) {
+                console.error('会話履歴の更新に失敗しました:', error);
+            }
+        }
+        
+        // 会話を読み込む関数
+        function loadConversation(conversationId) {
+            try {
+                if (!conversationId) return;
+                
+                // 会話履歴を取得
+                let conversations = localStorage.getItem('xibo_conversations');
+                conversations = conversations ? JSON.parse(conversations) : {};
+                
+                // 指定されたIDの会話が存在しない場合
+                if (!conversations[conversationId]) {
+                    console.error('指定された会話が見つかりません:', conversationId);
+                    return;
+                }
+                
+                // 現在の会話を変更
+                localStorage.setItem('current_conversation_id', conversationId);
+                
+                // アクティブな会話を更新
+                document.querySelectorAll('.chat-item').forEach(item => {
+                    item.classList.remove('active');
+                    if (item.dataset.id === conversationId) {
+                        item.classList.add('active');
+                    }
+                });
+                
+                // メッセージエリアをクリア
+                const messageArea = document.getElementById('message-area');
+                if (messageArea) {
+                    messageArea.innerHTML = '';
+                    
+                    // 会話のメッセージを表示
+                    const conversation = conversations[conversationId];
+                    if (conversation && conversation.messages && conversation.messages.length > 0) {
+                        conversation.messages.forEach(msg => {
+                            // システムメッセージはスキップ可能だが、ここでは表示する
+                            const msgEl = document.createElement('div');
+                            
+                            if (msg.role === 'system') {
+                                msgEl.className = 'system-message';
+                                msgEl.textContent = msg.content;
+                            } else {
+                                msgEl.className = `message-bubble ${msg.role}-message`;
+                                
+                                // マークダウンチェック（assistantの場合のみ）
+                                if (msg.role === 'assistant' && window.xiboMarkdown && 
+                                    typeof window.xiboMarkdown.isMdContent === 'function' && 
+                                    window.xiboMarkdown.isMdContent(msg.content)) {
+                                    
+                                    msgEl.classList.add('markdown-content');
+                                    if (window.xiboMarkdown && typeof window.xiboMarkdown.renderMarkdown === 'function') {
+                                        try {
+                                            msgEl.innerHTML = window.xiboMarkdown.renderMarkdown(msg.content);
+                                            
+                                            // コピーボタンを追加（必要に応じて）
+                                            if (window.xiboMessage && typeof window.xiboMessage.addCopyButton === 'function') {
+                                                window.xiboMessage.addCopyButton(msgEl, msg.content, true);
+                                            } else {
+                                                // 簡易コピーボタン
+                                                const copyBtn = document.createElement('button');
+                                                copyBtn.className = 'copy-btn';
+                                                copyBtn.textContent = 'コピー';
+                                                copyBtn.addEventListener('click', function() {
+                                                    navigator.clipboard.writeText(msg.content);
+                                                    copyBtn.textContent = 'コピー済';
+                                                    setTimeout(() => { copyBtn.textContent = 'コピー'; }, 2000);
+                                                });
+                                                msgEl.appendChild(copyBtn);
+                                            }
+                                        } catch (e) {
+                                            console.error('マークダウンレンダリングエラー:', e);
+                                            msgEl.textContent = msg.content;
+                                        }
+                                    } else {
+                                        msgEl.textContent = msg.content;
+                                    }
+                                } else {
+                                    msgEl.textContent = msg.content;
+                                }
+                            }
+                            
+                            messageArea.appendChild(msgEl);
+                        });
+                    }
+                    
+                    // スクロール
+                    messageArea.scrollTop = messageArea.scrollHeight;
+                }
+            } catch (error) {
+                console.error('会話の読み込みに失敗しました:', error);
+            }
+        }
+    </script>
+    
+    <!-- モジュール化されたJavaScriptファイルを読み込み (順序が重要) -->
+    <script src="js/config.js"></script>
+    <script src="js/markdown.js"></script>
+    <script src="js/message.js"></script>
+    <script src="js/ui.js"></script>
+    
+    <!-- markdown-itの初期化 -->
+    <script>
+        try {
+            // markdown-itのインスタンスを作成
+            window.md = window.markdownit({
+                html: true,
+                linkify: true,
+                typographer: true,
+                breaks: true,
+                highlight: function (str, lang) {
+                    if (lang && hljs && hljs.getLanguage(lang)) {
+                        try {
+                            return '<pre class="hljs"><code>' + 
+                                hljs.highlight(str, { language: lang }).value + 
+                                '</code></pre>';
+                        } catch (err) {
+                            console.error('Highlight.js エラー:', err);
+                        }
+                    }
+                    return '<pre class="hljs"><code>' + window.md.utils.escapeHtml(str) + '</code></pre>';
+                }
+            });
+            
+            // Mermaidの初期化
+            if (window.mermaid) {
+                window.mermaid.initialize({ 
+                    startOnLoad: false,
+                    theme: 'forest',
+                    securityLevel: 'loose',
+                    logLevel: 'error'
+                });
+            }
+        } catch (e) {
+            console.error('マークダウン初期化エラー:', e);
+        }
+    </script>
+    
+    <!-- 初期化スクリプト -->
+    <script>
+        // 二重実行防止フラグ
+        window.isInitialized = false;
+        
+        // テキストエリアの高さをリセットする関数
+        function resetTextareaHeight() {
+            const textarea = document.getElementById('message-input');
+            if (textarea) {
+                textarea.style.height = 'auto';
+                textarea.style.height = Math.min(textarea.scrollHeight, 120) + 'px';
+            }
+        }
+        
+        // テキストエリアの自動リサイズ設定
+        function setupTextareaAutoResize() {
+            const textarea = document.getElementById('message-input');
+            if (!textarea) return;
+            
+            // 入力に応じて高さをリセットして自動調整
+            textarea.addEventListener('input', function() {
+                this.style.height = 'auto';
+                this.style.height = Math.min(this.scrollHeight, 120) + 'px';
+            });
+            
+            // 初期状態でもリサイズを適用
+            resetTextareaHeight();
+        }
+        
+        // IME入力状態を管理するフラグ
+        let isIMEComposing = false;
+        
+        // テキストエリアのIME入力イベント設定
+        function setupTextareaIMEHandling() {
+            const textarea = document.getElementById('message-input');
+            if (!textarea) return;
+            
+            // IME入力開始時（日本語入力の変換中）
+            textarea.addEventListener('compositionstart', function() {
+                console.log('IME入力開始');
+                isIMEComposing = true;
+            });
+            
+            // IME入力終了時（日本語入力の確定時）
+            textarea.addEventListener('compositionend', function() {
+                console.log('IME入力終了');
+                isIMEComposing = false;
+                
+                // IME入力完了後に少し遅延させて送信可能にする（誤送信防止）
+                setTimeout(() => {
+                    isIMEComposing = false;
+                }, 10);
+            });
+            
+            // エンターキーでの送信処理
+            textarea.addEventListener('keydown', function(e) {
+                // IME入力中はEnterキーでの送信を無効化
+                if (e.key === 'Enter') {
+                    if (isIMEComposing) {
+                        // IME変換中は何もしない（通常のEnter処理を続行）
+                        console.log('IME変換中のEnterキー - 送信しません');
+                        return;
+                    }
+                    
+                    // Shift+Enterなら改行として処理
+                    if (e.shiftKey) {
+                        return;
+                    }
+                    
+                    // 通常のEnterキーは送信として処理
+                    e.preventDefault();
+                    sendMessageFromInput();
+                }
+            });
+        }
+        
+        // 入力フィールドからメッセージを送信する共通関数
+        function sendMessageFromInput() {
+            const msgInput = document.getElementById('message-input');
+            if (!msgInput) return;
+            
+            const text = msgInput.value;
+            // テキストが存在し、かつ空でない場合のみ処理
+            if (text && text.trim() !== '') {
+                // 値を取得してからsendCustomMessageを呼び出す
+                const inputText = text.trim();
+                // 先にinputをクリア
+                msgInput.value = '';
+                // テキストエリアの高さをリセット
+                resetTextareaHeight();
+                // 送信
+                sendCustomMessage(inputText);
+            }
+        }
+        
+        // マークダウンデモを表示する関数
+        function showMarkdownDemo(messageArea) {
+            // テスト用マークダウン応答
+            const demoResponses = [
+                "これはマークダウンテストです。\n\n**太字** と *斜体* のテキストが含まれています。",
+                "# マークダウン見出し\n\n- リストアイテム1\n- リストアイテム2\n\n```javascript\nconsole.log('コードブロック');\n```",
+                "以下は表の例です：\n\n| 名前 | 年齢 |\n| --- | --- |\n| 田中 | 25 |\n| 佐藤 | 30 |",
+                "このサンプルテキストは正常に**マークダウン**として処理されるはずです。\n\n1. 番号付きリスト\n2. 二番目の項目\n\n> 引用ブロック\n\n`インラインコード`"
+            ];
+            
+            // ランダムにレスポンスを選択
+            const randomResponse = demoResponses[Math.floor(Math.random() * demoResponses.length)];
+            
+            const mdTestMsg = document.createElement('div');
+            mdTestMsg.className = 'message-bubble assistant-message markdown-content';
+            mdTestMsg.innerHTML = window.xiboMarkdown && typeof window.xiboMarkdown.renderMarkdown === 'function' 
+                ? window.xiboMarkdown.renderMarkdown(randomResponse)
+                : randomResponse;
+            messageArea.appendChild(mdTestMsg);
+        }
+        
+        // エンドポイントURLを取得する関数
+        function getServerEndpoints(baseUrl) {
+            return {
+                health: `${baseUrl}/api/agents/xibo`,             // Xiboエージェント健全性確認
+                generate: `${baseUrl}/api/agents/xibo/generate`,  // 通常の生成エンドポイント
+                stream: `${baseUrl}/api/agents/xibo/stream`,      // ストリーミング生成エンドポイント
+                // フォールバック
+                fallbackHealth: `${baseUrl}/api/agents`,
+                fallbackGenerate: `${baseUrl}/api/agents/xibo/text-object`
+            };
+        }
+        
+        // エージェント接続関数
+        function connectToAgent() {
+            const messageArea = document.getElementById('message-area');
+            if (!messageArea) return;
+            
+            messageArea.innerHTML = ''; // メッセージエリアをクリア
+            const systemMsg = document.createElement('div');
+            systemMsg.className = 'system-message';
+            systemMsg.textContent = 'Xiboサーバーに接続中...';
+            messageArea.appendChild(systemMsg);
+            
+            // 設定からURLを取得
+            let serverUrl = 'http://localhost:4111';
+            if (window.xiboConfig && typeof window.xiboConfig.getXiboConfig === 'function') {
+                const config = window.xiboConfig.getXiboConfig();
+                serverUrl = config.serverUrl || serverUrl;
+            }
+            
+            const endpoints = getServerEndpoints(serverUrl);
+            
+            // テスト接続（main -> fallbackの順に試行）
+            function tryEndpoint(url, nextEndpoint) {
+                fetch(url, { 
+                    method: 'GET',
+                    mode: 'cors',
+                    headers: {
+                        'Accept': 'application/json'
+                    }
+                })
+                .then(response => {
+                    // ステータスコードで判断（JSONでなくても成功と判断）
+                    if (response.status >= 200 && response.status < 300) {
+                        return { status: 'ok' }; // 応答が成功ならJSONが期待できなくても成功と扱う
+                    }
+                    throw new Error(`サーバー応答エラー: ${response.status}`);
+                })
+                .then(data => {
+                    const statusMsg = document.createElement('div');
+                    statusMsg.className = 'system-message';
+                    statusMsg.textContent = `Xiboサーバー(${serverUrl})に接続しました`;
+                    messageArea.appendChild(statusMsg);
+                    
+                    // 正常に接続できたエンドポイントを記録
+                    window.connectedUrl = url;
+                    
+                    const welcomeMsg = document.createElement('div');
+                    welcomeMsg.className = 'message-bubble assistant-message';
+                    welcomeMsg.textContent = '何かお手伝いできることはありますか？';
+                    messageArea.appendChild(welcomeMsg);
+                })
+                .catch(error => {
+                    console.error(`接続エラー(${url}):`, error);
+                    
+                    if (nextEndpoint) {
+                        // 次のエンドポイントを試す
+                        const infoMsg = document.createElement('div');
+                        infoMsg.className = 'system-message';
+                        infoMsg.textContent = `別のエンドポイントで試行中...`;
+                        messageArea.appendChild(infoMsg);
+                        
+                        tryEndpoint(nextEndpoint, null);
+                    } else {
+                        // すべて失敗した場合
+                        const errorMsg = document.createElement('div');
+                        errorMsg.className = 'system-message';
+                        errorMsg.textContent = `サーバー接続エラー: ${error.message}`;
+                        messageArea.appendChild(errorMsg);
+                        
+                        const offlineMsg = document.createElement('div');
+                        offlineMsg.className = 'system-message';
+                        offlineMsg.textContent = 'オフラインモードで動作します';
+                        messageArea.appendChild(offlineMsg);
+                        
+                        const welcomeMsg = document.createElement('div');
+                        welcomeMsg.className = 'message-bubble assistant-message';
+                        welcomeMsg.textContent = '何かお手伝いできることはありますか？';
+                        messageArea.appendChild(welcomeMsg);
+                    }
+                });
+            }
+            
+            // 最初のエンドポイントから試行
+            tryEndpoint(endpoints.health, endpoints.fallbackHealth);
+        }
+        
+        // メッセージ送信関数を修正
+        function sendCustomMessage(text) {
+            // 無効な入力は処理しない
+            if (!text || typeof text !== 'string') {
+                console.warn('無効なメッセージ:', text);
+                return;
+            }
+            
+            // 空のメッセージは処理しない
+            const trimmedText = text.trim();
+            if (trimmedText === '') {
+                console.warn('空のメッセージです');
+                return;
+            }
+            
+            const messageArea = document.getElementById('message-area');
+            const inputField = document.getElementById('message-input');
+            if (!messageArea || !inputField) {
+                console.error('必要なDOM要素が見つかりません');
+                return;
+            }
+            
+            // 入力欄をクリア（重要: 関数の最初の方で行う）
+            const originalText = trimmedText;
+            inputField.value = '';
+            // テキストエリアの高さをリセット
+            resetTextareaHeight();
+            
+            // ユーザーメッセージを表示
+            const userMsg = document.createElement('div');
+            userMsg.className = 'message-bubble user-message';
+            userMsg.textContent = originalText;
+            messageArea.appendChild(userMsg);
+            
+            // 設定からURLを取得
+            let serverUrl = 'http://localhost:4111';
+            if (window.xiboConfig && typeof window.xiboConfig.getXiboConfig === 'function') {
+                const config = window.xiboConfig.getXiboConfig();
+                serverUrl = config.serverUrl || serverUrl;
+            }
+            
+            // エンドポイントを取得
+            const endpoints = getServerEndpoints(serverUrl);
+            
+            // デフォルトで生成エンドポイントを使用
+            let apiEndpoint = endpoints.generate;
+            
+            // ストリーミングがあれば使用（現在未実装）
+            if (window.useStreaming) {
+                apiEndpoint = endpoints.stream;
+            }
+            
+            // ローディングインジケーター
+            const loadingMsg = document.createElement('div');
+            loadingMsg.className = 'message-bubble assistant-message loading';
+            loadingMsg.innerHTML = '<div class="loading-dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>';
+            messageArea.appendChild(loadingMsg);
+            
+            // スクロール
+            messageArea.scrollTop = messageArea.scrollHeight;
+            
+            // 会話履歴の保存
+            if (typeof window.saveMessageToConversation === 'function') {
+                window.saveMessageToConversation(originalText, 'user');
+            }
+            
+            // Xiboエージェント用のリクエストデータ
+            const requestData = {
+                instruction: "",  // 特別な指示がない場合は空
+                messages: [
+                    {
+                        role: "user", 
+                        content: originalText
+                    }
+                ],
+                stream: false    // ストリーミングが実装されるまではfalse
+            };
+            
+            console.log(`Xiboエージェントへリクエスト送信: ${apiEndpoint}`, requestData);
+            
+            // APIリクエスト
+            fetch(apiEndpoint, {
+                method: 'POST',
+                mode: 'cors',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify(requestData)
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`サーバー応答エラー: ${response.status}`);
+                }
+                
+                // Content-Typeをチェック
+                const contentType = response.headers.get('content-type');
+                if (contentType && contentType.includes('application/json')) {
+                    return response.json();
+                } else {
+                    // テキストとして取得してみる
+                    return response.text().then(text => {
+                        console.log('テキスト応答:', text.substring(0, 150) + '...');
+                        try {
+                            // JSONとしてパースを試みる
+                            return JSON.parse(text);
+                        } catch (e) {
+                            console.error('JSONパースエラー:', e);
+                            // JSONではない場合はエラーを投げる
+                            throw new Error('サーバーからの応答がJSONではありません');
+                        }
+                    });
+                }
+            })
+            .then(data => {
+                // ローディングを削除
+                loadingMsg.remove();
+                
+                console.log('サーバー応答:', data);
+                
+                // 応答を表示
+                if (data && data.text) {
+                    const assistantMsg = document.createElement('div');
+                    assistantMsg.className = 'message-bubble assistant-message';
+                    
+                    // マークダウンレンダリング
+                    if (window.xiboMarkdown && typeof window.xiboMarkdown.isMdContent === 'function' &&
+                        window.xiboMarkdown.isMdContent(data.text)) {
+                        assistantMsg.classList.add('markdown-content');
+                        if (window.xiboMarkdown && typeof window.xiboMarkdown.renderMarkdown === 'function') {
+                            assistantMsg.innerHTML = window.xiboMarkdown.renderMarkdown(data.text);
+                        } else {
+                            assistantMsg.textContent = data.text;
+                        }
+                    } else {
+                        assistantMsg.textContent = data.text;
+                    }
+                    
+                    messageArea.appendChild(assistantMsg);
+                    
+                    // 会話履歴の保存
+                    if (typeof window.saveMessageToConversation === 'function') {
+                        window.saveMessageToConversation(data.text, 'assistant');
+                    }
+                } else {
+                    // データはあるが、text属性がない場合
+                    console.error('サーバー応答にtextフィールドがありません:', data);
+                    
+                    // 代替のマークダウンデモを表示
+                    showMarkdownDemo(messageArea);
+                }
+            })
+            .catch(error => {
+                console.error('APIエラー:', error);
+                // ローディングを削除
+                loadingMsg.remove();
+                
+                // エラーメッセージを表示
+                const errorMsg = document.createElement('div');
+                errorMsg.className = 'system-message';
+                errorMsg.textContent = `エラー: ${error.message}`;
+                messageArea.appendChild(errorMsg);
+                
+                // フォールバックエンドポイントを試す
+                if (!window.triedFallbackEndpoint) {
+                    window.triedFallbackEndpoint = true;
+                    
+                    const retryMsg = document.createElement('div');
+                    retryMsg.className = 'system-message';
+                    retryMsg.textContent = 'フォールバックエンドポイントで再試行中...';
+                    messageArea.appendChild(retryMsg);
+                    
+                    // 再度送信
+                    setTimeout(() => {
+                        // フォールバックエンドポイントを使用
+                        const fallbackEndpoint = endpoints.fallbackGenerate;
+                            
+                        fetch(fallbackEndpoint, {
+                            method: 'POST',
+                            mode: 'cors',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'Accept': 'application/json'
+                            },
+                            body: JSON.stringify(requestData)
+                        })
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error(`サーバー応答エラー: ${response.status}`);
+                            }
+                            return response.json();
+                        })
+                        .then(data => {
+                            if (data && data.text) {
+                                const assistantMsg = document.createElement('div');
+                                assistantMsg.className = 'message-bubble assistant-message';
+                                
+                                // マークダウンレンダリング
+                                if (window.xiboMarkdown && typeof window.xiboMarkdown.isMdContent === 'function' &&
+                                    window.xiboMarkdown.isMdContent(data.text)) {
+                                    assistantMsg.classList.add('markdown-content');
+                                    if (window.xiboMarkdown && typeof window.xiboMarkdown.renderMarkdown === 'function') {
+                                        assistantMsg.innerHTML = window.xiboMarkdown.renderMarkdown(data.text);
+                                    } else {
+                                        assistantMsg.textContent = data.text;
+                                    }
+                                } else {
+                                    assistantMsg.textContent = data.text;
+                                }
+                                
+                                messageArea.appendChild(assistantMsg);
+                                
+                                // 会話履歴の保存
+                                if (typeof window.saveMessageToConversation === 'function') {
+                                    window.saveMessageToConversation(data.text, 'assistant');
+                                }
+                            } else {
+                                throw new Error('応答にテキストがありません');
+                            }
+                        })
+                        .catch(fallbackError => {
+                            console.error('フォールバックエンドポイントエラー:', fallbackError);
+                            
+                            const failMsg = document.createElement('div');
+                            failMsg.className = 'system-message';
+                            failMsg.textContent = 'すべてのエンドポイントが失敗しました';
+                            messageArea.appendChild(failMsg);
+                            
+                            // マークダウンデモを表示
+                            showMarkdownDemo(messageArea);
+                        });
+                    }, 500);
+                } else {
+                    // マークダウンデモを表示
+                    showMarkdownDemo(messageArea);
+                }
+            })
+            .finally(() => {
+                // スクロール
+                messageArea.scrollTop = messageArea.scrollHeight;
+            });
+        }
+        
+        // DOMの読み込みが完了したら初期化
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('DOM読み込み完了');
+            
+            // 二重実行防止
+            if (window.isInitialized) return;
+            window.isInitialized = true;
+            
+            // エージェント接続
+            connectToAgent();
+            
+            // 会話履歴を表示
+            updateChatHistory();
+            
+            // 送信ボタンのイベント設定
+            const sendBtn = document.getElementById('send-message-btn');
+            const msgInput = document.getElementById('message-input');
+            
+            if (sendBtn && msgInput) {
+                // 既存のイベントリスナーを全て削除
+                const newSendBtn = sendBtn.cloneNode(true);
+                sendBtn.parentNode.replaceChild(newSendBtn, sendBtn);
+                
+                // 新しいイベントリスナーを追加
+                newSendBtn.addEventListener('click', function() {
+                    // IME入力中は送信しない
+                    if (isIMEComposing) {
+                        console.log('IME入力中のクリック - 送信をスキップ');
+                        return;
+                    }
+                    
+                    // 共通送信関数を呼び出す
+                    sendMessageFromInput();
+                });
+                
+                // テキストエリアの自動リサイズ設定
+                setupTextareaAutoResize();
+                
+                // IMEイベント設定（エンターキー対応含む）
+                setupTextareaIMEHandling();
+            }
+            
+            // 新規会話ボタン
+            const newChatBtn = document.getElementById('new-chat-btn');
+            if (newChatBtn) {
+                newChatBtn.addEventListener('click', function() {
+                    try {
+                        // 新しい会話IDを作成
+                        const newId = 'conv_' + Date.now();
+                        localStorage.setItem('current_conversation_id', newId);
+                        
+                        // メッセージエリアをクリア
+                        const messageArea = document.getElementById('message-area');
+                        if (messageArea) {
+                            messageArea.innerHTML = '';
+                            
+                            // 初期メッセージを表示
+                            const systemMsg = document.createElement('div');
+                            systemMsg.className = 'system-message';
+                            systemMsg.textContent = '新しい会話を開始しました';
+                            messageArea.appendChild(systemMsg);
+                            
+                            // 新しい会話も保存しておく
+                            let conversations = localStorage.getItem('xibo_conversations');
+                            conversations = conversations ? JSON.parse(conversations) : {};
+                            
+                            // 新しい会話を追加
+                            conversations[newId] = {
+                                id: newId,
+                                title: '新しい会話',
+                                messages: [{
+                                    role: 'system',
+                                    content: '新しい会話を開始しました',
+                                    timestamp: Date.now()
+                                }],
+                                createdAt: Date.now()
+                            };
+                            
+                            // 会話履歴を保存
+                            localStorage.setItem('xibo_conversations', JSON.stringify(conversations));
+                        }
+                        
+                        // 会話履歴を更新
+                        updateChatHistory();
+                    } catch (error) {
+                        console.error('新規会話の作成に失敗しました:', error);
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html> 
