@@ -1,5 +1,5 @@
 import React from 'react';
-import { Conversation } from '../../types/conversation';
+import { Conversation } from '../../types';
 
 interface SidebarProps {
   conversations: Conversation[];

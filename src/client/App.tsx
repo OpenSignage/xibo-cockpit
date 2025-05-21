@@ -7,6 +7,7 @@ import { MastraService } from '../services/mastraService';
 import { Conversation, UserSettings } from '../types';
 import { DEFAULT_SETTINGS } from '../config/default';
 import { getLocalStorage, setLocalStorage } from '../utils';
+import SettingsModal from './components/SettingsModal';
 
 const App: React.FC = () => {
   const [mastraService] = useState(() => new MastraService(DEFAULT_SETTINGS.endpoint));
@@ -16,6 +17,11 @@ const App: React.FC = () => {
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const initRef = useRef(false);
   const isMountedRef = useRef(true);
+  const [currentTheme, setCurrentTheme] = useState<'light' | 'dark'>(() => {
+    const savedTheme = localStorage.getItem('theme');
+    return (savedTheme as 'light' | 'dark') || 'light';
+  });
+  const [showSettings, setShowSettings] = useState(false);
 
   // コンポーネントのマウント状態を管理
   useEffect(() => {
@@ -24,6 +30,13 @@ const App: React.FC = () => {
       isMountedRef.current = false;
     };
   }, []);
+
+  useEffect(() => {
+    // テーマの変更をHTML要素に適用
+    document.documentElement.classList.remove('light', 'dark');
+    document.documentElement.classList.add(currentTheme);
+    localStorage.setItem('theme', currentTheme);
+  }, [currentTheme]);
 
   // 会話の更新を監視する関数をメモ化
   const updateConversation = useCallback(async (conversationId: string) => {
@@ -112,17 +125,30 @@ const App: React.FC = () => {
     setIsSettingsOpen(false);
   };
 
+  const handleSaveSettings = (newSettings: UserSettings) => {
+    if (!isMountedRef.current) return;
+
+    console.log('Settings saved:', newSettings);
+    setSettings(newSettings);
+    mastraService.updateEndpoint(newSettings.endpoint);
+    setShowSettings(false);
+  };
+
   return (
-    <div className="flex h-screen bg-gray-100">
-      <Navbar
-        conversations={conversations}
-        activeConversationId={currentConversationId}
-        onConversationSelect={setCurrentConversationId}
-        onNewConversation={handleNewConversation}
-        onDeleteConversation={handleDeleteConversation}
-        onOpenSettings={() => setIsSettingsOpen(true)}
-      />
-      <div className="flex-1 flex flex-col">
+    <div className={`app-container ${currentTheme === 'dark' ? 'dark' : ''}`}>
+      <div className="sidebar">
+        <Navbar
+          conversations={conversations}
+          activeConversationId={currentConversationId}
+          onConversationSelect={setCurrentConversationId}
+          onNewConversation={handleNewConversation}
+          onDeleteConversation={handleDeleteConversation}
+          onOpenSettings={() => setIsSettingsOpen(true)}
+          onThemeChange={setCurrentTheme}
+          currentTheme={currentTheme}
+        />
+      </div>
+      <div className="main-content">
         <ChatArea
           mastraService={mastraService}
           conversationId={currentConversationId}
@@ -143,7 +169,18 @@ const App: React.FC = () => {
         onClose={() => setIsSettingsOpen(false)}
         settings={settings}
         onSettingsChange={handleSettingsChange}
+        currentTheme={currentTheme}
+        onThemeChange={setCurrentTheme}
       />
+      {showSettings && (
+        <SettingsModal
+          settings={settings}
+          onSave={handleSaveSettings}
+          onClose={() => setShowSettings(false)}
+          currentTheme={currentTheme}
+          onThemeChange={setCurrentTheme}
+        />
+      )}
     </div>
   );
 };

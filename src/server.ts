@@ -19,7 +19,7 @@ app.use(express.static(path.join(__dirname, '../dist')));
 // });
 
 // すべてのルートをクライアントアプリにリダイレクト
-app.get('*', (req: Request, res: Response) => {
+app.get('*', (_: Request, res: Response) => {
   res.sendFile(path.join(__dirname, '../assets/index.html'));
 });
 

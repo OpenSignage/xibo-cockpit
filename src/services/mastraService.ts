@@ -1,5 +1,5 @@
 import { MastraClient } from '@mastra/client-js';
-import { Message, Conversation, ConversationMetadata } from '../types/conversation';
+import { Conversation, Message, ConversationMetadata } from '../types';
 
 // 一時的にanyを使用
 declare const AgentClient: any;
@@ -227,7 +227,7 @@ export class MastraService {
   }
 
   // メッセージの保存
-  async saveMessage(threadId: string, message: Message): Promise<void> {
+  async saveMessage(threadId: string, message: Message, onTitleUpdated?: (newTitle: string) => void): Promise<void> {
     if (!this.memoryClient) {
       await this.initialize();
     }
@@ -251,27 +251,16 @@ export class MastraService {
 
       console.log('Message saved successfully:', { savedMessage });
 
-      // TODO: タイトル更新の処理は一時的にコメントアウト
-      // CORSの設定が完了したら復活させる
-      /*
-      // スレッドの詳細を取得して確認
+      // スレッドの詳細を取得して新しいタイトルを確認
       const thread = this.memoryClient.getMemoryThread(threadId, 'xibo');
       const details = await thread.get();
       console.log('Thread details after save:', details);
 
-      // 最初のユーザーメッセージの場合、タイトルを更新
-      if (message.role === 'user' && details.title === '新しい会話') {
-        const newTitle = message.content.slice(0, 30);
-        console.log('Updating thread title:', { oldTitle: details.title, newTitle });
-        
-        const updated = await thread.update({
-          title: newTitle,
-          metadata: { ...details.metadata, lastUpdated: timestamp },
-          resourceId: this.userId
-        });
-        console.log('Thread updated:', updated);
+      // タイトルが更新されている場合は、コールバックを呼び出す
+      if (details.title && details.title !== '新しい会話' && onTitleUpdated) {
+        console.log('Thread title updated:', details.title);
+        onTitleUpdated(details.title);
       }
-      */
     } catch (error) {
       console.error('Error saving message:', error);
       throw error;
@@ -306,18 +295,24 @@ export class MastraService {
 
     try {
       console.log('Getting messages for thread:', threadId);
-      const thread = this.memoryClient.getMemoryThread(threadId, 'xibo');
-      console.log('Thread object:', thread);
       
-      const details = await thread.get();
-      console.log('Raw thread data:', details);
+      // 直接APIを呼び出してメッセージを取得
+      const response = await fetch(`${this.endpoint}/api/memory/threads/${threadId}/messages?agentId=xibo`);
+      if (!response.ok) {
+        throw new Error(`Failed to fetch messages: ${response.statusText}`);
+      }
+      
+      const data = await response.json();
+      console.log('Retrieved messages:', data);
 
-      if (!details.messages || !Array.isArray(details.messages) || details.messages.length === 0) {
+      // messages配列を取得
+      const messages = data.messages || [];
+      if (!Array.isArray(messages) || messages.length === 0) {
         console.warn('No messages found in thread');
         return [];
       }
 
-      return details.messages.map((msg: any) => ({
+      return messages.map((msg: any) => ({
         id: msg.id,
         role: msg.role,
         content: msg.content,

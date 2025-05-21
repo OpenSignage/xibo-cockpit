@@ -1,0 +1,90 @@
+プロジェクトの構造を確認するために、まずディレクトリ構成を確認させてください。
+
+
+Ran tool
+
+Ran tool
+プロジェクトの構造と各ディレクトリ/ファイルの役割をまとめます：
+
+### ルートディレクトリ
+- `webpack.config.js`: Webpackの設定ファイル。クライアントサイドのビルド設定
+- `tsconfig.json`: TypeScriptの設定ファイル
+- `package.json`: プロジェクトの依存関係とスクリプト定義
+- `DesignReq.txt`: プロジェクトの設計要件書
+
+### 主要ディレクトリ
+1. `src/`: メインのソースコード
+   - `server.ts`: Node.jsサーバーのエントリーポイント
+   - `client/`: クライアントサイドのコード
+     - `components/`: Reactコンポーネント
+     - `App.tsx`: メインのReactアプリケーション
+   - `services/`: バックエンドサービス
+     - `mastraService.ts`: Mastra Client SDKとの通信を管理
+   - `utils/`: ユーティリティ関数
+   - `config/`: 設定ファイル
+   - `types/`: TypeScript型定義
+
+2. `assets/`: 静的ファイル
+   - `index.html`: クライアントのHTMLテンプレート
+   - `styles/`: CSSファイル
+   - `images/`: 画像ファイル
+
+3. `dist/`: ビルド出力ディレクトリ
+   - コンパイル済みのJavaScriptファイル
+   - バンドルされたアセット
+
+4. `types/`: 共通の型定義
+   - アプリケーション全体で使用する型定義
+
+5. `config/`: 設定ファイル
+   - 環境変数やアプリケーション設定
+
+6. `tests/`: テストファイル
+   - ユニットテスト
+   - 統合テスト
+
+### 主要なファイルの役割
+1. クライアントサイド
+   - `src/client/components/ChatArea.tsx`: チャットインターフェース
+   - `src/client/components/Sidebar.tsx`: サイドバーナビゲーション
+   - `src/client/components/SettingsDialog.tsx`: 設定ダイアログ
+
+2. サーバーサイド
+   - `src/server.ts`: Expressサーバーの設定と起動
+   - `src/services/mastraService.ts`: Mastra Client SDKとの通信
+
+3. 型定義
+   - `src/types/index.ts`: 共通の型定義
+   - `src/types/conversation.ts`: 会話関連の型定義
+
+### 開発フロー
+1. クライアントサイドの開発
+   - `src/client/`内のコンポーネントを編集
+   - Webpackでビルド（`npm run build`）
+
+2. サーバーサイドの開発
+   - `src/server.ts`と`src/services/`内のファイルを編集
+   - TypeScriptでコンパイル
+
+3. 設定の変更
+   - `config/`内のファイルを編集
+   - 環境変数の設定
+
+### 今後の開発のポイント
+1. クライアントサイド
+   - コンポーネントの分割と再利用性の向上
+   - 状態管理の最適化
+   - UI/UXの改善
+
+2. サーバーサイド
+   - エラーハンドリングの強化
+   - パフォーマンスの最適化
+   - セキュリティの強化
+
+3. 共通
+   - 型定義の整理と拡充
+   - テストの追加
+   - ドキュメントの整備
+
+この構造を基に、機能追加や改善を行う際は、適切なディレクトリにファイルを配置し、関連するコードを参照しながら開発を進めることができます。
+

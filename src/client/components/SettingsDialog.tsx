@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { UserSettings } from '../../types';
 
 interface SettingsDialogProps {
@@ -6,87 +6,85 @@ interface SettingsDialogProps {
   onClose: () => void;
   settings: UserSettings;
   onSettingsChange: (settings: UserSettings) => void;
+  currentTheme: 'light' | 'dark';
+  onThemeChange: (theme: 'light' | 'dark') => void;
 }
 
 export const SettingsDialog: React.FC<SettingsDialogProps> = ({
   isOpen,
   onClose,
   settings,
-  onSettingsChange
+  onSettingsChange,
+  currentTheme,
+  onThemeChange
 }) => {
+  const [localSettings, setLocalSettings] = useState(settings);
+  const [localTheme, setLocalTheme] = useState(currentTheme);
+
   if (!isOpen) return null;
 
-  const handleEndpointChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    onSettingsChange({
-      ...settings,
-      endpoint: e.target.value
-    });
-  };
-
-  const handleDarkModeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    onSettingsChange({
-      ...settings,
-      darkMode: e.target.checked
-    });
-  };
-
-  const handleLanguageChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    onSettingsChange({
-      ...settings,
-      language: e.target.value as 'ja' | 'en'
-    });
+  const handleSave = () => {
+    onSettingsChange(localSettings);
+    onThemeChange(localTheme);
+    onClose();
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-      <div className="bg-white rounded-lg p-6 w-96">
-        <h2 className="text-xl font-bold mb-4">設定</h2>
-        <div className="space-y-4">
-          <div>
-            <label className="block text-sm font-medium text-gray-700">
-              エンドポイント
-            </label>
-            <input
-              type="text"
-              value={settings.endpoint}
-              onChange={handleEndpointChange}
-              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-            />
-          </div>
-          <div>
-            <label className="flex items-center">
-              <input
-                type="checkbox"
-                checked={settings.darkMode}
-                onChange={handleDarkModeChange}
-                className="rounded border-gray-300 text-blue-600 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-              />
-              <span className="ml-2">ダークモード</span>
-            </label>
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700">
-              言語
-            </label>
-            <select
-              value={settings.language}
-              onChange={handleLanguageChange}
-              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-            >
-              <option value="ja">日本語</option>
-              <option value="en">English</option>
-            </select>
-          </div>
+    <>
+      <div className="settings-dialog-overlay" onClick={onClose} />
+      <div className="settings-dialog">
+        <h2>設定</h2>
+        
+        {/* テーマ設定 */}
+        <div>
+          <label>テーマ</label>
+          <select
+            value={localTheme}
+            onChange={(e) => setLocalTheme(e.target.value as 'light' | 'dark')}
+          >
+            <option value="light">ライトモード</option>
+            <option value="dark">ダークモード</option>
+          </select>
         </div>
-        <div className="mt-6 flex justify-end">
+
+        {/* APIエンドポイント設定 */}
+        <div>
+          <label>APIエンドポイント</label>
+          <input
+            type="text"
+            value={localSettings.endpoint}
+            onChange={(e) => setLocalSettings({ ...localSettings, endpoint: e.target.value })}
+          />
+        </div>
+
+        {/* 言語設定 */}
+        <div>
+          <label>言語</label>
+          <select
+            value={localSettings.language}
+            onChange={(e) => setLocalSettings({ ...localSettings, language: e.target.value as 'ja' | 'en' })}
+          >
+            <option value="ja">日本語</option>
+            <option value="en">English</option>
+          </select>
+        </div>
+
+        {/* ボタン */}
+        <div className="settings-dialog-buttons">
           <button
             onClick={onClose}
-            className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600"
+            className="cancel"
           >
-            閉じる
+            キャンセル
+          </button>
+          <button
+            onClick={handleSave}
+            className="save"
+          >
+            保存
           </button>
         </div>
       </div>
-    </div>
+    </>
   );
 }; 

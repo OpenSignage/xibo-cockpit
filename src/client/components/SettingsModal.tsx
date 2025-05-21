@@ -5,16 +5,21 @@ interface SettingsModalProps {
   settings: UserSettings;
   onSave: (settings: UserSettings) => void;
   onClose: () => void;
+  currentTheme: 'light' | 'dark';
+  onThemeChange: (theme: 'light' | 'dark') => void;
 }
 
 const SettingsModal: React.FC<SettingsModalProps> = ({
   settings,
   onSave,
-  onClose
+  onClose,
+  currentTheme,
+  onThemeChange
 }) => {
   const [formState, setFormState] = useState<UserSettings>({
     ...settings
   });
+  const [localTheme, setLocalTheme] = useState(currentTheme);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value, type } = e.target;
@@ -30,6 +35,7 @@ const SettingsModal: React.FC<SettingsModalProps> = ({
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     onSave(formState);
+    onThemeChange(localTheme);
   };
 
   return (
@@ -58,16 +64,14 @@ const SettingsModal: React.FC<SettingsModalProps> = ({
             <label className="block text-gray-700 dark:text-gray-300 mb-2">
               テーマ
             </label>
-            <div className="flex items-center">
-              <input
-                type="checkbox"
-                name="darkMode"
-                checked={formState.darkMode}
-                onChange={handleChange}
-                className="mr-2"
-              />
-              <span>ダークモード</span>
-            </div>
+            <select
+              value={localTheme}
+              onChange={(e) => setLocalTheme(e.target.value as 'light' | 'dark')}
+              className="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+            >
+              <option value="light">ライトモード</option>
+              <option value="dark">ダークモード</option>
+            </select>
           </div>
           
           {/* 言語設定 */}
