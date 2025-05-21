@@ -8376,12 +8376,144 @@ ___CSS_LOADER_EXPORT___.push([module.id, `/* ベーススタイル */
   --success-color: #10b981;
 }
 
+/* レイアウトの基本スタイル */
+.app-container {
+  display: flex;
+  height: 100vh;
+  background-color: var(--bg-primary);
+}
+
+.sidebar {
+  width: 300px;
+  background-color: var(--bg-secondary);
+  border-right: 1px solid var(--border-color);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.main-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* ナビゲーションのスタイル */
+.navbar {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+}
+
+.navbar-header {
+  padding: 1rem;
+  border-bottom: 1px solid var(--border-color);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.navbar-logo {
+  width: 64px;
+  height: 64px;
+  object-fit: contain;
+}
+
+.navbar-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.navbar-new-chat {
+  font-size: 1rem;
+  margin: 1rem;
+  padding: 0.75rem;
+  background-color: var(--accent-color);
+  color: white;
+  border: none;
+  border-radius: 0.375rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.navbar-new-chat:hover {
+  opacity: 0.9;
+}
+
+.navbar-conversations {
+  flex: 1;
+  overflow-y: auto;
+  padding: 0.5rem;
+}
+
+.navbar-conversation {
+  padding: 0.75rem;
+  margin-bottom: 0.5rem;
+  border-radius: 0.375rem;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.navbar-conversation:hover {
+  background-color: var(--bg-primary);
+}
+
+.navbar-conversation.active {
+  background-color: var(--bg-primary);
+}
+
+.navbar-conversation-title {
+  font-size: 1rem;
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.navbar-conversation-date {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+}
+
+.navbar-footer {
+  padding: 1rem;
+  border-top: 1px solid var(--border-color);
+}
+
+.navbar-settings {
+  font-size: 1rem;
+  width: 100%;
+  padding: 0.75rem;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  border-radius: 0.375rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.navbar-settings:hover {
+  background-color: var(--bg-secondary);
+}
+
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
     Ubuntu, Cantarell, 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  font-size: 16px;
 }
 
 /* スクロールバーのスタイル */
@@ -8500,7 +8632,385 @@ body {
   max-width: 100%;
   display: block;
   margin: 1rem auto;
-} `, "",{"version":3,"sources":["webpack://./src/client/styles.css"],"names":[],"mappings":"AAAA,YAAY;AACZ;EACE,oBAAoB;EACpB,sBAAsB;EACtB,kBAAkB;EAClB,uBAAuB;EACvB,oBAAoB;EACpB,uBAAuB;EACvB,sBAAsB;EACtB,wBAAwB;AAC1B;;AAEA,WAAW;AACX;EACE,uBAAuB;EACvB,yBAAyB;EACzB,qBAAqB;EACrB,uBAAuB;EACvB,uBAAuB;EACvB,uBAAuB;EACvB,sBAAsB;EACtB,wBAAwB;AAC1B;;AAEA;EACE,SAAS;EACT;8EAC4E;EAC5E,mCAAmC;EACnC,kCAAkC;AACpC;;AAEA,iBAAiB;AACjB;EACE,UAAU;EACV,WAAW;AACb;;AAEA;EACE,+BAA+B;AACjC;;AAEA;EACE,gBAAgB;EAChB,kBAAkB;AACpB;;AAEA;EACE,gBAAgB;AAClB;;AAEA,qBAAqB;AACrB;EACE,eAAe;EACf,gBAAgB;AAClB;;AAEA;EACE,iBAAiB;EACjB,kBAAkB;EAClB,mBAAmB;EACnB,gBAAgB;AAClB;;AAEA;EACE,iBAAiB;EACjB,kBAAkB;EAClB,sBAAsB;EACtB,gBAAgB;AAClB;;AAEA;EACE,iBAAiB;EACjB,mBAAmB;EACnB,sBAAsB;EACtB,gBAAgB;AAClB;;AAEA;EACE,iBAAiB;AACnB;;AAEA;EACE,oBAAoB;EACpB,iBAAiB;AACnB;;AAEA;EACE,sBAAsB;AACxB;;AAEA;EACE,0BAA0B;EAC1B,qBAAqB;AACvB;;AAEA;EACE,0BAA0B;AAC5B;;AAEA;EACE,0CAA0C;EAC1C,kBAAkB;EAClB,cAAc;EACd,4BAA4B;AAC9B;;AAEA;EACE,yBAAyB;EACzB,WAAW;EACX,cAAc;AAChB;;AAEA;EACE,qCAAqC;EACrC,eAAe;AACjB;;AAEA;EACE,qCAAqC;EACrC,gBAAgB;AAClB;;AAEA;EACE,qCAAqC;EACrC,sBAAsB;EACtB,kBAAkB;EAClB,sBAAsB;EACtB,gBAAgB;AAClB;;AAEA;EACE,cAAc;EACd,aAAa;EACb,kBAAkB;EAClB,gBAAgB;EAChB,qCAAqC;AACvC;;AAEA;EACE,6BAA6B;EAC7B,UAAU;AACZ;;AAEA;EACE,eAAe;EACf,cAAc;EACd,iBAAiB;AACnB","sourcesContent":["/* ベーススタイル */\n:root {\n  --text-primary: #333;\n  --text-secondary: #666;\n  --bg-primary: #fff;\n  --bg-secondary: #f5f5f5;\n  --border-color: #ddd;\n  --accent-color: #3b82f6;\n  --error-color: #ef4444;\n  --success-color: #10b981;\n}\n\n/* ダークモード */\n.dark {\n  --text-primary: #f1f5f9;\n  --text-secondary: #94a3b8;\n  --bg-primary: #1e293b;\n  --bg-secondary: #111827;\n  --border-color: #334155;\n  --accent-color: #3b82f6;\n  --error-color: #ef4444;\n  --success-color: #10b981;\n}\n\nbody {\n  margin: 0;\n  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,\n    Ubuntu, Cantarell, 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;\n  -webkit-font-smoothing: antialiased;\n  -moz-osx-font-smoothing: grayscale;\n}\n\n/* スクロールバーのスタイル */\n::-webkit-scrollbar {\n  width: 8px;\n  height: 8px;\n}\n\n::-webkit-scrollbar-track {\n  background: var(--bg-secondary);\n}\n\n::-webkit-scrollbar-thumb {\n  background: #888;\n  border-radius: 4px;\n}\n\n::-webkit-scrollbar-thumb:hover {\n  background: #666;\n}\n\n/* マークダウンコンテンツのスタイル */\n.markdown-content {\n  font-size: 1rem;\n  line-height: 1.6;\n}\n\n.markdown-content h1 {\n  font-size: 1.8rem;\n  margin-top: 1.5rem;\n  margin-bottom: 1rem;\n  font-weight: 600;\n}\n\n.markdown-content h2 {\n  font-size: 1.5rem;\n  margin-top: 1.5rem;\n  margin-bottom: 0.75rem;\n  font-weight: 600;\n}\n\n.markdown-content h3 {\n  font-size: 1.3rem;\n  margin-top: 1.25rem;\n  margin-bottom: 0.75rem;\n  font-weight: 600;\n}\n\n.markdown-content p {\n  margin: 0.75rem 0;\n}\n\n.markdown-content ul, .markdown-content ol {\n  padding-left: 1.5rem;\n  margin: 0.75rem 0;\n}\n\n.markdown-content li {\n  margin-bottom: 0.25rem;\n}\n\n.markdown-content a {\n  color: var(--accent-color);\n  text-decoration: none;\n}\n\n.markdown-content a:hover {\n  text-decoration: underline;\n}\n\n.markdown-content blockquote {\n  border-left: 4px solid var(--border-color);\n  padding-left: 1rem;\n  margin: 1rem 0;\n  color: var(--text-secondary);\n}\n\n.markdown-content table {\n  border-collapse: collapse;\n  width: 100%;\n  margin: 1rem 0;\n}\n\n.markdown-content th, .markdown-content td {\n  border: 1px solid var(--border-color);\n  padding: 0.5rem;\n}\n\n.markdown-content th {\n  background-color: var(--bg-secondary);\n  font-weight: 600;\n}\n\n.markdown-content code {\n  background-color: var(--bg-secondary);\n  padding: 0.2rem 0.4rem;\n  border-radius: 3px;\n  font-family: monospace;\n  font-size: 0.9em;\n}\n\n.markdown-content pre {\n  margin: 1rem 0;\n  padding: 1rem;\n  border-radius: 4px;\n  overflow-x: auto;\n  background-color: var(--bg-secondary);\n}\n\n.markdown-content pre code {\n  background-color: transparent;\n  padding: 0;\n}\n\n.markdown-content img {\n  max-width: 100%;\n  display: block;\n  margin: 1rem auto;\n} "],"sourceRoot":""}]);
+}
+
+/* チャットエリアのスタイル */
+.chat-area {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background-color: var(--bg-primary);
+}
+
+.chat-messages {
+  flex: 1;
+  overflow-y: auto;
+  padding: 1rem;
+}
+
+.chat-input-area {
+  padding: 1rem;
+  border-top: 1px solid var(--border-color);
+  background-color: var(--bg-secondary);
+  display: flex;
+  gap: 0.5rem;
+}
+
+.chat-textarea {
+  flex: 1;
+  padding: 0.75rem;
+  border: 1px solid var(--border-color);
+  border-radius: 0.375rem;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  resize: none !important;
+  min-height: 40px !important;
+  max-height: 140px !important;
+  line-height: 20px;
+  font-size: 1rem;
+  font-family: inherit;
+  transition: height 0.2s ease;
+  box-sizing: border-box;
+  overflow-y: hidden;
+}
+
+.chat-textarea:focus {
+  outline: none;
+  border-color: var(--accent-color);
+}
+
+.chat-textarea::-webkit-scrollbar {
+  width: 8px;
+}
+
+.chat-textarea::-webkit-scrollbar-track {
+  background: var(--bg-secondary);
+  border-radius: 4px;
+}
+
+.chat-textarea::-webkit-scrollbar-thumb {
+  background: var(--border-color);
+  border-radius: 4px;
+}
+
+.chat-textarea::-webkit-scrollbar-thumb:hover {
+  background: var(--text-secondary);
+}
+
+.send-button {
+  padding: 0.75rem 1.5rem;
+  background-color: var(--accent-color);
+  color: white;
+  border: none;
+  border-radius: 0.375rem;
+  cursor: pointer;
+  white-space: nowrap;
+  font-size: 1rem;
+  transition: opacity 0.2s ease;
+}
+
+.send-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.send-button:hover:not(:disabled) {
+  opacity: 0.9;
+}
+
+/* 会話リストの追加スタイル */
+.navbar-conversation-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.navbar-conversation-menu {
+  padding: 0.25rem;
+  color: var(--text-secondary);
+  background: none;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 30;
+}
+
+.navbar-conversation-menu:hover {
+  color: var(--text-primary);
+}
+
+.navbar-conversation-input {
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid var(--border-color);
+  border-radius: 0.375rem;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+}
+
+.navbar-conversation-input:focus {
+  outline: none;
+  border-color: var(--accent-color);
+}
+
+/* メニューのスタイル */
+.menu-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+}
+
+.menu-container {
+  position: fixed;
+  background-color: var(--bg-primary);
+  border: 1px solid var(--border-color);
+  border-radius: 0.375rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  z-index: 50;
+  min-width: 200px;
+}
+
+.menu-container.settings-menu {
+  transform: translateY(-100%);
+}
+
+.menu-container button {
+  width: 100%;
+  padding: 0.5rem 1rem;
+  text-align: left;
+  background: none;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--text-primary);
+  white-space: nowrap;
+}
+
+.menu-container button:hover {
+  background-color: var(--bg-secondary);
+}
+
+.menu-container button.text-red-600 {
+  color: var(--error-color);
+}
+
+/* 設定ダイアログのスタイル */
+.settings-dialog-overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 50;
+}
+
+.settings-dialog {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: var(--bg-primary);
+  border-radius: 0.5rem;
+  padding: 1.5rem;
+  width: 24rem;
+  z-index: 51;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.settings-dialog h2 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  color: var(--text-primary);
+}
+
+.settings-dialog label {
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+  color: var(--text-primary);
+}
+
+.settings-dialog select,
+.settings-dialog input {
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid var(--border-color);
+  border-radius: 0.375rem;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  margin-bottom: 1rem;
+}
+
+.settings-dialog select:focus,
+.settings-dialog input:focus {
+  outline: none;
+  border-color: var(--accent-color);
+}
+
+.settings-dialog-buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+.settings-dialog-buttons button {
+  padding: 0.5rem 1rem;
+  border-radius: 0.375rem;
+  cursor: pointer;
+}
+
+.settings-dialog-buttons button.cancel {
+  background-color: transparent;
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+}
+
+.settings-dialog-buttons button.save {
+  background-color: var(--accent-color);
+  color: white;
+  border: none;
+}
+
+.settings-dialog-buttons button:hover {
+  opacity: 0.9;
+}
+
+/* メッセージヘッダーのスタイル */
+.message-header {
+  display: flex;
+  align-items: center;
+  margin-top: 0.25rem;
+  width: 100%;
+  height: 24px;
+  position: relative;
+}
+
+.message-timestamp {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  flex: 1;
+}
+
+.message-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex: 1;
+  justify-content: flex-end;
+}
+
+.message-collapse {
+  color: var(--text-secondary);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0.25rem;
+  display: inline-flex;
+  align-items: center;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.message-copy {
+  color: var(--text-secondary);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0.25rem;
+  display: inline-flex;
+  align-items: center;
+}
+
+.message-collapse:hover,
+.message-copy:hover {
+  color: var(--text-primary);
+}
+
+.message-collapse i,
+.message-copy i {
+  background: transparent;
+  font-size: 0.875rem;
+}
+
+.copy-tooltip {
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  margin-bottom: 0.5rem;
+  padding: 0.25rem 0.5rem;
+  font-size: 0.75rem;
+  border-radius: 0.25rem;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  white-space: nowrap;
+  z-index: 3;
+}
+
+.dark .message-collapse i,
+.dark .message-copy i {
+  background: transparent;
+}
+
+.dark .message-timestamp {
+  color: var(--text-secondary);
+}
+
+/* メッセージコンテナ */
+.message-container {
+  margin-bottom: 1rem;
+  padding-left: 3rem;
+  padding-right: 3rem;
+}
+
+.message-container.user {
+  padding-left: 3rem;
+}
+
+.message-container.assistant {
+  padding-right: 3rem;
+}
+
+/* メッセージのフレックスコンテナ */
+.message-flex {
+  display: flex;
+}
+
+.message-flex.user {
+  justify-content: flex-end;
+}
+
+.message-flex.assistant {
+  justify-content: flex-start;
+}
+
+/* メッセージ本体 */
+.message-content {
+  padding: 1rem;
+  border-radius: 0.5rem;
+  width: fit-content;
+  max-width: 60%;
+}
+
+.message-content.user {
+  background-color: var(--accent-color);
+  color: #ffffff;
+}
+
+.message-content.assistant {
+  background-color: var(--bg-secondary);
+  color: var(--text-primary);
+  width: 100%;
+  max-width: 100%;
+} `, "",{"version":3,"sources":["webpack://./src/client/styles.css"],"names":[],"mappings":"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","sourcesContent":["/* ベーススタイル */\n:root {\n  --text-primary: #333;\n  --text-secondary: #666;\n  --bg-primary: #fff;\n  --bg-secondary: #f5f5f5;\n  --border-color: #ddd;\n  --accent-color: #3b82f6;\n  --error-color: #ef4444;\n  --success-color: #10b981;\n}\n\n/* ダークモード */\n.dark {\n  --text-primary: #f1f5f9;\n  --text-secondary: #94a3b8;\n  --bg-primary: #1e293b;\n  --bg-secondary: #111827;\n  --border-color: #334155;\n  --accent-color: #3b82f6;\n  --error-color: #ef4444;\n  --success-color: #10b981;\n}\n\n/* レイアウトの基本スタイル */\n.app-container {\n  display: flex;\n  height: 100vh;\n  background-color: var(--bg-primary);\n}\n\n.sidebar {\n  width: 300px;\n  background-color: var(--bg-secondary);\n  border-right: 1px solid var(--border-color);\n  display: flex;\n  flex-direction: column;\n  overflow: hidden;\n}\n\n.main-content {\n  flex: 1;\n  display: flex;\n  flex-direction: column;\n  overflow: hidden;\n}\n\n/* ナビゲーションのスタイル */\n.navbar {\n  display: flex;\n  flex-direction: column;\n  height: 100%;\n  overflow: hidden;\n}\n\n.navbar-header {\n  padding: 1rem;\n  border-bottom: 1px solid var(--border-color);\n  display: flex;\n  align-items: center;\n  gap: 0.5rem;\n}\n\n.navbar-logo {\n  width: 64px;\n  height: 64px;\n  object-fit: contain;\n}\n\n.navbar-title {\n  font-size: 1.5rem;\n  font-weight: 600;\n  color: var(--text-primary);\n}\n\n.navbar-new-chat {\n  font-size: 1rem;\n  margin: 1rem;\n  padding: 0.75rem;\n  background-color: var(--accent-color);\n  color: white;\n  border: none;\n  border-radius: 0.375rem;\n  cursor: pointer;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  gap: 0.5rem;\n}\n\n.navbar-new-chat:hover {\n  opacity: 0.9;\n}\n\n.navbar-conversations {\n  flex: 1;\n  overflow-y: auto;\n  padding: 0.5rem;\n}\n\n.navbar-conversation {\n  padding: 0.75rem;\n  margin-bottom: 0.5rem;\n  border-radius: 0.375rem;\n  cursor: pointer;\n  display: flex;\n  flex-direction: column;\n  gap: 0.25rem;\n}\n\n.navbar-conversation:hover {\n  background-color: var(--bg-primary);\n}\n\n.navbar-conversation.active {\n  background-color: var(--bg-primary);\n}\n\n.navbar-conversation-title {\n  font-size: 1rem;\n  color: var(--text-primary);\n  white-space: nowrap;\n  overflow: hidden;\n  text-overflow: ellipsis;\n}\n\n.navbar-conversation-date {\n  font-size: 0.875rem;\n  color: var(--text-secondary);\n}\n\n.navbar-footer {\n  padding: 1rem;\n  border-top: 1px solid var(--border-color);\n}\n\n.navbar-settings {\n  font-size: 1rem;\n  width: 100%;\n  padding: 0.75rem;\n  background-color: var(--bg-primary);\n  color: var(--text-primary);\n  border: 1px solid var(--border-color);\n  border-radius: 0.375rem;\n  cursor: pointer;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  gap: 0.5rem;\n}\n\n.navbar-settings:hover {\n  background-color: var(--bg-secondary);\n}\n\nbody {\n  margin: 0;\n  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,\n    Ubuntu, Cantarell, 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;\n  -webkit-font-smoothing: antialiased;\n  -moz-osx-font-smoothing: grayscale;\n  font-size: 16px;\n}\n\n/* スクロールバーのスタイル */\n::-webkit-scrollbar {\n  width: 8px;\n  height: 8px;\n}\n\n::-webkit-scrollbar-track {\n  background: var(--bg-secondary);\n}\n\n::-webkit-scrollbar-thumb {\n  background: #888;\n  border-radius: 4px;\n}\n\n::-webkit-scrollbar-thumb:hover {\n  background: #666;\n}\n\n/* マークダウンコンテンツのスタイル */\n.markdown-content {\n  font-size: 1rem;\n  line-height: 1.6;\n}\n\n.markdown-content h1 {\n  font-size: 1.8rem;\n  margin-top: 1.5rem;\n  margin-bottom: 1rem;\n  font-weight: 600;\n}\n\n.markdown-content h2 {\n  font-size: 1.5rem;\n  margin-top: 1.5rem;\n  margin-bottom: 0.75rem;\n  font-weight: 600;\n}\n\n.markdown-content h3 {\n  font-size: 1.3rem;\n  margin-top: 1.25rem;\n  margin-bottom: 0.75rem;\n  font-weight: 600;\n}\n\n.markdown-content p {\n  margin: 0.75rem 0;\n}\n\n.markdown-content ul, .markdown-content ol {\n  padding-left: 1.5rem;\n  margin: 0.75rem 0;\n}\n\n.markdown-content li {\n  margin-bottom: 0.25rem;\n}\n\n.markdown-content a {\n  color: var(--accent-color);\n  text-decoration: none;\n}\n\n.markdown-content a:hover {\n  text-decoration: underline;\n}\n\n.markdown-content blockquote {\n  border-left: 4px solid var(--border-color);\n  padding-left: 1rem;\n  margin: 1rem 0;\n  color: var(--text-secondary);\n}\n\n.markdown-content table {\n  border-collapse: collapse;\n  width: 100%;\n  margin: 1rem 0;\n}\n\n.markdown-content th, .markdown-content td {\n  border: 1px solid var(--border-color);\n  padding: 0.5rem;\n}\n\n.markdown-content th {\n  background-color: var(--bg-secondary);\n  font-weight: 600;\n}\n\n.markdown-content code {\n  background-color: var(--bg-secondary);\n  padding: 0.2rem 0.4rem;\n  border-radius: 3px;\n  font-family: monospace;\n  font-size: 0.9em;\n}\n\n.markdown-content pre {\n  margin: 1rem 0;\n  padding: 1rem;\n  border-radius: 4px;\n  overflow-x: auto;\n  background-color: var(--bg-secondary);\n}\n\n.markdown-content pre code {\n  background-color: transparent;\n  padding: 0;\n}\n\n.markdown-content img {\n  max-width: 100%;\n  display: block;\n  margin: 1rem auto;\n}\n\n/* チャットエリアのスタイル */\n.chat-area {\n  display: flex;\n  flex-direction: column;\n  height: 100%;\n  background-color: var(--bg-primary);\n}\n\n.chat-messages {\n  flex: 1;\n  overflow-y: auto;\n  padding: 1rem;\n}\n\n.chat-input-area {\n  padding: 1rem;\n  border-top: 1px solid var(--border-color);\n  background-color: var(--bg-secondary);\n  display: flex;\n  gap: 0.5rem;\n}\n\n.chat-textarea {\n  flex: 1;\n  padding: 0.75rem;\n  border: 1px solid var(--border-color);\n  border-radius: 0.375rem;\n  background-color: var(--bg-primary);\n  color: var(--text-primary);\n  resize: none !important;\n  min-height: 40px !important;\n  max-height: 140px !important;\n  line-height: 20px;\n  font-size: 1rem;\n  font-family: inherit;\n  transition: height 0.2s ease;\n  box-sizing: border-box;\n  overflow-y: hidden;\n}\n\n.chat-textarea:focus {\n  outline: none;\n  border-color: var(--accent-color);\n}\n\n.chat-textarea::-webkit-scrollbar {\n  width: 8px;\n}\n\n.chat-textarea::-webkit-scrollbar-track {\n  background: var(--bg-secondary);\n  border-radius: 4px;\n}\n\n.chat-textarea::-webkit-scrollbar-thumb {\n  background: var(--border-color);\n  border-radius: 4px;\n}\n\n.chat-textarea::-webkit-scrollbar-thumb:hover {\n  background: var(--text-secondary);\n}\n\n.send-button {\n  padding: 0.75rem 1.5rem;\n  background-color: var(--accent-color);\n  color: white;\n  border: none;\n  border-radius: 0.375rem;\n  cursor: pointer;\n  white-space: nowrap;\n  font-size: 1rem;\n  transition: opacity 0.2s ease;\n}\n\n.send-button:disabled {\n  opacity: 0.5;\n  cursor: not-allowed;\n}\n\n.send-button:hover:not(:disabled) {\n  opacity: 0.9;\n}\n\n/* 会話リストの追加スタイル */\n.navbar-conversation-header {\n  display: flex;\n  align-items: center;\n  justify-content: space-between;\n  width: 100%;\n}\n\n.navbar-conversation-menu {\n  padding: 0.25rem;\n  color: var(--text-secondary);\n  background: none;\n  border: none;\n  cursor: pointer;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  z-index: 30;\n}\n\n.navbar-conversation-menu:hover {\n  color: var(--text-primary);\n}\n\n.navbar-conversation-input {\n  width: 100%;\n  padding: 0.5rem;\n  border: 1px solid var(--border-color);\n  border-radius: 0.375rem;\n  background-color: var(--bg-primary);\n  color: var(--text-primary);\n}\n\n.navbar-conversation-input:focus {\n  outline: none;\n  border-color: var(--accent-color);\n}\n\n/* メニューのスタイル */\n.menu-overlay {\n  position: fixed;\n  inset: 0;\n  z-index: 40;\n}\n\n.menu-container {\n  position: fixed;\n  background-color: var(--bg-primary);\n  border: 1px solid var(--border-color);\n  border-radius: 0.375rem;\n  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);\n  z-index: 50;\n  min-width: 200px;\n}\n\n.menu-container.settings-menu {\n  transform: translateY(-100%);\n}\n\n.menu-container button {\n  width: 100%;\n  padding: 0.5rem 1rem;\n  text-align: left;\n  background: none;\n  border: none;\n  cursor: pointer;\n  display: flex;\n  align-items: center;\n  gap: 0.5rem;\n  color: var(--text-primary);\n  white-space: nowrap;\n}\n\n.menu-container button:hover {\n  background-color: var(--bg-secondary);\n}\n\n.menu-container button.text-red-600 {\n  color: var(--error-color);\n}\n\n/* 設定ダイアログのスタイル */\n.settings-dialog-overlay {\n  position: fixed;\n  inset: 0;\n  background-color: rgba(0, 0, 0, 0.5);\n  z-index: 50;\n}\n\n.settings-dialog {\n  position: fixed;\n  top: 50%;\n  left: 50%;\n  transform: translate(-50%, -50%);\n  background-color: var(--bg-primary);\n  border-radius: 0.5rem;\n  padding: 1.5rem;\n  width: 24rem;\n  z-index: 51;\n  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);\n}\n\n.settings-dialog h2 {\n  font-size: 1.25rem;\n  font-weight: 600;\n  margin-bottom: 1rem;\n  color: var(--text-primary);\n}\n\n.settings-dialog label {\n  display: block;\n  font-size: 0.875rem;\n  font-weight: 500;\n  margin-bottom: 0.5rem;\n  color: var(--text-primary);\n}\n\n.settings-dialog select,\n.settings-dialog input {\n  width: 100%;\n  padding: 0.5rem;\n  border: 1px solid var(--border-color);\n  border-radius: 0.375rem;\n  background-color: var(--bg-primary);\n  color: var(--text-primary);\n  margin-bottom: 1rem;\n}\n\n.settings-dialog select:focus,\n.settings-dialog input:focus {\n  outline: none;\n  border-color: var(--accent-color);\n}\n\n.settings-dialog-buttons {\n  display: flex;\n  justify-content: flex-end;\n  gap: 0.5rem;\n  margin-top: 1rem;\n}\n\n.settings-dialog-buttons button {\n  padding: 0.5rem 1rem;\n  border-radius: 0.375rem;\n  cursor: pointer;\n}\n\n.settings-dialog-buttons button.cancel {\n  background-color: transparent;\n  color: var(--text-primary);\n  border: 1px solid var(--border-color);\n}\n\n.settings-dialog-buttons button.save {\n  background-color: var(--accent-color);\n  color: white;\n  border: none;\n}\n\n.settings-dialog-buttons button:hover {\n  opacity: 0.9;\n}\n\n/* メッセージヘッダーのスタイル */\n.message-header {\n  display: flex;\n  align-items: center;\n  margin-top: 0.25rem;\n  width: 100%;\n  height: 24px;\n  position: relative;\n}\n\n.message-timestamp {\n  font-size: 0.75rem;\n  color: var(--text-secondary);\n  flex: 1;\n}\n\n.message-actions {\n  display: flex;\n  align-items: center;\n  gap: 0.5rem;\n  flex: 1;\n  justify-content: flex-end;\n}\n\n.message-collapse {\n  color: var(--text-secondary);\n  background: transparent;\n  border: none;\n  cursor: pointer;\n  padding: 0.25rem;\n  display: inline-flex;\n  align-items: center;\n  position: absolute;\n  left: 50%;\n  top: 50%;\n  transform: translate(-50%, -50%);\n}\n\n.message-copy {\n  color: var(--text-secondary);\n  background: transparent;\n  border: none;\n  cursor: pointer;\n  padding: 0.25rem;\n  display: inline-flex;\n  align-items: center;\n}\n\n.message-collapse:hover,\n.message-copy:hover {\n  color: var(--text-primary);\n}\n\n.message-collapse i,\n.message-copy i {\n  background: transparent;\n  font-size: 0.875rem;\n}\n\n.copy-tooltip {\n  position: absolute;\n  bottom: 100%;\n  left: 50%;\n  transform: translateX(-50%);\n  margin-bottom: 0.5rem;\n  padding: 0.25rem 0.5rem;\n  font-size: 0.75rem;\n  border-radius: 0.25rem;\n  background-color: var(--bg-primary);\n  color: var(--text-primary);\n  white-space: nowrap;\n  z-index: 3;\n}\n\n.dark .message-collapse i,\n.dark .message-copy i {\n  background: transparent;\n}\n\n.dark .message-timestamp {\n  color: var(--text-secondary);\n}\n\n/* メッセージコンテナ */\n.message-container {\n  margin-bottom: 1rem;\n  padding-left: 3rem;\n  padding-right: 3rem;\n}\n\n.message-container.user {\n  padding-left: 3rem;\n}\n\n.message-container.assistant {\n  padding-right: 3rem;\n}\n\n/* メッセージのフレックスコンテナ */\n.message-flex {\n  display: flex;\n}\n\n.message-flex.user {\n  justify-content: flex-end;\n}\n\n.message-flex.assistant {\n  justify-content: flex-start;\n}\n\n/* メッセージ本体 */\n.message-content {\n  padding: 1rem;\n  border-radius: 0.5rem;\n  width: fit-content;\n  max-width: 60%;\n}\n\n.message-content.user {\n  background-color: var(--accent-color);\n  color: #ffffff;\n}\n\n.message-content.assistant {\n  background-color: var(--bg-secondary);\n  color: var(--text-primary);\n  width: 100%;\n  max-width: 100%;\n} "],"sourceRoot":""}]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -56523,7 +57033,8 @@ function logCapturedError(boundary, errorInfo) {
       // displayed by the browser thanks to the DEV-only fake event trick in ReactErrorUtils.
 
       console['error'](combinedMessage); // Don't transform to our wrapper
-    } else {}
+    } else // removed by dead control flow
+{}
   } catch (e) {
     // This method must not throw, or React internal state will get messed up.
     // If console.error is overridden, or logCapturedError() shows a dialog that throws,
@@ -67751,7 +68262,8 @@ if (
 
 
 var m = __webpack_require__(/*! react-dom */ "./node_modules/react-dom/index.js");
-if (false) {} else {
+if (false) // removed by dead control flow
+{} else {
   var i = m.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED;
   exports.createRoot = function(c, o) {
     i.usingClientEntryPoint = true;
@@ -67801,17 +68313,12 @@ function checkDCE() {
     // a false positive.
     throw new Error('^_^');
   }
-  try {
-    // Verify that the code above has been dead code eliminated (DCE'd).
-    __REACT_DEVTOOLS_GLOBAL_HOOK__.checkDCE(checkDCE);
-  } catch (err) {
-    // DevTools shouldn't crash React, no matter what.
-    // We should still report in case we break this code.
-    console.error(err);
-  }
+  // removed by dead control flow
+{}
 }
 
-if (false) {} else {
+if (false) // removed by dead control flow
+{} else {
   module.exports = __webpack_require__(/*! ./cjs/react-dom.development.js */ "./node_modules/react-dom/cjs/react-dom.development.js");
 }
 
@@ -72418,7 +72925,8 @@ if (
 "use strict";
 
 
-if (false) {} else {
+if (false) // removed by dead control flow
+{} else {
   module.exports = __webpack_require__(/*! ./cjs/react.development.js */ "./node_modules/react/cjs/react.development.js");
 }
 
@@ -72434,7 +72942,8 @@ if (false) {} else {
 "use strict";
 
 
-if (false) {} else {
+if (false) // removed by dead control flow
+{} else {
   module.exports = __webpack_require__(/*! ./cjs/react-jsx-runtime.development.js */ "./node_modules/react/cjs/react-jsx-runtime.development.js");
 }
 
@@ -82171,7 +82680,8 @@ function readableStreamLikeToAsyncGenerator(readableStream) {
                     _b.trys.push([1, , 9, 10]);
                     _b.label = 2;
                 case 2:
-                    if (false) {}
+                    if (false) // removed by dead control flow
+{}
                     return [4, __await(reader.read())];
                 case 3:
                     _a = _b.sent(), value = _a.value, done = _a.done;
@@ -84716,7 +85226,8 @@ function readableStreamLikeToAsyncGenerator(readableStream) {
                     _b.trys.push([1, , 9, 10]);
                     _b.label = 2;
                 case 2:
-                    if (false) {}
+                    if (false) // removed by dead control flow
+{}
                     return [4, (0,tslib__WEBPACK_IMPORTED_MODULE_0__.__await)(reader.read())];
                 case 3:
                     _a = _b.sent(), value = _a.value, done = _a.done;
@@ -85554,7 +86065,8 @@ if (
 "use strict";
 
 
-if (false) {} else {
+if (false) // removed by dead control flow
+{} else {
   module.exports = __webpack_require__(/*! ./cjs/scheduler.development.js */ "./node_modules/scheduler/cjs/scheduler.development.js");
 }
 
@@ -103587,6 +104099,7 @@ const Navbar_1 = __importDefault(__webpack_require__(/*! ./components/Navbar */ 
 const SettingsDialog_1 = __webpack_require__(/*! ./components/SettingsDialog */ "./src/client/components/SettingsDialog.tsx");
 const mastraService_1 = __webpack_require__(/*! ../services/mastraService */ "./src/services/mastraService.ts");
 const default_1 = __webpack_require__(/*! ../config/default */ "./src/config/default.ts");
+const SettingsModal_1 = __importDefault(__webpack_require__(/*! ./components/SettingsModal */ "./src/client/components/SettingsModal.tsx"));
 const App = () => {
     const [mastraService] = (0, react_1.useState)(() => new mastraService_1.MastraService(default_1.DEFAULT_SETTINGS.endpoint));
     const [conversations, setConversations] = (0, react_1.useState)([]);
@@ -103595,6 +104108,11 @@ const App = () => {
     const [isSettingsOpen, setIsSettingsOpen] = (0, react_1.useState)(false);
     const initRef = (0, react_1.useRef)(false);
     const isMountedRef = (0, react_1.useRef)(true);
+    const [currentTheme, setCurrentTheme] = (0, react_1.useState)(() => {
+        const savedTheme = localStorage.getItem('theme');
+        return savedTheme || 'light';
+    });
+    const [showSettings, setShowSettings] = (0, react_1.useState)(false);
     // コンポーネントのマウント状態を管理
     (0, react_1.useEffect)(() => {
         isMountedRef.current = true;
@@ -103602,6 +104120,12 @@ const App = () => {
             isMountedRef.current = false;
         };
     }, []);
+    (0, react_1.useEffect)(() => {
+        // テーマの変更をHTML要素に適用
+        document.documentElement.classList.remove('light', 'dark');
+        document.documentElement.classList.add(currentTheme);
+        localStorage.setItem('theme', currentTheme);
+    }, [currentTheme]);
     // 会話の更新を監視する関数をメモ化
     const updateConversation = (0, react_1.useCallback)((conversationId) => __awaiter(void 0, void 0, void 0, function* () {
         if (!isMountedRef.current)
@@ -103683,11 +104207,19 @@ const App = () => {
         mastraService.updateEndpoint(newSettings.endpoint);
         setIsSettingsOpen(false);
     };
-    return ((0, jsx_runtime_1.jsxs)("div", { className: "flex h-screen bg-gray-100", children: [(0, jsx_runtime_1.jsx)(Navbar_1.default, { conversations: conversations, activeConversationId: currentConversationId, onConversationSelect: setCurrentConversationId, onNewConversation: handleNewConversation, onDeleteConversation: handleDeleteConversation, onOpenSettings: () => setIsSettingsOpen(true) }), (0, jsx_runtime_1.jsx)("div", { className: "flex-1 flex flex-col", children: (0, jsx_runtime_1.jsx)(ChatArea_1.ChatArea, { mastraService: mastraService, conversationId: currentConversationId, settings: settings, onUpdateConversation: (updatedConversation) => {
+    const handleSaveSettings = (newSettings) => {
+        if (!isMountedRef.current)
+            return;
+        console.log('Settings saved:', newSettings);
+        setSettings(newSettings);
+        mastraService.updateEndpoint(newSettings.endpoint);
+        setShowSettings(false);
+    };
+    return ((0, jsx_runtime_1.jsxs)("div", { className: `app-container ${currentTheme === 'dark' ? 'dark' : ''}`, children: [(0, jsx_runtime_1.jsx)("div", { className: "sidebar", children: (0, jsx_runtime_1.jsx)(Navbar_1.default, { conversations: conversations, activeConversationId: currentConversationId, onConversationSelect: setCurrentConversationId, onNewConversation: handleNewConversation, onDeleteConversation: handleDeleteConversation, onOpenSettings: () => setIsSettingsOpen(true), onThemeChange: setCurrentTheme, currentTheme: currentTheme }) }), (0, jsx_runtime_1.jsx)("div", { className: "main-content", children: (0, jsx_runtime_1.jsx)(ChatArea_1.ChatArea, { mastraService: mastraService, conversationId: currentConversationId, settings: settings, onUpdateConversation: (updatedConversation) => {
                         if (isMountedRef.current) {
                             setConversations(prev => prev.map(conv => conv.id === updatedConversation.id ? updatedConversation : conv));
                         }
-                    } }) }), (0, jsx_runtime_1.jsx)(SettingsDialog_1.SettingsDialog, { isOpen: isSettingsOpen, onClose: () => setIsSettingsOpen(false), settings: settings, onSettingsChange: handleSettingsChange })] }));
+                    } }) }), (0, jsx_runtime_1.jsx)(SettingsDialog_1.SettingsDialog, { isOpen: isSettingsOpen, onClose: () => setIsSettingsOpen(false), settings: settings, onSettingsChange: handleSettingsChange, currentTheme: currentTheme, onThemeChange: setCurrentTheme }), showSettings && ((0, jsx_runtime_1.jsx)(SettingsModal_1.default, { settings: settings, onSave: handleSaveSettings, onClose: () => setShowSettings(false), currentTheme: currentTheme, onThemeChange: setCurrentTheme }))] }));
 };
 exports["default"] = App;
 
@@ -103730,6 +104262,31 @@ const ChatArea = ({ mastraService, conversationId, settings, onUpdateConversatio
     const endOfMessagesRef = (0, react_1.useRef)(null);
     const inputRef = (0, react_1.useRef)(null);
     const isMountedRef = (0, react_1.useRef)(true);
+    // 入力エリアの高さを自動調整
+    const adjustTextareaHeight = () => {
+        const textarea = inputRef.current;
+        if (!textarea)
+            return;
+        // 一度高さをリセット
+        textarea.style.height = '40px';
+        // 新しい高さを計算
+        const scrollHeight = textarea.scrollHeight;
+        const maxHeight = 140; // 7行分の最大高さ
+        // 高さを設定（最大7行分まで）
+        textarea.style.height = `${Math.min(scrollHeight, maxHeight)}px`;
+        // 7行を超える場合はスクロール可能に
+        textarea.style.overflowY = scrollHeight > maxHeight ? 'auto' : 'hidden';
+    };
+    // 入力内容が変更されたときに高さを調整
+    (0, react_1.useEffect)(() => {
+        adjustTextareaHeight();
+    }, [input]);
+    // 入力エリアのスタイル
+    const textareaStyle = {
+        resize: 'none',
+        minHeight: '40px',
+        maxHeight: '140px', // 7行分の最大高さ
+    };
     // コンポーネントのマウント状態を管理
     (0, react_1.useEffect)(() => {
         isMountedRef.current = true;
@@ -103744,6 +104301,7 @@ const ChatArea = ({ mastraService, conversationId, settings, onUpdateConversatio
         const fetchConversation = () => __awaiter(void 0, void 0, void 0, function* () {
             if (!conversationId || !isMountedRef.current) {
                 setCurrentConversation(null);
+                setStreamedResponse('');
                 return;
             }
             try {
@@ -103752,6 +104310,7 @@ const ChatArea = ({ mastraService, conversationId, settings, onUpdateConversatio
                 if (isCurrentRequest && isMountedRef.current) {
                     console.log('Conversation fetched:', conversation);
                     setCurrentConversation(conversation);
+                    setStreamedResponse('');
                 }
             }
             catch (error) {
@@ -103762,6 +104321,7 @@ const ChatArea = ({ mastraService, conversationId, settings, onUpdateConversatio
                 console.error('Error fetching conversation:', error);
                 if (isCurrentRequest && isMountedRef.current) {
                     setCurrentConversation(null);
+                    setStreamedResponse('');
                 }
             }
         });
@@ -103770,7 +104330,7 @@ const ChatArea = ({ mastraService, conversationId, settings, onUpdateConversatio
             isCurrentRequest = false;
             abortController.abort();
         };
-    }, [conversationId]);
+    }, [conversationId, mastraService]);
     // メッセージが増えたら自動スクロール
     (0, react_1.useEffect)(() => {
         var _a;
@@ -103793,12 +104353,17 @@ const ChatArea = ({ mastraService, conversationId, settings, onUpdateConversatio
             const userMessage = {
                 id: (0, uuid_1.v4)(),
                 role: 'user',
-                content,
+                content: content,
                 timestamp: new Date().toISOString()
             };
             console.log('Saving user message:', { userMessage });
             // ユーザーメッセージを保存
-            yield mastraService.saveMessage(currentConversation.id, userMessage);
+            yield mastraService.saveMessage(currentConversation.id, userMessage, (newTitle) => {
+                // タイトルが更新された場合、会話を更新
+                const updatedConversation = Object.assign(Object.assign({}, currentConversation), { title: newTitle });
+                setCurrentConversation(updatedConversation);
+                onUpdateConversation(updatedConversation);
+            });
             if (!isMountedRef.current || signal.aborted)
                 return;
             // 会話を更新
@@ -103830,7 +104395,12 @@ const ChatArea = ({ mastraService, conversationId, settings, onUpdateConversatio
             };
             console.log('Saving assistant message:', { assistantMessage });
             // アシスタントのメッセージを保存
-            yield mastraService.saveMessage(currentConversation.id, assistantMessage);
+            yield mastraService.saveMessage(currentConversation.id, assistantMessage, (newTitle) => {
+                // タイトルが更新された場合、会話を更新
+                const updatedConversation = Object.assign(Object.assign({}, currentConversation), { title: newTitle });
+                setCurrentConversation(updatedConversation);
+                onUpdateConversation(updatedConversation);
+            });
             if (!isMountedRef.current || signal.aborted)
                 return;
             // 会話を更新
@@ -103861,32 +104431,81 @@ const ChatArea = ({ mastraService, conversationId, settings, onUpdateConversatio
     });
     // メッセージ表示コンポーネント
     const MessageComponent = ({ message }) => {
-        const isUser = message.role === 'user';
-        return ((0, jsx_runtime_1.jsxs)("div", { className: `mb-4 ${isUser ? 'pl-12' : 'pr-12'}`, children: [(0, jsx_runtime_1.jsx)("div", { className: `flex ${isUser ? 'justify-end' : 'justify-start'}`, children: (0, jsx_runtime_1.jsx)("div", { className: `max-w-3xl p-4 rounded-lg ${isUser
-                            ? 'bg-blue-600 text-white'
-                            : 'bg-gray-200 text-gray-900 dark:bg-gray-700 dark:text-white'}`, children: isUser ? ((0, jsx_runtime_1.jsx)("div", { children: message.content })) : ((0, jsx_runtime_1.jsx)("div", { className: "markdown-content", children: (0, jsx_runtime_1.jsx)(react_markdown_1.default, { remarkPlugins: [remark_gfm_1.default], components: {
-                                    pre: ({ children }) => ((0, jsx_runtime_1.jsxs)("div", { className: "relative", children: [(0, jsx_runtime_1.jsx)("button", { onClick: () => {
-                                                    var _a;
-                                                    const code = typeof children === 'string'
-                                                        ? children
-                                                        : (children && typeof children === 'object' && 'props' in children)
-                                                            ? String(((_a = children.props) === null || _a === void 0 ? void 0 : _a.children) || '')
-                                                            : '';
-                                                    navigator.clipboard.writeText(code);
-                                                }, className: "absolute top-2 right-2 bg-gray-700 text-white rounded px-2 py-1 text-xs", children: "\u30B3\u30D4\u30FC" }), (0, jsx_runtime_1.jsx)("pre", { className: "bg-gray-800 p-4 rounded-md overflow-x-auto text-white my-2", children: children })] }))
-                                }, children: message.content }) })) }) }), (0, jsx_runtime_1.jsx)("div", { className: `text-xs text-gray-500 mt-1 ${isUser ? 'text-right' : 'text-left'}`, children: new Date(message.timestamp).toLocaleTimeString('ja-JP', {
-                        hour: '2-digit',
-                        minute: '2-digit'
-                    }) })] }));
+        const content = Array.isArray(message.content)
+            ? message.content.map(item => typeof item === 'string' ? item : JSON.stringify(item)).join('\n')
+            : message.content;
+        const [isCollapsed, setIsCollapsed] = (0, react_1.useState)(false);
+        const [showCopied, setShowCopied] = (0, react_1.useState)(false);
+        const contentRef = (0, react_1.useRef)(null);
+        const [shouldShowCollapse, setShouldShowCollapse] = (0, react_1.useState)(false);
+        // コンテンツの高さをチェックして折りたたみボタンの表示を決定
+        (0, react_1.useEffect)(() => {
+            const checkContentHeight = () => {
+                if (contentRef.current && message.role === 'assistant') {
+                    const lineHeight = 20; // 1行あたりの高さ（px）
+                    const maxLines = 20; // 折りたたみ時の最大行数
+                    const maxHeight = lineHeight * maxLines;
+                    // コンテンツの実際の高さを取得
+                    const contentHeight = contentRef.current.scrollHeight;
+                    console.log('Content height:', contentHeight, 'Max height:', maxHeight);
+                    setShouldShowCollapse(contentHeight > maxHeight);
+                }
+            };
+            // 初回チェック
+            checkContentHeight();
+            // コンテンツが変更されたときに再チェック
+            const observer = new ResizeObserver(checkContentHeight);
+            if (contentRef.current) {
+                observer.observe(contentRef.current);
+            }
+            return () => {
+                observer.disconnect();
+            };
+        }, [message.role, content]);
+        const handleCopy = () => {
+            navigator.clipboard.writeText(content);
+            setShowCopied(true);
+            setTimeout(() => setShowCopied(false), 2000);
+        };
+        const handleCopyToInput = () => {
+            if (inputRef.current) {
+                inputRef.current.value = content;
+                inputRef.current.focus();
+            }
+        };
+        const toggleCollapse = () => {
+            setIsCollapsed(!isCollapsed);
+        };
+        return ((0, jsx_runtime_1.jsxs)("div", { className: `message-container ${message.role}`, children: [(0, jsx_runtime_1.jsx)("div", { className: `message-flex ${message.role}`, children: (0, jsx_runtime_1.jsx)("div", { className: `message-content ${message.role}`, children: message.role === 'user' ? ((0, jsx_runtime_1.jsx)("div", { className: "whitespace-pre-wrap", children: content })) : ((0, jsx_runtime_1.jsx)("div", { className: "relative", children: (0, jsx_runtime_1.jsx)("div", { ref: contentRef, className: "markdown-content overflow-x-auto", style: {
+                                    maxHeight: isCollapsed ? '400px' : 'none',
+                                    overflowY: isCollapsed ? 'auto' : 'visible',
+                                    transition: 'max-height 0.3s ease-in-out'
+                                }, children: (0, jsx_runtime_1.jsx)(react_markdown_1.default, { remarkPlugins: [remark_gfm_1.default], components: {
+                                        pre: ({ children }) => ((0, jsx_runtime_1.jsxs)("div", { className: "relative", children: [(0, jsx_runtime_1.jsx)("button", { onClick: () => {
+                                                        var _a;
+                                                        const code = typeof children === 'string'
+                                                            ? children
+                                                            : (children && typeof children === 'object' && 'props' in children)
+                                                                ? String(((_a = children.props) === null || _a === void 0 ? void 0 : _a.children) || '')
+                                                                : '';
+                                                        navigator.clipboard.writeText(code);
+                                                    }, className: "absolute top-2 right-2 rounded px-2 py-1 text-xs", style: { backgroundColor: 'var(--bg-primary)', color: 'var(--text-primary)' }, children: (0, jsx_runtime_1.jsx)("i", { className: "fa-regular fa-copy" }) }), (0, jsx_runtime_1.jsx)("pre", { className: "p-4 rounded-md overflow-x-auto my-2", style: { backgroundColor: 'var(--bg-primary)', color: 'var(--text-primary)' }, children: children })] })),
+                                        table: ({ children }) => ((0, jsx_runtime_1.jsx)("div", { className: "overflow-x-auto", children: (0, jsx_runtime_1.jsx)("table", { className: "min-w-full border-collapse", style: { border: '1px solid var(--border-color)' }, children: children }) })),
+                                        img: ({ src, alt }) => ((0, jsx_runtime_1.jsx)("div", { className: "overflow-x-auto", children: (0, jsx_runtime_1.jsx)("img", { src: src, alt: alt, className: "max-w-full h-auto" }) }))
+                                    }, children: content }) }) })) }) }), message.role === 'assistant' ? ((0, jsx_runtime_1.jsxs)("div", { className: "message-header", children: [(0, jsx_runtime_1.jsx)("div", { className: "message-timestamp", children: new Date(message.timestamp).toLocaleString('ja-JP', {
+                                year: 'numeric',
+                                month: '2-digit',
+                                day: '2-digit',
+                                hour: '2-digit',
+                                minute: '2-digit'
+                            }) }), (0, jsx_runtime_1.jsxs)("div", { className: "message-actions", children: [shouldShowCollapse && ((0, jsx_runtime_1.jsx)("button", { onClick: toggleCollapse, className: "message-collapse", title: isCollapsed ? '展開する' : '折りたたむ', children: (0, jsx_runtime_1.jsx)("i", { className: `fa-solid fa-angles-${isCollapsed ? 'down' : 'up'}` }) })), (0, jsx_runtime_1.jsx)("button", { onClick: handleCopy, className: "message-copy", title: "\u30AF\u30EA\u30C3\u30D7\u30DC\u30FC\u30C9\u306B\u30B3\u30D4\u30FC", children: (0, jsx_runtime_1.jsx)("i", { className: "fa-regular fa-copy" }) }), showCopied && ((0, jsx_runtime_1.jsx)("div", { className: "copy-tooltip", children: "Copied!" }))] })] })) : ((0, jsx_runtime_1.jsx)("div", { className: "message-header", children: (0, jsx_runtime_1.jsxs)("div", { className: "message-actions", children: [(0, jsx_runtime_1.jsx)("button", { onClick: handleCopy, className: "message-copy", title: "\u30AF\u30EA\u30C3\u30D7\u30DC\u30FC\u30C9\u306B\u30B3\u30D4\u30FC", children: (0, jsx_runtime_1.jsx)("i", { className: "fa-regular fa-copy" }) }), (0, jsx_runtime_1.jsx)("button", { onClick: handleCopyToInput, className: "message-copy", title: "\u5165\u529B\u6B04\u306B\u30B3\u30D4\u30FC", children: (0, jsx_runtime_1.jsx)("i", { className: "fa-regular fa-keyboard" }) })] }) }))] }));
     };
-    // キー入力でのメッセージ送信
-    const handleKeyDown = (e) => {
-        if (e.key === 'Enter' && !e.shiftKey && !isComposing) {
-            e.preventDefault();
-            handleSendMessage(input);
-        }
-    };
-    return ((0, jsx_runtime_1.jsxs)("div", { className: "flex flex-col h-full", children: [(0, jsx_runtime_1.jsx)("div", { className: "flex-1 overflow-y-auto p-4 bg-gray-100 dark:bg-gray-800", children: !conversationId ? ((0, jsx_runtime_1.jsx)("div", { className: "h-full flex items-center justify-center text-gray-500 dark:text-gray-400", children: (0, jsx_runtime_1.jsxs)("div", { className: "text-center", children: [(0, jsx_runtime_1.jsx)("h2", { className: "text-2xl font-bold mb-2", children: "Xibo Cockpit" }), (0, jsx_runtime_1.jsx)("p", { children: "\u5DE6\u5074\u306E\u30B5\u30A4\u30C9\u30D0\u30FC\u304B\u3089\u65B0\u898F\u4F1A\u8A71\u3092\u958B\u59CB\u3057\u3066\u304F\u3060\u3055\u3044" })] }) })) : ((0, jsx_runtime_1.jsxs)("div", { children: [currentConversation === null || currentConversation === void 0 ? void 0 : currentConversation.messages.map((msg) => ((0, jsx_runtime_1.jsx)(MessageComponent, { message: msg }, msg.id))), streamedResponse && (!(currentConversation === null || currentConversation === void 0 ? void 0 : currentConversation.messages.length) || currentConversation.messages[currentConversation.messages.length - 1].role !== 'assistant') && ((0, jsx_runtime_1.jsx)("div", { className: "mb-4 pr-12", children: (0, jsx_runtime_1.jsx)("div", { className: "flex justify-start", children: (0, jsx_runtime_1.jsx)("div", { className: "max-w-3xl p-4 rounded-lg bg-gray-200 text-gray-900 dark:bg-gray-700 dark:text-white", children: (0, jsx_runtime_1.jsx)("div", { className: "markdown-content", children: (0, jsx_runtime_1.jsx)(react_markdown_1.default, { remarkPlugins: [remark_gfm_1.default], children: streamedResponse }) }) }) }) })), (0, jsx_runtime_1.jsx)("div", { ref: endOfMessagesRef })] })) }), (0, jsx_runtime_1.jsx)("div", { className: "border-t border-gray-300 dark:border-gray-700 p-4 bg-white dark:bg-gray-900", children: (0, jsx_runtime_1.jsxs)("div", { className: "flex", children: [(0, jsx_runtime_1.jsx)("textarea", { ref: inputRef, value: input, onChange: (e) => setInput(e.target.value), onKeyDown: handleKeyDown, onCompositionStart: () => setIsComposing(true), onCompositionEnd: () => setIsComposing(false), placeholder: "\u30E1\u30C3\u30BB\u30FC\u30B8\u3092\u5165\u529B...", className: "flex-1 p-2 border rounded-l dark:bg-gray-800 dark:text-white dark:border-gray-700", disabled: !conversationId || isLoading, rows: 2 }), (0, jsx_runtime_1.jsx)("button", { onClick: () => handleSendMessage(input), disabled: !conversationId || isLoading || !input.trim(), className: "bg-blue-600 hover:bg-blue-700 text-white px-4 rounded-r transition disabled:opacity-50", children: isLoading ? '処理中...' : '送信' })] }) })] }));
+    return ((0, jsx_runtime_1.jsxs)("div", { className: "chat-area", children: [(0, jsx_runtime_1.jsxs)("div", { className: "chat-messages", children: [currentConversation === null || currentConversation === void 0 ? void 0 : currentConversation.messages.map((message) => ((0, jsx_runtime_1.jsx)(MessageComponent, { message: message }, message.id))), streamedResponse && ((0, jsx_runtime_1.jsx)("div", { className: `message-container assistant`, children: (0, jsx_runtime_1.jsx)("div", { className: `message-flex assistant`, children: (0, jsx_runtime_1.jsx)("div", { className: `message-content assistant`, children: (0, jsx_runtime_1.jsx)("div", { className: "relative", children: (0, jsx_runtime_1.jsx)("div", { className: "markdown-content overflow-x-auto", children: (0, jsx_runtime_1.jsx)(react_markdown_1.default, { remarkPlugins: [remark_gfm_1.default], children: streamedResponse }) }) }) }) }) })), (0, jsx_runtime_1.jsx)("div", { ref: endOfMessagesRef })] }), (0, jsx_runtime_1.jsxs)("div", { className: "chat-input-area", children: [(0, jsx_runtime_1.jsx)("textarea", { ref: inputRef, value: input, onChange: (e) => setInput(e.target.value), onKeyPress: (e) => {
+                            if (e.key === 'Enter' && !e.shiftKey && !isComposing) {
+                                e.preventDefault();
+                                handleSendMessage(input);
+                            }
+                        }, onCompositionStart: () => setIsComposing(true), onCompositionEnd: () => setIsComposing(false), placeholder: "\u30E1\u30C3\u30BB\u30FC\u30B8\u3092\u5165\u529B...", className: "chat-textarea", disabled: isLoading }), (0, jsx_runtime_1.jsx)("button", { onClick: () => handleSendMessage(input), disabled: !input.trim() || isLoading, className: "send-button", children: isLoading ? '送信中...' : '送信' })] })] }));
 };
 exports.ChatArea = ChatArea;
 
@@ -103897,13 +104516,62 @@ exports.ChatArea = ChatArea;
 /*!******************************************!*\
   !*** ./src/client/components/Navbar.tsx ***!
   \******************************************/
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
 
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const jsx_runtime_1 = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
-const Navbar = ({ conversations, activeConversationId, onConversationSelect, onNewConversation, onDeleteConversation, onOpenSettings }) => {
+const react_1 = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+const DeleteConfirmDialog = ({ isOpen, onClose, onConfirm }) => {
+    if (!isOpen)
+        return null;
+    return ((0, jsx_runtime_1.jsxs)(jsx_runtime_1.Fragment, { children: [(0, jsx_runtime_1.jsx)("div", { className: "fixed inset-0 bg-black bg-opacity-50 z-50", onClick: onClose }), (0, jsx_runtime_1.jsxs)("div", { className: "fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white dark:bg-gray-800 rounded-lg p-6 w-96 z-50", children: [(0, jsx_runtime_1.jsx)("h3", { className: "text-lg font-medium mb-4", children: "\u4F1A\u8A71\u5C65\u6B74\u306E\u524A\u9664" }), (0, jsx_runtime_1.jsx)("p", { className: "text-gray-600 dark:text-gray-300 mb-4", children: "\u3053\u306E\u64CD\u4F5C\u306F\u53D6\u308A\u6D88\u305B\u307E\u305B\u3093\u3002\u672C\u5F53\u306B\u524A\u9664\u3057\u307E\u3059\u304B\uFF1F" }), (0, jsx_runtime_1.jsxs)("div", { className: "flex justify-end space-x-2", children: [(0, jsx_runtime_1.jsx)("button", { onClick: onClose, className: "px-4 py-2 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded", children: "\u30AD\u30E3\u30F3\u30BB\u30EB" }), (0, jsx_runtime_1.jsx)("button", { onClick: onConfirm, className: "px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700", children: "\u524A\u9664" })] })] })] }));
+};
+const Menu = ({ isOpen, onClose, onEditTitle, onDelete, position }) => {
+    if (!isOpen)
+        return null;
+    return ((0, jsx_runtime_1.jsxs)(jsx_runtime_1.Fragment, { children: [(0, jsx_runtime_1.jsx)("div", { className: "menu-overlay", onClick: onClose }), (0, jsx_runtime_1.jsxs)("div", { className: "menu-container", style: { top: position.y, left: position.x }, children: [(0, jsx_runtime_1.jsxs)("button", { onClick: onEditTitle, className: "w-full px-4 py-2 text-left hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center", children: [(0, jsx_runtime_1.jsx)("i", { className: "fa-solid fa-pen-to-square mr-2" }), "\u30BF\u30A4\u30C8\u30EB\u3092\u7DE8\u96C6"] }), (0, jsx_runtime_1.jsxs)("button", { onClick: onDelete, className: "w-full px-4 py-2 text-left hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center text-red-600 dark:text-red-400", children: [(0, jsx_runtime_1.jsx)("i", { className: "fa-solid fa-trash-can mr-2" }), "\u524A\u9664"] })] })] }));
+};
+const SettingsMenu = ({ isOpen, onClose, onOpenSettings, position, onThemeChange, currentTheme }) => {
+    if (!isOpen)
+        return null;
+    return ((0, jsx_runtime_1.jsxs)(jsx_runtime_1.Fragment, { children: [(0, jsx_runtime_1.jsx)("div", { className: "menu-overlay", onClick: onClose }), (0, jsx_runtime_1.jsxs)("div", { className: "menu-container settings-menu", style: {
+                    top: position.y,
+                    left: position.x
+                }, children: [(0, jsx_runtime_1.jsxs)("button", { onClick: () => {
+                            onOpenSettings();
+                            onClose();
+                        }, className: "w-full px-4 py-2 text-left hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center whitespace-nowrap", children: [(0, jsx_runtime_1.jsx)("i", { className: "fa-solid fa-sliders mr-2" }), "\u74B0\u5883\u8A2D\u5B9A"] }), (0, jsx_runtime_1.jsxs)("button", { onClick: onClose, className: "w-full px-4 py-2 text-left hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center whitespace-nowrap", children: [(0, jsx_runtime_1.jsx)("i", { className: "fa-solid fa-list-check mr-2" }), "\u8A73\u7D30\u8A2D\u5B9A"] }), (0, jsx_runtime_1.jsxs)("button", { onClick: onClose, className: "w-full px-4 py-2 text-left hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center whitespace-nowrap", children: [(0, jsx_runtime_1.jsx)("i", { className: "fa-solid fa-bug mr-2" }), "\u30ED\u30B0\u8868\u793A"] }), (0, jsx_runtime_1.jsxs)("button", { onClick: onClose, className: "w-full px-4 py-2 text-left hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center text-red-600 dark:text-red-400 whitespace-nowrap", children: [(0, jsx_runtime_1.jsx)("i", { className: "fa-solid fa-trash-can mr-2" }), "\u5168\u524A\u9664"] }), (0, jsx_runtime_1.jsxs)("button", { onClick: onClose, className: "w-full px-4 py-2 text-left hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center whitespace-nowrap", children: [(0, jsx_runtime_1.jsx)("i", { className: "fa-solid fa-info mr-2" }), "About"] })] })] }));
+};
+const Navbar = ({ conversations, activeConversationId, onConversationSelect, onNewConversation, onDeleteConversation, onOpenSettings, onThemeChange, currentTheme }) => {
+    const [menuState, setMenuState] = (0, react_1.useState)({
+        isOpen: false,
+        conversationId: null,
+        position: { x: 0, y: 0 }
+    });
+    const [editingTitle, setEditingTitle] = (0, react_1.useState)({
+        conversationId: null,
+        title: ''
+    });
+    const [deleteConfirmState, setDeleteConfirmState] = (0, react_1.useState)({
+        isOpen: false,
+        conversationId: null
+    });
+    const [settingsMenuState, setSettingsMenuState] = (0, react_1.useState)({
+        isOpen: false,
+        position: { x: 0, y: 0 }
+    });
+    const inputRef = (0, react_1.useRef)(null);
     // 会話を日付順にソート
     const sortedConversations = [...conversations].sort((a, b) => {
         return new Date(b.metadata.lastUpdated).getTime() - new Date(a.metadata.lastUpdated).getTime();
@@ -103915,23 +104583,103 @@ const Navbar = ({ conversations, activeConversationId, onConversationSelect, onN
         const diffMinutes = Math.floor(diff / (1000 * 60));
         const diffHours = Math.floor(diff / (1000 * 60 * 60));
         const diffDays = Math.floor(diff / (1000 * 60 * 60 * 24));
+        const diffMonths = Math.floor(diffDays / 30);
+        const diffYears = Math.floor(diffDays / 365);
+        // 日付が変わっているかチェック
+        const isDifferentDay = messageDate.getDate() !== now.getDate() ||
+            messageDate.getMonth() !== now.getMonth() ||
+            messageDate.getFullYear() !== now.getFullYear();
+        if (isDifferentDay) {
+            // 日付が異なる場合は年月日時分を表示
+            return messageDate.toLocaleString('ja-JP', {
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+        }
+        // 同じ日の場合は相対時間を表示
         if (diffMinutes < 60) {
             return `${diffMinutes}分前`;
         }
         else if (diffHours < 24) {
             return `${diffHours}時間前`;
         }
-        else if (diffDays < 7) {
-            return `${diffDays}日前`;
-        }
         else {
-            return messageDate.toLocaleDateString();
+            return messageDate.toLocaleString('ja-JP', {
+                hour: '2-digit',
+                minute: '2-digit'
+            });
         }
     };
-    return ((0, jsx_runtime_1.jsxs)("nav", { className: "w-64 bg-gray-800 dark:bg-gray-900 text-white flex flex-col h-full", children: [(0, jsx_runtime_1.jsx)("div", { className: "flex justify-center items-center h-16 border-b border-gray-700", children: (0, jsx_runtime_1.jsx)("h1", { className: "text-xl font-bold", children: "Xibo Cockpit" }) }), (0, jsx_runtime_1.jsx)("div", { className: "p-3", children: (0, jsx_runtime_1.jsx)("button", { onClick: onNewConversation, className: "w-full bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded transition", children: "\u65B0\u898F\u4F1A\u8A71" }) }), (0, jsx_runtime_1.jsx)("div", { className: "flex-1 overflow-y-auto", children: sortedConversations.length === 0 ? ((0, jsx_runtime_1.jsx)("div", { className: "p-4 text-gray-400 text-center", children: "\u4F1A\u8A71\u5C65\u6B74\u304C\u3042\u308A\u307E\u305B\u3093" })) : ((0, jsx_runtime_1.jsx)("ul", { children: sortedConversations.map((conv) => ((0, jsx_runtime_1.jsx)("li", { children: (0, jsx_runtime_1.jsx)("button", { onClick: () => onConversationSelect(conv.id), className: `w-full text-left py-3 px-4 hover:bg-gray-700 transition ${activeConversationId === conv.id ? 'bg-gray-700' : ''}`, children: (0, jsx_runtime_1.jsxs)("div", { className: "flex justify-between items-center", children: [(0, jsx_runtime_1.jsxs)("div", { className: "flex-1 truncate", children: [(0, jsx_runtime_1.jsx)("div", { className: "font-medium", children: conv.title }), (0, jsx_runtime_1.jsx)("div", { className: "text-xs text-gray-400", children: formatDate(conv.metadata.lastUpdated) })] }), (0, jsx_runtime_1.jsx)("button", { onClick: (e) => {
-                                            e.stopPropagation();
-                                            onDeleteConversation(conv.id);
-                                        }, className: "ml-2 text-gray-400 hover:text-white", children: (0, jsx_runtime_1.jsx)("svg", { xmlns: "http://www.w3.org/2000/svg", className: "h-4 w-4", fill: "none", viewBox: "0 0 24 24", stroke: "currentColor", children: (0, jsx_runtime_1.jsx)("path", { strokeLinecap: "round", strokeLinejoin: "round", strokeWidth: 2, d: "M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" }) }) })] }) }) }, conv.id))) })) }), (0, jsx_runtime_1.jsx)("div", { className: "p-3 border-t border-gray-700", children: (0, jsx_runtime_1.jsx)("button", { onClick: onOpenSettings, className: "w-full bg-gray-700 hover:bg-gray-600 text-white py-2 px-4 rounded transition", children: "\u8A2D\u5B9A" }) })] }));
+    const handleMenuClick = (e, conversationId) => {
+        e.stopPropagation();
+        const rect = e.currentTarget.getBoundingClientRect();
+        setMenuState({
+            isOpen: true,
+            conversationId,
+            position: { x: rect.left, y: rect.bottom }
+        });
+    };
+    const handleEditTitle = (newTitle) => __awaiter(void 0, void 0, void 0, function* () {
+        if (!editingTitle.conversationId)
+            return;
+        try {
+            // TODO: PATCHリクエストを実装
+            // const response = await fetch(`/api/conversations/${editingTitle.conversationId}`, {
+            //   method: 'PATCH',
+            //   headers: {
+            //     'Content-Type': 'application/json',
+            //   },
+            //   body: JSON.stringify({ title: newTitle }),
+            // });
+            // if (!response.ok) throw new Error('Failed to update title');
+            // 成功した場合の処理
+            setEditingTitle({ conversationId: null, title: '' });
+        }
+        catch (error) {
+            console.error('Error updating title:', error);
+            // エラー処理
+        }
+    });
+    const handleKeyDown = (e) => {
+        if (e.key === 'Enter') {
+            handleEditTitle(editingTitle.title);
+        }
+        else if (e.key === 'Escape') {
+            setEditingTitle({ conversationId: null, title: '' });
+        }
+    };
+    const handleSettingsClick = (e) => {
+        e.stopPropagation();
+        const rect = e.currentTarget.getBoundingClientRect();
+        setSettingsMenuState({
+            isOpen: true,
+            position: { x: rect.right, y: rect.top }
+        });
+    };
+    return ((0, jsx_runtime_1.jsxs)("div", { className: "navbar", children: [(0, jsx_runtime_1.jsxs)("div", { className: "navbar-header", children: [(0, jsx_runtime_1.jsx)("img", { src: "/images/logo.jpg", alt: "Xibo Cockpit Logo", className: "navbar-logo" }), (0, jsx_runtime_1.jsx)("h1", { className: "navbar-title", children: "Xibo Cockpit" })] }), (0, jsx_runtime_1.jsxs)("button", { className: "navbar-new-chat", onClick: onNewConversation, children: [(0, jsx_runtime_1.jsx)("i", { className: "fa-solid fa-plus" }), "\u65B0\u3057\u3044\u4F1A\u8A71"] }), (0, jsx_runtime_1.jsx)("div", { className: "navbar-conversations", children: sortedConversations.map((conversation) => ((0, jsx_runtime_1.jsx)("div", { className: `navbar-conversation ${conversation.id === activeConversationId ? 'active' : ''}`, onClick: () => onConversationSelect(conversation.id), children: editingTitle.conversationId === conversation.id ? ((0, jsx_runtime_1.jsx)("input", { ref: inputRef, type: "text", value: editingTitle.title, onChange: (e) => setEditingTitle(prev => (Object.assign(Object.assign({}, prev), { title: e.target.value }))), onKeyDown: handleKeyDown, onBlur: () => handleEditTitle(editingTitle.title), className: "navbar-conversation-input" })) : ((0, jsx_runtime_1.jsxs)(jsx_runtime_1.Fragment, { children: [(0, jsx_runtime_1.jsxs)("div", { className: "navbar-conversation-header", children: [(0, jsx_runtime_1.jsx)("div", { className: "navbar-conversation-title", children: conversation.title }), (0, jsx_runtime_1.jsx)("button", { onClick: (e) => handleMenuClick(e, conversation.id), className: "navbar-conversation-menu", children: (0, jsx_runtime_1.jsx)("i", { className: "fa-solid fa-ellipsis" }) })] }), (0, jsx_runtime_1.jsx)("div", { className: "navbar-conversation-date", children: formatDate(conversation.metadata.lastUpdated) })] })) }, conversation.id))) }), (0, jsx_runtime_1.jsx)("div", { className: "navbar-footer", children: (0, jsx_runtime_1.jsxs)("button", { onClick: handleSettingsClick, className: "navbar-settings", children: [(0, jsx_runtime_1.jsx)("i", { className: "fa-solid fa-gear" }), "\u8A2D\u5B9A"] }) }), (0, jsx_runtime_1.jsx)(Menu, { isOpen: menuState.isOpen, onClose: () => setMenuState(prev => (Object.assign(Object.assign({}, prev), { isOpen: false }))), onEditTitle: () => {
+                    const conversation = conversations.find(c => c.id === menuState.conversationId);
+                    if (conversation) {
+                        setEditingTitle({
+                            conversationId: conversation.id,
+                            title: conversation.title
+                        });
+                        setMenuState(prev => (Object.assign(Object.assign({}, prev), { isOpen: false })));
+                    }
+                }, onDelete: () => {
+                    setDeleteConfirmState({
+                        isOpen: true,
+                        conversationId: menuState.conversationId
+                    });
+                    setMenuState(prev => (Object.assign(Object.assign({}, prev), { isOpen: false })));
+                }, position: menuState.position }), (0, jsx_runtime_1.jsx)(DeleteConfirmDialog, { isOpen: deleteConfirmState.isOpen, onClose: () => setDeleteConfirmState(prev => (Object.assign(Object.assign({}, prev), { isOpen: false }))), onConfirm: () => {
+                    if (deleteConfirmState.conversationId) {
+                        onDeleteConversation(deleteConfirmState.conversationId);
+                        setDeleteConfirmState(prev => (Object.assign(Object.assign({}, prev), { isOpen: false })));
+                    }
+                } }), (0, jsx_runtime_1.jsx)(SettingsMenu, { isOpen: settingsMenuState.isOpen, onClose: () => setSettingsMenuState(prev => (Object.assign(Object.assign({}, prev), { isOpen: false }))), onOpenSettings: onOpenSettings, position: settingsMenuState.position, onThemeChange: onThemeChange, currentTheme: currentTheme })] }));
 };
 exports["default"] = Navbar;
 
@@ -103949,21 +104697,52 @@ exports["default"] = Navbar;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.SettingsDialog = void 0;
 const jsx_runtime_1 = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
-const SettingsDialog = ({ isOpen, onClose, settings, onSettingsChange }) => {
+const react_1 = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+const SettingsDialog = ({ isOpen, onClose, settings, onSettingsChange, currentTheme, onThemeChange }) => {
+    const [localSettings, setLocalSettings] = (0, react_1.useState)(settings);
+    const [localTheme, setLocalTheme] = (0, react_1.useState)(currentTheme);
     if (!isOpen)
         return null;
-    const handleEndpointChange = (e) => {
-        onSettingsChange(Object.assign(Object.assign({}, settings), { endpoint: e.target.value }));
+    const handleSave = () => {
+        onSettingsChange(localSettings);
+        onThemeChange(localTheme);
+        onClose();
     };
-    const handleDarkModeChange = (e) => {
-        onSettingsChange(Object.assign(Object.assign({}, settings), { darkMode: e.target.checked }));
-    };
-    const handleLanguageChange = (e) => {
-        onSettingsChange(Object.assign(Object.assign({}, settings), { language: e.target.value }));
-    };
-    return ((0, jsx_runtime_1.jsx)("div", { className: "fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center", children: (0, jsx_runtime_1.jsxs)("div", { className: "bg-white rounded-lg p-6 w-96", children: [(0, jsx_runtime_1.jsx)("h2", { className: "text-xl font-bold mb-4", children: "\u8A2D\u5B9A" }), (0, jsx_runtime_1.jsxs)("div", { className: "space-y-4", children: [(0, jsx_runtime_1.jsxs)("div", { children: [(0, jsx_runtime_1.jsx)("label", { className: "block text-sm font-medium text-gray-700", children: "\u30A8\u30F3\u30C9\u30DD\u30A4\u30F3\u30C8" }), (0, jsx_runtime_1.jsx)("input", { type: "text", value: settings.endpoint, onChange: handleEndpointChange, className: "mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500" })] }), (0, jsx_runtime_1.jsx)("div", { children: (0, jsx_runtime_1.jsxs)("label", { className: "flex items-center", children: [(0, jsx_runtime_1.jsx)("input", { type: "checkbox", checked: settings.darkMode, onChange: handleDarkModeChange, className: "rounded border-gray-300 text-blue-600 shadow-sm focus:border-blue-500 focus:ring-blue-500" }), (0, jsx_runtime_1.jsx)("span", { className: "ml-2", children: "\u30C0\u30FC\u30AF\u30E2\u30FC\u30C9" })] }) }), (0, jsx_runtime_1.jsxs)("div", { children: [(0, jsx_runtime_1.jsx)("label", { className: "block text-sm font-medium text-gray-700", children: "\u8A00\u8A9E" }), (0, jsx_runtime_1.jsxs)("select", { value: settings.language, onChange: handleLanguageChange, className: "mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500", children: [(0, jsx_runtime_1.jsx)("option", { value: "ja", children: "\u65E5\u672C\u8A9E" }), (0, jsx_runtime_1.jsx)("option", { value: "en", children: "English" })] })] })] }), (0, jsx_runtime_1.jsx)("div", { className: "mt-6 flex justify-end", children: (0, jsx_runtime_1.jsx)("button", { onClick: onClose, className: "bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600", children: "\u9589\u3058\u308B" }) })] }) }));
+    return ((0, jsx_runtime_1.jsxs)(jsx_runtime_1.Fragment, { children: [(0, jsx_runtime_1.jsx)("div", { className: "settings-dialog-overlay", onClick: onClose }), (0, jsx_runtime_1.jsxs)("div", { className: "settings-dialog", children: [(0, jsx_runtime_1.jsx)("h2", { children: "\u8A2D\u5B9A" }), (0, jsx_runtime_1.jsxs)("div", { children: [(0, jsx_runtime_1.jsx)("label", { children: "\u30C6\u30FC\u30DE" }), (0, jsx_runtime_1.jsxs)("select", { value: localTheme, onChange: (e) => setLocalTheme(e.target.value), children: [(0, jsx_runtime_1.jsx)("option", { value: "light", children: "\u30E9\u30A4\u30C8\u30E2\u30FC\u30C9" }), (0, jsx_runtime_1.jsx)("option", { value: "dark", children: "\u30C0\u30FC\u30AF\u30E2\u30FC\u30C9" })] })] }), (0, jsx_runtime_1.jsxs)("div", { children: [(0, jsx_runtime_1.jsx)("label", { children: "API\u30A8\u30F3\u30C9\u30DD\u30A4\u30F3\u30C8" }), (0, jsx_runtime_1.jsx)("input", { type: "text", value: localSettings.endpoint, onChange: (e) => setLocalSettings(Object.assign(Object.assign({}, localSettings), { endpoint: e.target.value })) })] }), (0, jsx_runtime_1.jsxs)("div", { children: [(0, jsx_runtime_1.jsx)("label", { children: "\u8A00\u8A9E" }), (0, jsx_runtime_1.jsxs)("select", { value: localSettings.language, onChange: (e) => setLocalSettings(Object.assign(Object.assign({}, localSettings), { language: e.target.value })), children: [(0, jsx_runtime_1.jsx)("option", { value: "ja", children: "\u65E5\u672C\u8A9E" }), (0, jsx_runtime_1.jsx)("option", { value: "en", children: "English" })] })] }), (0, jsx_runtime_1.jsxs)("div", { className: "settings-dialog-buttons", children: [(0, jsx_runtime_1.jsx)("button", { onClick: onClose, className: "cancel", children: "\u30AD\u30E3\u30F3\u30BB\u30EB" }), (0, jsx_runtime_1.jsx)("button", { onClick: handleSave, className: "save", children: "\u4FDD\u5B58" })] })] })] }));
 };
 exports.SettingsDialog = SettingsDialog;
+
+
+/***/ }),
+
+/***/ "./src/client/components/SettingsModal.tsx":
+/*!*************************************************!*\
+  !*** ./src/client/components/SettingsModal.tsx ***!
+  \*************************************************/
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+const jsx_runtime_1 = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
+const react_1 = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+const SettingsModal = ({ settings, onSave, onClose, currentTheme, onThemeChange }) => {
+    const [formState, setFormState] = (0, react_1.useState)(Object.assign({}, settings));
+    const [localTheme, setLocalTheme] = (0, react_1.useState)(currentTheme);
+    const handleChange = (e) => {
+        const { name, value, type } = e.target;
+        setFormState(prev => (Object.assign(Object.assign({}, prev), { [name]: type === 'checkbox'
+                ? e.target.checked
+                : value })));
+    };
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        onSave(formState);
+        onThemeChange(localTheme);
+    };
+    return ((0, jsx_runtime_1.jsx)("div", { className: "fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50", children: (0, jsx_runtime_1.jsxs)("div", { className: "bg-white dark:bg-gray-800 rounded-lg shadow-lg w-full max-w-md p-6", children: [(0, jsx_runtime_1.jsx)("h2", { className: "text-xl font-bold mb-4 text-gray-900 dark:text-white", children: "\u8A2D\u5B9A" }), (0, jsx_runtime_1.jsxs)("form", { onSubmit: handleSubmit, children: [(0, jsx_runtime_1.jsxs)("div", { className: "mb-4", children: [(0, jsx_runtime_1.jsx)("label", { className: "block text-gray-700 dark:text-gray-300 mb-2", children: "\u63A5\u7D9A\u5148" }), (0, jsx_runtime_1.jsx)("input", { type: "text", name: "endpoint", value: formState.endpoint, onChange: handleChange, className: "w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white", placeholder: "\u4F8B: http://localhost:4111" })] }), (0, jsx_runtime_1.jsxs)("div", { className: "mb-4", children: [(0, jsx_runtime_1.jsx)("label", { className: "block text-gray-700 dark:text-gray-300 mb-2", children: "\u30C6\u30FC\u30DE" }), (0, jsx_runtime_1.jsxs)("select", { value: localTheme, onChange: (e) => setLocalTheme(e.target.value), className: "w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white", children: [(0, jsx_runtime_1.jsx)("option", { value: "light", children: "\u30E9\u30A4\u30C8\u30E2\u30FC\u30C9" }), (0, jsx_runtime_1.jsx)("option", { value: "dark", children: "\u30C0\u30FC\u30AF\u30E2\u30FC\u30C9" })] })] }), (0, jsx_runtime_1.jsxs)("div", { className: "mb-4", children: [(0, jsx_runtime_1.jsx)("label", { className: "block text-gray-700 dark:text-gray-300 mb-2", children: "\u8A00\u8A9E" }), (0, jsx_runtime_1.jsxs)("select", { name: "language", value: formState.language, onChange: handleChange, className: "w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white", children: [(0, jsx_runtime_1.jsx)("option", { value: "ja", children: "\u65E5\u672C\u8A9E" }), (0, jsx_runtime_1.jsx)("option", { value: "en", children: "English" })] })] }), (0, jsx_runtime_1.jsxs)("div", { className: "flex justify-end space-x-2 mt-6", children: [(0, jsx_runtime_1.jsx)("button", { type: "button", onClick: onClose, className: "px-4 py-2 bg-gray-300 text-gray-800 rounded hover:bg-gray-400 transition", children: "\u30AD\u30E3\u30F3\u30BB\u30EB" }), (0, jsx_runtime_1.jsx)("button", { type: "submit", className: "px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition", children: "\u4FDD\u5B58" })] })] })] }) }));
+};
+exports["default"] = SettingsModal;
 
 
 /***/ }),
@@ -104307,7 +105086,7 @@ class MastraService {
         });
     }
     // メッセージの保存
-    saveMessage(threadId, message) {
+    saveMessage(threadId, message, onTitleUpdated) {
         return __awaiter(this, void 0, void 0, function* () {
             if (!this.memoryClient) {
                 yield this.initialize();
@@ -104328,27 +105107,15 @@ class MastraService {
                     agentId: 'xibo'
                 });
                 console.log('Message saved successfully:', { savedMessage });
-                // TODO: タイトル更新の処理は一時的にコメントアウト
-                // CORSの設定が完了したら復活させる
-                /*
-                // スレッドの詳細を取得して確認
+                // スレッドの詳細を取得して新しいタイトルを確認
                 const thread = this.memoryClient.getMemoryThread(threadId, 'xibo');
-                const details = await thread.get();
+                const details = yield thread.get();
                 console.log('Thread details after save:', details);
-          
-                // 最初のユーザーメッセージの場合、タイトルを更新
-                if (message.role === 'user' && details.title === '新しい会話') {
-                  const newTitle = message.content.slice(0, 30);
-                  console.log('Updating thread title:', { oldTitle: details.title, newTitle });
-                  
-                  const updated = await thread.update({
-                    title: newTitle,
-                    metadata: { ...details.metadata, lastUpdated: timestamp },
-                    resourceId: this.userId
-                  });
-                  console.log('Thread updated:', updated);
+                // タイトルが更新されている場合は、コールバックを呼び出す
+                if (details.title && details.title !== '新しい会話' && onTitleUpdated) {
+                    console.log('Thread title updated:', details.title);
+                    onTitleUpdated(details.title);
                 }
-                */
             }
             catch (error) {
                 console.error('Error saving message:', error);
@@ -104385,15 +105152,20 @@ class MastraService {
             }
             try {
                 console.log('Getting messages for thread:', threadId);
-                const thread = this.memoryClient.getMemoryThread(threadId, 'xibo');
-                console.log('Thread object:', thread);
-                const details = yield thread.get();
-                console.log('Raw thread data:', details);
-                if (!details.messages || !Array.isArray(details.messages) || details.messages.length === 0) {
+                // 直接APIを呼び出してメッセージを取得
+                const response = yield fetch(`${this.endpoint}/api/memory/threads/${threadId}/messages?agentId=xibo`);
+                if (!response.ok) {
+                    throw new Error(`Failed to fetch messages: ${response.statusText}`);
+                }
+                const data = yield response.json();
+                console.log('Retrieved messages:', data);
+                // messages配列を取得
+                const messages = data.messages || [];
+                if (!Array.isArray(messages) || messages.length === 0) {
                     console.warn('No messages found in thread');
                     return [];
                 }
-                return details.messages.map((msg) => ({
+                return messages.map((msg) => ({
                     id: msg.id,
                     role: msg.role,
                     content: msg.content,

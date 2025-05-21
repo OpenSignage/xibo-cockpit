@@ -1,0 +1,49 @@
+xibo-cockpitの設計要求をまとめます。
+
+基本機能
+xibo-agent(localhost:4111)に接続して会話を行うwebクライアントです。
+
+環境
+node.jsサーバーで稼働し、開発言語は基本typescriptとします。
+Javascriptでパッケージが提供されているものぬ関しては、javascriptでの記述も行います。
+
+ディレクトリ構造
+ディレクトリ構成は以下のとおりとして、作成したソフトは適切なディレクトリに配置します。
+ README.md     プログラムの解説や設定などのドキュメント
+ assets        imagesやstyleなどのリソースファイル
+ config        設定ファイル等を配置。環境ごとの設定もここで管理。
+ dist          コンパイル後のjavascript
+ src           ここにソースコードを展開。必要に応じて機能別にディレクトリを作る。
+ tests         テストファイルはtestsにまとめる
+ types         型定義を共通で管理し、再利用しやすくします。
+ utils         汎用的に使える関数やロジックを格納.
+
+利用するライブラリ
+Mastra Client SDK　(npm install @mastra/client-js@latest)
+その他必要に応じてインストールする。
+
+参考ドキュメント
+Mastra client SDK https://mastra.ai/ja/docs/deployment/client
+このSDKを使って、Agentにアクセスすること！
+Agentとの会話：https://mastra.ai/ja/reference/client-js/agents
+  streamモードーで通信すること
+履歴管理：https://mastra.ai/ja/reference/client-js/memory
+
+
+Web画面構成
+画面左にNavi-barを設置し、上からロゴ（固定）、新規会話ボタン（固定）、会話履歴に全削除、
+会話スレッドの表示（スクロール）、底部固定で設定ボタン。
+右の領域は会話の表示エリア(スクロール）、一番底部に固定で入力エリアと送信ボタンを配置
+会話表示のエリアにはコピーボタンを配置し、内容のクリップボードへのコピーをサポートする。
+
+設定ボタンで開くダイアログ
+以下の項目を設定できること。
+　デフォルトの接続先（localhost:4111)
+  表示切り替え（ライトモード/ダークモード）デフォルトはダーク
+　言語切り替え（英語/日本語）　デフォルトは日本語
+
+その他機能
+Markdownデータの表示をサポートすること
+(section,tabel,code,image,Linkなど）
+mermaidの表示をサポートすること
+できる限りユーザーフレンドリーであること。

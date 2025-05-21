@@ -33,6 +33,37 @@ const ChatArea: React.FC<ChatAreaProps> = ({
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const isMountedRef = useRef(true);
 
+  // 入力エリアの高さを自動調整
+  const adjustTextareaHeight = () => {
+    const textarea = inputRef.current;
+    if (!textarea) return;
+
+    // 一度高さをリセット
+    textarea.style.height = '40px';
+    
+    // 新しい高さを計算
+    const scrollHeight = textarea.scrollHeight;
+    const maxHeight = 140; // 7行分の最大高さ
+    
+    // 高さを設定（最大7行分まで）
+    textarea.style.height = `${Math.min(scrollHeight, maxHeight)}px`;
+    
+    // 7行を超える場合はスクロール可能に
+    textarea.style.overflowY = scrollHeight > maxHeight ? 'auto' : 'hidden';
+  };
+
+  // 入力内容が変更されたときに高さを調整
+  useEffect(() => {
+    adjustTextareaHeight();
+  }, [input]);
+
+  // 入力エリアのスタイル
+  const textareaStyle = {
+    resize: 'none' as const,
+    minHeight: '40px',
+    maxHeight: '140px', // 7行分の最大高さ
+  };
+
   // コンポーネントのマウント状態を管理
   useEffect(() => {
     isMountedRef.current = true;
@@ -49,6 +80,7 @@ const ChatArea: React.FC<ChatAreaProps> = ({
     const fetchConversation = async () => {
       if (!conversationId || !isMountedRef.current) {
         setCurrentConversation(null);
+        setStreamedResponse('');
         return;
       }
 
@@ -58,6 +90,7 @@ const ChatArea: React.FC<ChatAreaProps> = ({
         if (isCurrentRequest && isMountedRef.current) {
           console.log('Conversation fetched:', conversation);
           setCurrentConversation(conversation);
+          setStreamedResponse('');
         }
       } catch (error: unknown) {
         if (error instanceof Error && error.name === 'AbortError') {
@@ -67,6 +100,7 @@ const ChatArea: React.FC<ChatAreaProps> = ({
         console.error('Error fetching conversation:', error);
         if (isCurrentRequest && isMountedRef.current) {
           setCurrentConversation(null);
+          setStreamedResponse('');
         }
       }
     };
@@ -77,7 +111,7 @@ const ChatArea: React.FC<ChatAreaProps> = ({
       isCurrentRequest = false;
       abortController.abort();
     };
-  }, [conversationId]);
+  }, [conversationId, mastraService]);
 
   // メッセージが増えたら自動スクロール
   useEffect(() => {
@@ -103,14 +137,22 @@ const ChatArea: React.FC<ChatAreaProps> = ({
       const userMessage: Message = {
         id: uuidv4(),
         role: 'user',
-        content,
+        content: content,
         timestamp: new Date().toISOString()
       };
 
       console.log('Saving user message:', { userMessage });
 
       // ユーザーメッセージを保存
-      await mastraService.saveMessage(currentConversation.id, userMessage);
+      await mastraService.saveMessage(currentConversation.id, userMessage, (newTitle) => {
+        // タイトルが更新された場合、会話を更新
+        const updatedConversation = {
+          ...currentConversation,
+          title: newTitle
+        };
+        setCurrentConversation(updatedConversation);
+        onUpdateConversation(updatedConversation);
+      });
 
       if (!isMountedRef.current || signal.aborted) return;
 
@@ -153,7 +195,15 @@ const ChatArea: React.FC<ChatAreaProps> = ({
       console.log('Saving assistant message:', { assistantMessage });
 
       // アシスタントのメッセージを保存
-      await mastraService.saveMessage(currentConversation.id, assistantMessage);
+      await mastraService.saveMessage(currentConversation.id, assistantMessage, (newTitle) => {
+        // タイトルが更新された場合、会話を更新
+        const updatedConversation = {
+          ...currentConversation,
+          title: newTitle
+        };
+        setCurrentConversation(updatedConversation);
+        onUpdateConversation(updatedConversation);
+      });
 
       if (!isMountedRef.current || signal.aborted) return;
 
@@ -188,134 +238,231 @@ const ChatArea: React.FC<ChatAreaProps> = ({
   };
 
   // メッセージ表示コンポーネント
-  const MessageComponent = ({ message }: { message: Message }) => {
-    const isUser = message.role === 'user';
+  const MessageComponent: React.FC<MessageComponentProps> = ({ message }) => {
+    const content = Array.isArray(message.content) 
+      ? message.content.map(item => typeof item === 'string' ? item : JSON.stringify(item)).join('\n')
+      : message.content;
+    
+    const [isCollapsed, setIsCollapsed] = useState(false);
+    const [showCopied, setShowCopied] = useState(false);
+    const contentRef = useRef<HTMLDivElement>(null);
+    const [shouldShowCollapse, setShouldShowCollapse] = useState(false);
+
+    // コンテンツの高さをチェックして折りたたみボタンの表示を決定
+    useEffect(() => {
+      const checkContentHeight = () => {
+        if (contentRef.current && message.role === 'assistant') {
+          const lineHeight = 20; // 1行あたりの高さ（px）
+          const maxLines = 20; // 折りたたみ時の最大行数
+          const maxHeight = lineHeight * maxLines;
+          
+          // コンテンツの実際の高さを取得
+          const contentHeight = contentRef.current.scrollHeight;
+          console.log('Content height:', contentHeight, 'Max height:', maxHeight);
+          
+          setShouldShowCollapse(contentHeight > maxHeight);
+        }
+      };
+
+      // 初回チェック
+      checkContentHeight();
+
+      // コンテンツが変更されたときに再チェック
+      const observer = new ResizeObserver(checkContentHeight);
+      if (contentRef.current) {
+        observer.observe(contentRef.current);
+      }
+
+      return () => {
+        observer.disconnect();
+      };
+    }, [message.role, content]);
+
+    const handleCopy = () => {
+      navigator.clipboard.writeText(content);
+      setShowCopied(true);
+      setTimeout(() => setShowCopied(false), 2000);
+    };
+
+    const handleCopyToInput = () => {
+      if (inputRef.current) {
+        inputRef.current.value = content;
+        inputRef.current.focus();
+      }
+    };
+
+    const toggleCollapse = () => {
+      setIsCollapsed(!isCollapsed);
+    };
 
     return (
-      <div className={`mb-4 ${isUser ? 'pl-12' : 'pr-12'}`}>
-        <div className={`flex ${isUser ? 'justify-end' : 'justify-start'}`}>
-          <div
-            className={`max-w-3xl p-4 rounded-lg ${
-              isUser
-                ? 'bg-blue-600 text-white'
-                : 'bg-gray-200 text-gray-900 dark:bg-gray-700 dark:text-white'
-            }`}
-          >
-            {isUser ? (
-              <div>{message.content}</div>
+      <div className={`message-container ${message.role}`}>
+        <div className={`message-flex ${message.role}`}>
+          <div className={`message-content ${message.role}`}>
+            {message.role === 'user' ? (
+              <div className="whitespace-pre-wrap">{content}</div>
             ) : (
-              <div className="markdown-content">
-                <ReactMarkdown
-                  remarkPlugins={[remarkGfm]}
-                  components={{
-                    pre: ({ children }) => (
-                      <div className="relative">
-                        <button
-                          onClick={() => {
-                            const code = typeof children === 'string' 
-                              ? children 
-                              : (children && typeof children === 'object' && 'props' in children)
-                                ? String(children.props?.children || '')
-                                : '';
-                            navigator.clipboard.writeText(code);
-                          }}
-                          className="absolute top-2 right-2 bg-gray-700 text-white rounded px-2 py-1 text-xs"
-                        >
-                          コピー
-                        </button>
-                        <pre className="bg-gray-800 p-4 rounded-md overflow-x-auto text-white my-2">
-                          {children}
-                        </pre>
-                      </div>
-                    )
+              <div className="relative">
+                <div 
+                  ref={contentRef}
+                  className="markdown-content overflow-x-auto"
+                  style={{
+                    maxHeight: isCollapsed ? '400px' : 'none',
+                    overflowY: isCollapsed ? 'auto' : 'visible',
+                    transition: 'max-height 0.3s ease-in-out'
                   }}
                 >
-                  {message.content}
-                </ReactMarkdown>
+                  <ReactMarkdown
+                    remarkPlugins={[remarkGfm]}
+                    components={{
+                      pre: ({ children }) => (
+                        <div className="relative">
+                          <button
+                            onClick={() => {
+                              const code = typeof children === 'string' 
+                                ? children 
+                                : (children && typeof children === 'object' && 'props' in children)
+                                  ? String(children.props?.children || '')
+                                  : '';
+                              navigator.clipboard.writeText(code);
+                            }}
+                            className="absolute top-2 right-2 rounded px-2 py-1 text-xs"
+                            style={{ backgroundColor: 'var(--bg-primary)', color: 'var(--text-primary)' }}
+                          >
+                            <i className="fa-regular fa-copy"></i>
+                          </button>
+                          <pre className="p-4 rounded-md overflow-x-auto my-2" style={{ backgroundColor: 'var(--bg-primary)', color: 'var(--text-primary)' }}>
+                            {children}
+                          </pre>
+                        </div>
+                      ),
+                      table: ({ children }) => (
+                        <div className="overflow-x-auto">
+                          <table className="min-w-full border-collapse" style={{ border: '1px solid var(--border-color)' }}>
+                            {children}
+                          </table>
+                        </div>
+                      ),
+                      img: ({ src, alt }) => (
+                        <div className="overflow-x-auto">
+                          <img src={src} alt={alt} className="max-w-full h-auto" />
+                        </div>
+                      )
+                    }}
+                  >
+                    {content}
+                  </ReactMarkdown>
+                </div>
               </div>
             )}
           </div>
         </div>
-        <div className={`text-xs text-gray-500 mt-1 ${isUser ? 'text-right' : 'text-left'}`}>
-          {new Date(message.timestamp).toLocaleTimeString('ja-JP', {
-            hour: '2-digit',
-            minute: '2-digit'
-          })}
-        </div>
+        {message.role === 'assistant' ? (
+          <div className="message-header">
+            <div className="message-timestamp">
+              {new Date(message.timestamp).toLocaleString('ja-JP', {
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit',
+                hour: '2-digit',
+                minute: '2-digit'
+              })}
+            </div>
+            <div className="message-actions">
+              {shouldShowCollapse && (
+                <button
+                  onClick={toggleCollapse}
+                  className="message-collapse"
+                  title={isCollapsed ? '展開する' : '折りたたむ'}
+                >
+                  <i className={`fa-solid fa-angles-${isCollapsed ? 'down' : 'up'}`}></i>
+                </button>
+              )}
+              <button
+                onClick={handleCopy}
+                className="message-copy"
+                title="クリップボードにコピー"
+              >
+                <i className="fa-regular fa-copy"></i>
+              </button>
+              {showCopied && (
+                <div className="copy-tooltip">
+                  Copied!
+                </div>
+              )}
+            </div>
+          </div>
+        ) : (
+          <div className="message-header">
+            <div className="message-actions">
+              <button
+                onClick={handleCopy}
+                className="message-copy"
+                title="クリップボードにコピー"
+              >
+                <i className="fa-regular fa-copy"></i>
+              </button>
+              <button
+                onClick={handleCopyToInput}
+                className="message-copy"
+                title="入力欄にコピー"
+              >
+                <i className="fa-regular fa-keyboard"></i>
+              </button>
+            </div>
+          </div>
+        )}
       </div>
     );
   };
 
-  // キー入力でのメッセージ送信
-  const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter' && !e.shiftKey && !isComposing) {
-      e.preventDefault();
-      handleSendMessage(input);
-    }
-  };
-
   return (
-    <div className="flex flex-col h-full">
-      {/* 会話エリア */}
-      <div className="flex-1 overflow-y-auto p-4 bg-gray-100 dark:bg-gray-800">
-        {!conversationId ? (
-          <div className="h-full flex items-center justify-center text-gray-500 dark:text-gray-400">
-            <div className="text-center">
-              <h2 className="text-2xl font-bold mb-2">Xibo Cockpit</h2>
-              <p>左側のサイドバーから新規会話を開始してください</p>
-            </div>
-          </div>
-        ) : (
-          <div>
-            {/* 会話メッセージ */}
-            {currentConversation?.messages.map((msg) => (
-              <MessageComponent key={msg.id} message={msg} />
-            ))}
-            
-            {/* ストリーミング中の応答（最後のメッセージがアシスタントのメッセージでない場合のみ表示） */}
-            {streamedResponse && (!currentConversation?.messages.length || currentConversation.messages[currentConversation.messages.length - 1].role !== 'assistant') && (
-              <div className="mb-4 pr-12">
-                <div className="flex justify-start">
-                  <div className="max-w-3xl p-4 rounded-lg bg-gray-200 text-gray-900 dark:bg-gray-700 dark:text-white">
-                    <div className="markdown-content">
-                      <ReactMarkdown remarkPlugins={[remarkGfm]}>
-                        {streamedResponse}
-                      </ReactMarkdown>
-                    </div>
+    <div className="chat-area">
+      <div className="chat-messages">
+        {currentConversation?.messages.map((message) => (
+          <MessageComponent key={message.id} message={message} />
+        ))}
+        {streamedResponse && (
+          <div className={`message-container assistant`}>
+            <div className={`message-flex assistant`}>
+              <div className={`message-content assistant`}>
+                <div className="relative">
+                  <div className="markdown-content overflow-x-auto">
+                    <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                      {streamedResponse}
+                    </ReactMarkdown>
                   </div>
                 </div>
               </div>
-            )}
-            
-            {/* 自動スクロール用の要素 */}
-            <div ref={endOfMessagesRef} />
+            </div>
           </div>
         )}
+        <div ref={endOfMessagesRef} />
       </div>
-
-      {/* 入力エリア */}
-      <div className="border-t border-gray-300 dark:border-gray-700 p-4 bg-white dark:bg-gray-900">
-        <div className="flex">
-          <textarea
-            ref={inputRef}
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            onKeyDown={handleKeyDown}
-            onCompositionStart={() => setIsComposing(true)}
-            onCompositionEnd={() => setIsComposing(false)}
-            placeholder="メッセージを入力..."
-            className="flex-1 p-2 border rounded-l dark:bg-gray-800 dark:text-white dark:border-gray-700"
-            disabled={!conversationId || isLoading}
-            rows={2}
-          />
-          <button
-            onClick={() => handleSendMessage(input)}
-            disabled={!conversationId || isLoading || !input.trim()}
-            className="bg-blue-600 hover:bg-blue-700 text-white px-4 rounded-r transition disabled:opacity-50"
-          >
-            {isLoading ? '処理中...' : '送信'}
-          </button>
-        </div>
+      <div className="chat-input-area">
+        <textarea
+          ref={inputRef}
+          value={input}
+          onChange={(e) => setInput(e.target.value)}
+          onKeyPress={(e) => {
+            if (e.key === 'Enter' && !e.shiftKey && !isComposing) {
+              e.preventDefault();
+              handleSendMessage(input);
+            }
+          }}
+          onCompositionStart={() => setIsComposing(true)}
+          onCompositionEnd={() => setIsComposing(false)}
+          placeholder="メッセージを入力..."
+          className="chat-textarea"
+          disabled={isLoading}
+        />
+        <button
+          onClick={() => handleSendMessage(input)}
+          disabled={!input.trim() || isLoading}
+          className="send-button"
+        >
+          {isLoading ? '送信中...' : '送信'}
+        </button>
       </div>
     </div>
   );

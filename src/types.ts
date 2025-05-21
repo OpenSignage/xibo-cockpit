@@ -1,10 +1,16 @@
+export interface UserSettings {
+  endpoint: string;
+  darkMode: boolean;
+  language: 'ja' | 'en';
+}
+
 export interface ConversationMetadata {
+  lastUpdated: string;
   userId: string;
   agentId: string;
-  memoryId?: string;
-  messageCount?: number;
+  messageCount: number;
   createdAt: string;
-  lastUpdated: string;
+  memoryId?: string;
 }
 
 export interface Conversation {
@@ -19,7 +25,6 @@ export interface Message {
   role: 'user' | 'assistant';
   content: string;
   timestamp: string;
-  metadata?: {
-    memoryId?: string;
-  };
-} 
+}
+
+// 会話関連の型定義は src/types/conversation.ts に移動しました 
