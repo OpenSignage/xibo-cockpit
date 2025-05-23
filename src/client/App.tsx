@@ -7,7 +7,7 @@ import { MastraService } from '../services/mastraService';
 import { Conversation, UserSettings } from '../types';
 import { DEFAULT_SETTINGS } from '../config/default';
 import { getLocalStorage, setLocalStorage } from '../utils';
-import SettingsModal from './components/SettingsModal';
+import DeleteConfirmDialog from './components/DeleteConfirmDialog';
 
 const App: React.FC = () => {
   const [mastraService] = useState(() => new MastraService(DEFAULT_SETTINGS.endpoint));
@@ -15,13 +15,19 @@ const App: React.FC = () => {
   const [currentConversationId, setCurrentConversationId] = useState<string | null>(null);
   const [settings, setSettings] = useState<UserSettings>(DEFAULT_SETTINGS);
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+  const [deleteConfirmState, setDeleteConfirmState] = useState<{
+    isOpen: boolean;
+    conversationId: string | null;
+  }>({
+    isOpen: false,
+    conversationId: null
+  });
   const initRef = useRef(false);
   const isMountedRef = useRef(true);
   const [currentTheme, setCurrentTheme] = useState<'light' | 'dark'>(() => {
     const savedTheme = localStorage.getItem('theme');
     return (savedTheme as 'light' | 'dark') || 'light';
   });
-  const [showSettings, setShowSettings] = useState(false);
 
   // コンポーネントのマウント状態を管理
   useEffect(() => {
@@ -106,13 +112,36 @@ const App: React.FC = () => {
     try {
       await mastraService.deleteConversationThread(id);
       if (isMountedRef.current) {
-        setConversations(prev => prev.filter(conv => conv.id !== id));
+        const updatedConversations = conversations.filter(conv => conv.id !== id);
+        setConversations(updatedConversations);
         if (currentConversationId === id) {
-          setCurrentConversationId(conversations[0]?.id || null);
+          setCurrentConversationId(updatedConversations.length > 0 ? updatedConversations[0].id : null);
         }
       }
     } catch (error) {
       console.error('Error deleting conversation:', error);
+    }
+  };
+
+  const handleDeleteAll = async () => {
+    if (!isMountedRef.current) return;
+
+    console.log('Deleting all conversations...');
+    try {
+      // 全てのスレッドを取得
+      const threads = await mastraService.getConversationThreads();
+      
+      // 各スレッドを削除
+      for (const thread of threads) {
+        await mastraService.deleteConversationThread(thread.id);
+      }
+
+      if (isMountedRef.current) {
+        setConversations([]);
+        setCurrentConversationId(null);
+      }
+    } catch (error) {
+      console.error('Error deleting all conversations:', error);
     }
   };
 
@@ -123,15 +152,6 @@ const App: React.FC = () => {
     setSettings(newSettings);
     mastraService.updateEndpoint(newSettings.endpoint);
     setIsSettingsOpen(false);
-  };
-
-  const handleSaveSettings = (newSettings: UserSettings) => {
-    if (!isMountedRef.current) return;
-
-    console.log('Settings saved:', newSettings);
-    setSettings(newSettings);
-    mastraService.updateEndpoint(newSettings.endpoint);
-    setShowSettings(false);
   };
 
   return (
@@ -146,6 +166,18 @@ const App: React.FC = () => {
           onOpenSettings={() => setIsSettingsOpen(true)}
           onThemeChange={setCurrentTheme}
           currentTheme={currentTheme}
+          onDeleteConfirm={(conversationId) => {
+            setDeleteConfirmState({
+              isOpen: true,
+              conversationId
+            });
+          }}
+          onDeleteAll={() => {
+            setDeleteConfirmState({
+              isOpen: true,
+              conversationId: null
+            });
+          }}
         />
       </div>
       <div className="main-content">
@@ -172,15 +204,19 @@ const App: React.FC = () => {
         currentTheme={currentTheme}
         onThemeChange={setCurrentTheme}
       />
-      {showSettings && (
-        <SettingsModal
-          settings={settings}
-          onSave={handleSaveSettings}
-          onClose={() => setShowSettings(false)}
-          currentTheme={currentTheme}
-          onThemeChange={setCurrentTheme}
-        />
-      )}
+      <DeleteConfirmDialog
+        isOpen={deleteConfirmState.isOpen}
+        onClose={() => setDeleteConfirmState(prev => ({ ...prev, isOpen: false }))}
+        onConfirm={() => {
+          if (deleteConfirmState.conversationId) {
+            handleDeleteConversation(deleteConfirmState.conversationId);
+          } else {
+            handleDeleteAll();
+          }
+          setDeleteConfirmState(prev => ({ ...prev, isOpen: false }));
+        }}
+        isDeleteAll={!deleteConfirmState.conversationId}
+      />
     </div>
   );
 };

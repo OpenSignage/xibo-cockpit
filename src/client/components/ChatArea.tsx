@@ -37,32 +37,19 @@ const ChatArea: React.FC<ChatAreaProps> = ({
   const adjustTextareaHeight = () => {
     const textarea = inputRef.current;
     if (!textarea) return;
-
+    
     // 一度高さをリセット
     textarea.style.height = '40px';
     
     // 新しい高さを計算
     const scrollHeight = textarea.scrollHeight;
-    const maxHeight = 140; // 7行分の最大高さ
-    
-    // 高さを設定（最大7行分まで）
-    textarea.style.height = `${Math.min(scrollHeight, maxHeight)}px`;
-    
-    // 7行を超える場合はスクロール可能に
-    textarea.style.overflowY = scrollHeight > maxHeight ? 'auto' : 'hidden';
+    textarea.style.height = `${scrollHeight}px`;
   };
 
   // 入力内容が変更されたときに高さを調整
   useEffect(() => {
     adjustTextareaHeight();
   }, [input]);
-
-  // 入力エリアのスタイル
-  const textareaStyle = {
-    resize: 'none' as const,
-    minHeight: '40px',
-    maxHeight: '140px', // 7行分の最大高さ
-  };
 
   // コンポーネントのマウント状態を管理
   useEffect(() => {
@@ -85,16 +72,13 @@ const ChatArea: React.FC<ChatAreaProps> = ({
       }
 
       try {
-        console.log('Fetching conversation:', conversationId);
         const conversation = await mastraService.getConversationThread(conversationId);
         if (isCurrentRequest && isMountedRef.current) {
-          console.log('Conversation fetched:', conversation);
           setCurrentConversation(conversation);
           setStreamedResponse('');
         }
       } catch (error: unknown) {
         if (error instanceof Error && error.name === 'AbortError') {
-          console.log('Fetch aborted');
           return;
         }
         console.error('Error fetching conversation:', error);
@@ -128,11 +112,6 @@ const ChatArea: React.FC<ChatAreaProps> = ({
     const signal = abortController.signal;
 
     try {
-      console.log('Starting message send process:', { 
-        conversationId: currentConversation.id,
-        content 
-      });
-
       setIsLoading(true);
       const userMessage: Message = {
         id: uuidv4(),
@@ -140,8 +119,6 @@ const ChatArea: React.FC<ChatAreaProps> = ({
         content: content,
         timestamp: new Date().toISOString()
       };
-
-      console.log('Saving user message:', { userMessage });
 
       // ユーザーメッセージを保存
       await mastraService.saveMessage(currentConversation.id, userMessage, (newTitle) => {
@@ -161,10 +138,6 @@ const ChatArea: React.FC<ChatAreaProps> = ({
         ...currentConversation,
         messages: [...currentConversation.messages, userMessage]
       };
-      console.log('Updated conversation with user message:', { 
-        conversationId: updatedConversation.id,
-        messageCount: updatedConversation.messages.length
-      });
 
       setCurrentConversation(updatedConversation);
       onUpdateConversation(updatedConversation);
@@ -172,7 +145,6 @@ const ChatArea: React.FC<ChatAreaProps> = ({
       // アシスタントの応答を生成（ストリーミング）
       let fullResponse = '';
       setStreamedResponse('');
-      console.log('Requesting assistant response');
 
       const response = await mastraService.sendMessage(content, (text) => {
         if (isMountedRef.current && !signal.aborted) {
@@ -183,16 +155,12 @@ const ChatArea: React.FC<ChatAreaProps> = ({
 
       if (!isMountedRef.current || signal.aborted) return;
 
-      console.log('Received assistant response:', { fullResponse });
-
       const assistantMessage: Message = {
         id: uuidv4(),
         role: 'assistant',
         content: fullResponse,
         timestamp: new Date().toISOString()
       };
-
-      console.log('Saving assistant message:', { assistantMessage });
 
       // アシスタントのメッセージを保存
       await mastraService.saveMessage(currentConversation.id, assistantMessage, (newTitle) => {
@@ -212,17 +180,18 @@ const ChatArea: React.FC<ChatAreaProps> = ({
         ...updatedConversation,
         messages: [...updatedConversation.messages, assistantMessage]
       };
-      console.log('Updated conversation with assistant message:', { 
-        conversationId: finalConversation.id,
-        messageCount: finalConversation.messages.length
-      });
 
       setCurrentConversation(finalConversation);
       onUpdateConversation(finalConversation);
       setInput('');
+      setStreamedResponse('');
+      
+      // テキストエリアの高さをリセット
+      if (inputRef.current) {
+        inputRef.current.style.height = '40px';
+      }
     } catch (error: unknown) {
       if (error instanceof Error && error.name === 'AbortError') {
-        console.log('Message sending aborted');
         return;
       }
       console.error('Error sending message:', error);
@@ -258,7 +227,6 @@ const ChatArea: React.FC<ChatAreaProps> = ({
           
           // コンテンツの実際の高さを取得
           const contentHeight = contentRef.current.scrollHeight;
-          console.log('Content height:', contentHeight, 'Max height:', maxHeight);
           
           setShouldShowCollapse(contentHeight > maxHeight);
         }
@@ -287,6 +255,14 @@ const ChatArea: React.FC<ChatAreaProps> = ({
     const handleCopyToInput = () => {
       if (inputRef.current) {
         inputRef.current.value = content;
+        setInput(content);
+        setTimeout(() => {
+          if (inputRef.current) {
+            inputRef.current.style.height = '40px';
+            const scrollHeight = inputRef.current.scrollHeight;
+            inputRef.current.style.height = `${scrollHeight}px`;
+          }
+        }, 0);
         inputRef.current.focus();
       }
     };
@@ -315,27 +291,42 @@ const ChatArea: React.FC<ChatAreaProps> = ({
                   <ReactMarkdown
                     remarkPlugins={[remarkGfm]}
                     components={{
-                      pre: ({ children }) => (
-                        <div className="relative">
-                          <button
-                            onClick={() => {
-                              const code = typeof children === 'string' 
-                                ? children 
-                                : (children && typeof children === 'object' && 'props' in children)
-                                  ? String(children.props?.children || '')
-                                  : '';
-                              navigator.clipboard.writeText(code);
-                            }}
-                            className="absolute top-2 right-2 rounded px-2 py-1 text-xs"
-                            style={{ backgroundColor: 'var(--bg-primary)', color: 'var(--text-primary)' }}
-                          >
-                            <i className="fa-regular fa-copy"></i>
-                          </button>
-                          <pre className="p-4 rounded-md overflow-x-auto my-2" style={{ backgroundColor: 'var(--bg-primary)', color: 'var(--text-primary)' }}>
-                            {children}
-                          </pre>
-                        </div>
-                      ),
+                      pre: ({ children }) => {
+                        // 言語を取得（```の後の文字列）
+                        let language = 'unknown';
+                        if (children && typeof children === 'object' && 'props' in children) {
+                          const className = children.props?.className || '';
+                          const match = className.match(/language-(\w+)/);
+                          if (match) {
+                            language = match[1];
+                          }
+                        }
+
+                        return (
+                          <div className="code-block">
+                            <div className="code-block-header">
+                              <span className="code-block-language">{language}</span>
+                              <button
+                                onClick={() => {
+                                  const code = typeof children === 'string' 
+                                    ? children 
+                                    : (children && typeof children === 'object' && 'props' in children)
+                                      ? String(children.props?.children || '')
+                                      : '';
+                                  navigator.clipboard.writeText(code);
+                                }}
+                                className="code-block-copy"
+                                title="クリップボードにコピー"
+                              >
+                                <i className="fa-regular fa-copy"></i>
+                              </button>
+                            </div>
+                            <pre className="code-block-content">
+                              {children}
+                            </pre>
+                          </div>
+                        );
+                      },
                       table: ({ children }) => (
                         <div className="overflow-x-auto">
                           <table className="min-w-full border-collapse" style={{ border: '1px solid var(--border-color)' }}>
@@ -419,23 +410,32 @@ const ChatArea: React.FC<ChatAreaProps> = ({
   return (
     <div className="chat-area">
       <div className="chat-messages">
-        {currentConversation?.messages.map((message) => (
-          <MessageComponent key={message.id} message={message} />
-        ))}
-        {streamedResponse && (
-          <div className={`message-container assistant`}>
-            <div className={`message-flex assistant`}>
-              <div className={`message-content assistant`}>
-                <div className="relative">
-                  <div className="markdown-content overflow-x-auto">
-                    <ReactMarkdown remarkPlugins={[remarkGfm]}>
-                      {streamedResponse}
-                    </ReactMarkdown>
+        {!currentConversation ? (
+          <div className="empty-state">
+            <img src="/images/logo.jpg" alt="Xibo Cockpit Logo" className="empty-state-logo" />
+            <p>新しい会話ボタンを押して会話を開始してください。</p>
+          </div>
+        ) : (
+          <>
+            {currentConversation.messages.map((message) => (
+              <MessageComponent key={message.id} message={message} />
+            ))}
+            {streamedResponse && (
+              <div className={`message-container assistant`}>
+                <div className={`message-flex assistant`}>
+                  <div className={`message-content assistant`}>
+                    <div className="relative">
+                      <div className="markdown-content overflow-x-auto">
+                        <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                          {streamedResponse}
+                        </ReactMarkdown>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-          </div>
+            )}
+          </>
         )}
         <div ref={endOfMessagesRef} />
       </div>
@@ -461,7 +461,7 @@ const ChatArea: React.FC<ChatAreaProps> = ({
           disabled={!input.trim() || isLoading}
           className="send-button"
         >
-          {isLoading ? '送信中...' : '送信'}
+          {isLoading ? '処理中...' : '送信'}
         </button>
       </div>
     </div>

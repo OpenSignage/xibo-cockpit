@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Conversation } from '../../types';
+import { AboutDialog } from './AboutDialog';
 
 interface NavbarProps {
   conversations: Conversation[];
@@ -10,6 +11,8 @@ interface NavbarProps {
   onOpenSettings: () => void;
   onThemeChange: (theme: 'light' | 'dark') => void;
   currentTheme: 'light' | 'dark';
+  onDeleteConfirm: (conversationId: string) => void;
+  onDeleteAll: () => void;
 }
 
 interface MenuProps {
@@ -33,15 +36,18 @@ interface SettingsMenuProps {
   position: { x: number; y: number };
   onThemeChange: (theme: 'light' | 'dark') => void;
   currentTheme: 'light' | 'dark';
+  onDeleteAll: () => void;
+  hasConversations: boolean;
+  onAboutClick: () => void;
 }
 
 const DeleteConfirmDialog: React.FC<DeleteConfirmDialogProps> = ({ isOpen, onClose, onConfirm }) => {
   if (!isOpen) return null;
 
   return (
-    <>
-      <div className="fixed inset-0 bg-black bg-opacity-50 z-50" onClick={onClose} />
-      <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white dark:bg-gray-800 rounded-lg p-6 w-96 z-50">
+    <div className="fixed inset-0 z-[100]">
+      <div className="fixed inset-0 bg-black bg-opacity-50" onClick={onClose} />
+      <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white dark:bg-gray-800 rounded-lg p-6 w-96">
         <h3 className="text-lg font-medium mb-4">会話履歴の削除</h3>
         <p className="text-gray-600 dark:text-gray-300 mb-4">
           この操作は取り消せません。本当に削除しますか？
@@ -61,7 +67,7 @@ const DeleteConfirmDialog: React.FC<DeleteConfirmDialogProps> = ({ isOpen, onClo
           </button>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 
@@ -100,7 +106,10 @@ const SettingsMenu: React.FC<SettingsMenuProps> = ({
   onOpenSettings, 
   position,
   onThemeChange,
-  currentTheme 
+  currentTheme,
+  onDeleteAll,
+  hasConversations,
+  onAboutClick
 }) => {
   if (!isOpen) return null;
 
@@ -138,15 +147,23 @@ const SettingsMenu: React.FC<SettingsMenuProps> = ({
           <i className="fa-solid fa-bug mr-2"></i>
           ログ表示
         </button>
+        {hasConversations && (
+          <button
+            onClick={() => {
+              onDeleteAll();
+              onClose();
+            }}
+            className="w-full px-4 py-2 text-left hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center text-red-600 dark:text-red-400 whitespace-nowrap"
+          >
+            <i className="fa-solid fa-trash-can mr-2"></i>
+            全削除
+          </button>
+        )}
         <button
-          onClick={onClose}
-          className="w-full px-4 py-2 text-left hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center text-red-600 dark:text-red-400 whitespace-nowrap"
-        >
-          <i className="fa-solid fa-trash-can mr-2"></i>
-          全削除
-        </button>
-        <button
-          onClick={onClose}
+          onClick={() => {
+            onAboutClick();
+            onClose();
+          }}
           className="w-full px-4 py-2 text-left hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center whitespace-nowrap"
         >
           <i className="fa-solid fa-info mr-2"></i>
@@ -165,7 +182,9 @@ const Navbar: React.FC<NavbarProps> = ({
   onDeleteConversation,
   onOpenSettings,
   onThemeChange,
-  currentTheme
+  currentTheme,
+  onDeleteConfirm,
+  onDeleteAll
 }) => {
   const [menuState, setMenuState] = useState<{
     isOpen: boolean;
@@ -185,14 +204,6 @@ const Navbar: React.FC<NavbarProps> = ({
     title: ''
   });
 
-  const [deleteConfirmState, setDeleteConfirmState] = useState<{
-    isOpen: boolean;
-    conversationId: string | null;
-  }>({
-    isOpen: false,
-    conversationId: null
-  });
-
   const [settingsMenuState, setSettingsMenuState] = useState<{
     isOpen: boolean;
     position: { x: number; y: number };
@@ -200,6 +211,8 @@ const Navbar: React.FC<NavbarProps> = ({
     isOpen: false,
     position: { x: 0, y: 0 }
   });
+
+  const [isAboutOpen, setIsAboutOpen] = useState(false);
 
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -296,6 +309,21 @@ const Navbar: React.FC<NavbarProps> = ({
     });
   };
 
+  const handleMenuClickAll = (action: string) => {
+    switch (action) {
+      case 'settings':
+        onOpenSettings();
+        break;
+      case 'delete-all':
+        onDeleteAll();
+        break;
+      case 'about':
+        setIsAboutOpen(true);
+        break;
+    }
+    setMenuState(prev => ({ ...prev, isOpen: false }));
+  };
+
   return (
     <div className="navbar">
       <div className="navbar-header">
@@ -365,23 +393,12 @@ const Navbar: React.FC<NavbarProps> = ({
           }
         }}
         onDelete={() => {
-          setDeleteConfirmState({
-            isOpen: true,
-            conversationId: menuState.conversationId
-          });
-          setMenuState(prev => ({ ...prev, isOpen: false }));
-        }}
-        position={menuState.position}
-      />
-      <DeleteConfirmDialog
-        isOpen={deleteConfirmState.isOpen}
-        onClose={() => setDeleteConfirmState(prev => ({ ...prev, isOpen: false }))}
-        onConfirm={() => {
-          if (deleteConfirmState.conversationId) {
-            onDeleteConversation(deleteConfirmState.conversationId);
-            setDeleteConfirmState(prev => ({ ...prev, isOpen: false }));
+          if (menuState.conversationId) {
+            onDeleteConfirm(menuState.conversationId);
+            setMenuState(prev => ({ ...prev, isOpen: false }));
           }
         }}
+        position={menuState.position}
       />
       <SettingsMenu
         isOpen={settingsMenuState.isOpen}
@@ -390,6 +407,13 @@ const Navbar: React.FC<NavbarProps> = ({
         position={settingsMenuState.position}
         onThemeChange={onThemeChange}
         currentTheme={currentTheme}
+        onDeleteAll={onDeleteAll}
+        hasConversations={conversations.length > 0}
+        onAboutClick={() => setIsAboutOpen(true)}
+      />
+      <AboutDialog
+        isOpen={isAboutOpen}
+        onClose={() => setIsAboutOpen(false)}
       />
     </div>
   );
