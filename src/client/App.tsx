@@ -10,10 +10,76 @@ import { getLocalStorage, setLocalStorage } from '../utils';
 import DeleteConfirmDialog from './components/DeleteConfirmDialog';
 
 const App: React.FC = () => {
-  const [mastraService] = useState(() => new MastraService(DEFAULT_SETTINGS.endpoint));
+  const [settings, setSettings] = useState<UserSettings>(() => {
+    return getLocalStorage<UserSettings>('userSettings', DEFAULT_SETTINGS);
+  });
+
+  // settingsが変更されたときにMastraServiceを再初期化
+  const [mastraService, setMastraService] = useState<MastraService>(() => {
+    return new MastraService(
+      settings.endpoint,
+      settings.agent,
+      settings.defaultAdmin
+    );
+  });
+
+  useEffect(() => {
+    // settingsが変更されたときにMastraServiceを更新
+    const newService = new MastraService(
+      settings.endpoint,
+      settings.agent,
+      settings.defaultAdmin
+    );
+    setMastraService(newService);
+    
+    // 新しいサービスで初期化を実行
+    const initializeNewService = async () => {
+      try {
+        const initialized = await newService.initialize();
+        if (!initialized) {
+          throw new Error('エージェントサーバーに接続できません。サーバーが起動しているか確認してください。');
+        }
+        const threads = await newService.getConversationThreads();
+        if (isMountedRef.current) {
+          console.log('Fetched conversations:', threads);
+          setConversations(threads);
+          setError(null);
+          
+          if (threads.length > 0) {
+            setCurrentConversationId(threads[0].id);
+          }
+        }
+      } catch (error) {
+        console.error('Error initializing new service:', error);
+        if (isMountedRef.current) {
+          let errorMessage = '予期せぬエラーが発生しました';
+          let errorDetails = '';
+
+          if (error instanceof Error) {
+            if (error.message.includes('Failed to fetch')) {
+              errorMessage = 'ネットワーク接続を確認してください';
+              errorDetails = 'エージェントサーバーに接続できません。ネットワーク接続とサーバーの状態を確認してください。';
+            } else if (error.message.includes('Agent')) {
+              errorMessage = 'エージェントが見つかりません';
+              errorDetails = '指定されたエージェントが存在しません。設定を確認してください。';
+            } else {
+              errorMessage = error.message;
+            }
+          }
+
+          setError({
+            message: errorMessage,
+            details: errorDetails
+          });
+        }
+      }
+    };
+
+    initializeNewService();
+  }, [settings]);
+
   const [conversations, setConversations] = useState<Conversation[]>([]);
   const [currentConversationId, setCurrentConversationId] = useState<string | null>(null);
-  const [settings, setSettings] = useState<UserSettings>(DEFAULT_SETTINGS);
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [deleteConfirmState, setDeleteConfirmState] = useState<{
     isOpen: boolean;
@@ -28,6 +94,7 @@ const App: React.FC = () => {
     const savedTheme = localStorage.getItem('theme');
     return (savedTheme as 'light' | 'dark') || 'light';
   });
+  const [error, setError] = useState<{ message: string; details?: string } | null>(null);
 
   // コンポーネントのマウント状態を管理
   useEffect(() => {
@@ -62,7 +129,7 @@ const App: React.FC = () => {
     }
   }, []);
 
-  // 会話の初期化
+  // 会話の初期化（初回のみ）
   useEffect(() => {
     if (initRef.current) return;
     initRef.current = true;
@@ -71,11 +138,15 @@ const App: React.FC = () => {
       if (!isMountedRef.current) return;
 
       try {
-        await mastraService.initialize();
+        const initialized = await mastraService.initialize();
+        if (!initialized) {
+          throw new Error('エージェントサーバーに接続できません。サーバーが起動しているか確認してください。');
+        }
         const threads = await mastraService.getConversationThreads();
         if (isMountedRef.current) {
           console.log('Fetched conversations:', threads);
           setConversations(threads);
+          setError(null);
           
           if (threads.length > 0) {
             setCurrentConversationId(threads[0].id);
@@ -83,11 +154,32 @@ const App: React.FC = () => {
         }
       } catch (error) {
         console.error('Error initializing conversations:', error);
+        if (isMountedRef.current) {
+          let errorMessage = '予期せぬエラーが発生しました';
+          let errorDetails = '';
+
+          if (error instanceof Error) {
+            if (error.message.includes('Failed to fetch')) {
+              errorMessage = 'ネットワーク接続を確認してください';
+              errorDetails = 'エージェントサーバーに接続できません。ネットワーク接続とサーバーの状態を確認してください。';
+            } else if (error.message.includes('Agent')) {
+              errorMessage = 'エージェントが見つかりません';
+              errorDetails = '指定されたエージェントが存在しません。設定を確認してください。';
+            } else {
+              errorMessage = error.message;
+            }
+          }
+
+          setError({
+            message: errorMessage,
+            details: errorDetails
+          });
+        }
       }
     };
 
     initializeConversations();
-  }, []);
+  }, [mastraService]);
 
   const handleNewConversation = async () => {
     if (!isMountedRef.current) return;
@@ -150,7 +242,13 @@ const App: React.FC = () => {
 
     console.log('Settings changed:', newSettings);
     setSettings(newSettings);
+    setLocalStorage('userSettings', newSettings);
+    setCurrentTheme(newSettings.darkMode ? 'dark' : 'light');
     mastraService.updateEndpoint(newSettings.endpoint);
+    mastraService.updateSettings({ 
+      agentId: newSettings.agent,
+      resourceId: newSettings.defaultAdmin
+    });
     setIsSettingsOpen(false);
   };
 
@@ -194,6 +292,7 @@ const App: React.FC = () => {
               );
             }
           }}
+          error={error}
         />
       </div>
       <SettingsDialog

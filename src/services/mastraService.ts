@@ -8,11 +8,14 @@ export class MastraService {
   private agentClient: any = null;
   private memoryClient: any = null;
   public endpoint: string;
-  private readonly userId = 'captain'; // 将来的にユーザー認証で置き換え
+  private agentId: string;
+  private resourceId: string;
   private initializationPromise: Promise<boolean> | null = null;
 
-  constructor(endpoint: string) {
+  constructor(endpoint: string, agentId: string, resourceId: string = 'captain') {
     this.endpoint = endpoint;
+    this.agentId = agentId;
+    this.resourceId = resourceId;
   }
 
   async initialize() {
@@ -31,31 +34,19 @@ export class MastraService {
       const client = new MastraClient({
         baseUrl: this.endpoint
       });
-      // 利用可能なエージェントの一覧を取得
-      const agents = await client.getAgents();
-      console.log('Available agents:', Object.entries(agents).map(([id, agent]) => ({
-        id,
-        name: agent.name,
-        provider: agent.provider,
-        modelId: agent.modelId
-      })));
 
-      // IDが'xibo'のエージェントを取得
-      const xiboAgentId = 'xibo';
-      if (!agents[xiboAgentId]) {
-        throw new Error('xibo-agent not found');
-      }
-
-      this.agentClient = client.getAgent(xiboAgentId);
+      // エージェントクライアントの初期化
+      this.agentClient = client.getAgent(this.agentId);
       this.memoryClient = client;
-      console.log('Connected to xibo-agent at', this.endpoint);
+      
+      console.log(`Initialized connection to ${this.agentId} at ${this.endpoint}`);
       return true;
     } catch (error) {
-      console.error('Failed to connect to xibo-agent:', error);
+      console.error('Failed to initialize agent client:', error);
       this.agentClient = null;
       this.memoryClient = null;
       this.initializationPromise = null;
-      return false;
+      throw error;
     }
   }
 
@@ -66,27 +57,53 @@ export class MastraService {
     this.initializationPromise = null;
   }
 
-  private async ensureInitialized() {
-    if (!this.agentClient || !this.memoryClient) {
-      await this.initialize();
+  updateSettings(settings: { agentId?: string; resourceId?: string }) {
+    let needsReinitialize = false;
+
+    if (settings.agentId && settings.agentId !== this.agentId) {
+      this.agentId = settings.agentId;
+      needsReinitialize = true;
     }
-    if (!this.agentClient || !this.memoryClient) {
-      throw new Error('Failed to connect to xibo-agent');
+    
+    if (settings.resourceId && settings.resourceId !== this.resourceId) {
+      this.resourceId = settings.resourceId;
+      needsReinitialize = true;
+    }
+
+    if (needsReinitialize) {
+      this.agentClient = null;
+      this.memoryClient = null;
+      this.initializationPromise = null;
+      
+      // 設定変更後は明示的に初期化を要求
+      this.initialize().catch(error => {
+        console.error('Failed to initialize after settings update:', error);
+        throw error; // エラーを上位に伝播させる
+      });
     }
   }
 
-  async sendMessage(message: string, onStreamUpdate: (content: string) => void): Promise<string> {
+  private async ensureInitialized() {
+    if (!this.agentClient || !this.memoryClient) {
+      const initialized = await this.initialize();
+      if (!initialized) {
+        throw new Error(`Failed to connect to agent: ${this.agentId}`);
+      }
+    }
+  }
+
+  async sendMessage(message: string, onStreamUpdate: (content: string) => void, threadId?: string): Promise<string> {
     await this.ensureInitialized();
 
     try {
       let fullResponse = '';
-      console.log('Sending message to agent:', { message });
+      console.log('Sending message to agent:', { message, threadId });
       
       // streamモードで通信
       const response = await this.agentClient.stream({
         messages: [{ role: 'user', content: message }],
-        threadId: 'xibo',
-        resourceId: this.userId
+        threadId: threadId || this.agentId,  // threadIdが指定されていない場合はagentIdを使用
+        resourceId: this.resourceId
       });
       console.log('Stream response received');
 
@@ -106,7 +123,7 @@ export class MastraService {
       console.log('Final response:', { fullResponse });
       return fullResponse;
     } catch (error) {
-      console.error('Error sending message to xibo-agent:', error);
+      console.error('Error sending message to agent:', error);
       throw error;
     }
   }
@@ -120,22 +137,22 @@ export class MastraService {
     try {
       console.log('Getting conversation threads...');
       const threads = await this.memoryClient.getMemoryThreads({
-        resourceId: this.userId,
-        agentId: 'xibo'
+        resourceId: this.resourceId,
+        agentId: this.agentId
       });
       console.log('Raw threads from API:', threads);
 
       const mappedThreads = await Promise.all(threads.map(async (thread: any) => {
         console.log('Processing thread:', thread);
-        const threadDetails = await this.memoryClient.getMemoryThread(thread.id, 'xibo').get();
+        const threadDetails = await this.memoryClient.getMemoryThread(thread.id, this.agentId).get();
         console.log('Thread details:', threadDetails);
         
         const messages = threadDetails.messages || [];
         const lastMessage = messages[messages.length - 1];
         
         const metadata: ConversationMetadata = {
-          userId: this.userId,
-          agentId: 'xibo',
+          userId: this.resourceId,
+          agentId: this.agentId,
           memoryId: thread.id,
           messageCount: messages.length,
           createdAt: threadDetails.metadata?.createdAt || new Date().toISOString(),
@@ -179,16 +196,17 @@ export class MastraService {
           createdAt: new Date().toISOString(),
           lastUpdated: new Date().toISOString(),
           messageCount: 0,
-          userId: this.userId
+          userId: this.resourceId,
+          agentId: this.agentId
         },
-        resourceId: this.userId,
-        agentId: 'xibo'
+        resourceId: this.resourceId,
+        agentId: this.agentId
       });
       console.log('Created thread from API:', thread);
 
       const metadata: ConversationMetadata = {
-        userId: this.userId,
-        agentId: 'xibo',
+        userId: this.resourceId,
+        agentId: this.agentId,
         memoryId: thread.id,
         messageCount: 0,
         createdAt: thread.metadata.createdAt,
@@ -217,7 +235,7 @@ export class MastraService {
 
     try {
       console.log('Deleting conversation thread:', threadId);
-      const thread = this.memoryClient.getMemoryThread(threadId, 'xibo');
+      const thread = this.memoryClient.getMemoryThread(threadId, this.agentId);
       await thread.delete();
       console.log('Successfully deleted thread:', threadId);
     } catch (error) {
@@ -246,13 +264,13 @@ export class MastraService {
           createdAt: timestamp,
           type: 'text'
         }],
-        agentId: 'xibo'
+        agentId: this.agentId
       });
 
       console.log('Message saved successfully:', { savedMessage });
 
       // スレッドの詳細を取得して新しいタイトルを確認
-      const thread = this.memoryClient.getMemoryThread(threadId, 'xibo');
+      const thread = this.memoryClient.getMemoryThread(threadId, this.agentId);
       const details = await thread.get();
       console.log('Thread details after save:', details);
 
@@ -274,11 +292,11 @@ export class MastraService {
     }
 
     try {
-      const thread = this.memoryClient.getMemoryThread(threadId, 'xibo');
+      const thread = this.memoryClient.getMemoryThread(threadId, this.agentId);
       const updated = await thread.update({
         title,
         metadata: { status: "active" },
-        resourceId: this.userId
+        resourceId: this.resourceId
       });
       console.log('Updated thread:', updated);
     } catch (error) {
@@ -297,7 +315,7 @@ export class MastraService {
       console.log('Getting messages for thread:', threadId);
       
       // 直接APIを呼び出してメッセージを取得
-      const response = await fetch(`${this.endpoint}/api/memory/threads/${threadId}/messages?agentId=xibo`);
+      const response = await fetch(`${this.endpoint}/api/memory/threads/${threadId}/messages?agentId=${this.agentId}`);
       if (!response.ok) {
         throw new Error(`Failed to fetch messages: ${response.statusText}`);
       }
@@ -330,7 +348,7 @@ export class MastraService {
   async getConversationThread(threadId: string): Promise<Conversation> {
     console.log('Getting conversation thread:', threadId);
     try {
-      const thread = await this.memoryClient.getMemoryThread(threadId, 'xibo');
+      const thread = await this.memoryClient.getMemoryThread(threadId, this.agentId);
       console.log('Thread object:', thread);
       const details = await thread.get();
       console.log('Raw thread data:', details);
@@ -344,8 +362,8 @@ export class MastraService {
         title: details.title || '新しい会話',
         messages: messages,
         metadata: {
-          userId: this.userId,
-          agentId: 'xibo',
+          userId: this.resourceId,
+          agentId: this.agentId,
           memoryId: details.id,
           messageCount: messages.length,
           createdAt: details.metadata?.createdAt || new Date().toISOString(),
@@ -369,7 +387,7 @@ export class MastraService {
 
     try {
       const response = await this.memoryClient.generateResponse({
-        agentId: 'xibo',
+        agentId: this.agentId,
         threadId,
         message: content
       });

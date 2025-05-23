@@ -19,12 +19,15 @@ const Navbar_1 = __importDefault(require("./components/Navbar"));
 const SettingsDialog_1 = require("./components/SettingsDialog");
 const mastraService_1 = require("../services/mastraService");
 const default_1 = require("../config/default");
+const utils_1 = require("../utils");
 const DeleteConfirmDialog_1 = __importDefault(require("./components/DeleteConfirmDialog"));
 const App = () => {
-    const [mastraService] = (0, react_1.useState)(() => new mastraService_1.MastraService(default_1.DEFAULT_SETTINGS.endpoint));
+    const [mastraService] = (0, react_1.useState)(() => new mastraService_1.MastraService(default_1.DEFAULT_SETTINGS.endpoint, default_1.DEFAULT_SETTINGS.agent, default_1.DEFAULT_SETTINGS.defaultAdmin));
     const [conversations, setConversations] = (0, react_1.useState)([]);
     const [currentConversationId, setCurrentConversationId] = (0, react_1.useState)(null);
-    const [settings, setSettings] = (0, react_1.useState)(default_1.DEFAULT_SETTINGS);
+    const [settings, setSettings] = (0, react_1.useState)(() => {
+        return (0, utils_1.getLocalStorage)('userSettings', default_1.DEFAULT_SETTINGS);
+    });
     const [isSettingsOpen, setIsSettingsOpen] = (0, react_1.useState)(false);
     const [deleteConfirmState, setDeleteConfirmState] = (0, react_1.useState)({
         isOpen: false,
@@ -36,6 +39,7 @@ const App = () => {
         const savedTheme = localStorage.getItem('theme');
         return savedTheme || 'light';
     });
+    const [error, setError] = (0, react_1.useState)(null);
     // コンポーネントのマウント状態を管理
     (0, react_1.useEffect)(() => {
         isMountedRef.current = true;
@@ -72,11 +76,15 @@ const App = () => {
             if (!isMountedRef.current)
                 return;
             try {
-                yield mastraService.initialize();
+                const initialized = yield mastraService.initialize();
+                if (!initialized) {
+                    throw new Error('エージェントサーバーに接続できません。サーバーが起動しているか確認してください。');
+                }
                 const threads = yield mastraService.getConversationThreads();
                 if (isMountedRef.current) {
                     console.log('Fetched conversations:', threads);
                     setConversations(threads);
+                    setError(null);
                     if (threads.length > 0) {
                         setCurrentConversationId(threads[0].id);
                     }
@@ -84,6 +92,27 @@ const App = () => {
             }
             catch (error) {
                 console.error('Error initializing conversations:', error);
+                if (isMountedRef.current) {
+                    let errorMessage = '予期せぬエラーが発生しました';
+                    let errorDetails = '';
+                    if (error instanceof Error) {
+                        if (error.message.includes('Failed to fetch')) {
+                            errorMessage = 'ネットワーク接続を確認してください';
+                            errorDetails = 'エージェントサーバーに接続できません。ネットワーク接続とサーバーの状態を確認してください。';
+                        }
+                        else if (error.message.includes('Agent')) {
+                            errorMessage = 'エージェントが見つかりません';
+                            errorDetails = '指定されたエージェントが存在しません。設定を確認してください。';
+                        }
+                        else {
+                            errorMessage = error.message;
+                        }
+                    }
+                    setError({
+                        message: errorMessage,
+                        details: errorDetails
+                    });
+                }
             }
         });
         initializeConversations();
@@ -147,7 +176,13 @@ const App = () => {
             return;
         console.log('Settings changed:', newSettings);
         setSettings(newSettings);
+        (0, utils_1.setLocalStorage)('userSettings', newSettings);
+        setCurrentTheme(newSettings.darkMode ? 'dark' : 'light');
         mastraService.updateEndpoint(newSettings.endpoint);
+        mastraService.updateSettings({
+            agentId: newSettings.agent,
+            resourceId: newSettings.defaultAdmin
+        });
         setIsSettingsOpen(false);
     };
     return ((0, jsx_runtime_1.jsxs)("div", { className: `app-container ${currentTheme === 'dark' ? 'dark' : ''}`, children: [(0, jsx_runtime_1.jsx)("div", { className: "sidebar", children: (0, jsx_runtime_1.jsx)(Navbar_1.default, { conversations: conversations, activeConversationId: currentConversationId, onConversationSelect: setCurrentConversationId, onNewConversation: handleNewConversation, onDeleteConversation: handleDeleteConversation, onOpenSettings: () => setIsSettingsOpen(true), onThemeChange: setCurrentTheme, currentTheme: currentTheme, onDeleteConfirm: (conversationId) => {
@@ -164,7 +199,7 @@ const App = () => {
                         if (isMountedRef.current) {
                             setConversations(prev => prev.map(conv => conv.id === updatedConversation.id ? updatedConversation : conv));
                         }
-                    } }) }), (0, jsx_runtime_1.jsx)(SettingsDialog_1.SettingsDialog, { isOpen: isSettingsOpen, onClose: () => setIsSettingsOpen(false), settings: settings, onSettingsChange: handleSettingsChange, currentTheme: currentTheme, onThemeChange: setCurrentTheme }), (0, jsx_runtime_1.jsx)(DeleteConfirmDialog_1.default, { isOpen: deleteConfirmState.isOpen, onClose: () => setDeleteConfirmState(prev => (Object.assign(Object.assign({}, prev), { isOpen: false }))), onConfirm: () => {
+                    }, error: error }) }), (0, jsx_runtime_1.jsx)(SettingsDialog_1.SettingsDialog, { isOpen: isSettingsOpen, onClose: () => setIsSettingsOpen(false), settings: settings, onSettingsChange: handleSettingsChange, currentTheme: currentTheme, onThemeChange: setCurrentTheme }), (0, jsx_runtime_1.jsx)(DeleteConfirmDialog_1.default, { isOpen: deleteConfirmState.isOpen, onClose: () => setDeleteConfirmState(prev => (Object.assign(Object.assign({}, prev), { isOpen: false }))), onConfirm: () => {
                     if (deleteConfirmState.conversationId) {
                         handleDeleteConversation(deleteConfirmState.conversationId);
                     }

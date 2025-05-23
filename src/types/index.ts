@@ -1,7 +1,11 @@
 export interface UserSettings {
   endpoint: string;
+  agent: string;
+  timezone: string;
+  defaultAdmin: string;
+  defaultPassword: string;
   darkMode: boolean;
-  language: 'ja' | 'en';
+  language: string;
 }
 
 export interface ConversationMetadata {
@@ -27,4 +31,8 @@ export interface Message {
   timestamp: string;
 }
 
-// 会話関連の型定義は src/types/conversation.ts に移動しました 
+export interface AppState {
+  conversations: Conversation[];
+  currentConversationId: string | null;
+  settings: UserSettings;
+} 

@@ -1,19 +1,28 @@
-import { Conversation, Message } from '../types';
+import { Conversation, Message, ConversationMetadata } from '../src/types';
 
 export const generateId = (): string => {
   return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
 };
 
-export const getCurrentTimestamp = (): number => {
-  return Date.now();
+export const getCurrentTimestamp = (): string => {
+  return new Date().toISOString();
 };
 
 export const createNewConversation = (): Conversation => {
+  const now = getCurrentTimestamp();
+  const metadata: ConversationMetadata = {
+    lastUpdated: now,
+    userId: 'default',
+    agentId: 'default',
+    messageCount: 0,
+    createdAt: now
+  };
+
   return {
     id: generateId(),
     title: '新しい会話',
     messages: [],
-    lastUpdated: getCurrentTimestamp()
+    metadata
   };
 };
 

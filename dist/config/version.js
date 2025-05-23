@@ -5,8 +5,6 @@ exports.BUILD_INFO = exports.VERSION = void 0;
 exports.VERSION = '0.8.0';
 // ビルド情報
 exports.BUILD_INFO = {
-    buildTime: new Date().toISOString(),
-    buildHash: process.env.VITE_GIT_HASH || 'unknown',
-    buildNumber: process.env.VITE_BUILD_NUMBER || 'unknown'
+    buildTime: process.env.VITE_BUILD_TIME || new Date().toISOString()
 };
 //# sourceMappingURL=version.js.map

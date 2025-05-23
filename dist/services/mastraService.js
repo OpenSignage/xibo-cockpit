@@ -12,12 +12,13 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.MastraService = void 0;
 const client_js_1 = require("@mastra/client-js");
 class MastraService {
-    constructor(endpoint) {
+    constructor(endpoint, agentId, resourceId = 'captain') {
         this.agentClient = null;
         this.memoryClient = null;
-        this.userId = 'captain'; // 将来的にユーザー認証で置き換え
         this.initializationPromise = null;
         this.endpoint = endpoint;
+        this.agentId = agentId;
+        this.resourceId = resourceId;
     }
     initialize() {
         return __awaiter(this, void 0, void 0, function* () {
@@ -36,30 +37,17 @@ class MastraService {
                 const client = new client_js_1.MastraClient({
                     baseUrl: this.endpoint
                 });
-                // 利用可能なエージェントの一覧を取得
-                const agents = yield client.getAgents();
-                console.log('Available agents:', Object.entries(agents).map(([id, agent]) => ({
-                    id,
-                    name: agent.name,
-                    provider: agent.provider,
-                    modelId: agent.modelId
-                })));
-                // IDが'xibo'のエージェントを取得
-                const xiboAgentId = 'xibo';
-                if (!agents[xiboAgentId]) {
-                    throw new Error('xibo-agent not found');
-                }
-                this.agentClient = client.getAgent(xiboAgentId);
+                this.agentClient = client.getAgent(this.agentId);
                 this.memoryClient = client;
-                console.log('Connected to xibo-agent at', this.endpoint);
+                console.log(`Connected to ${this.agentId} at ${this.endpoint}`);
                 return true;
             }
             catch (error) {
-                console.error('Failed to connect to xibo-agent:', error);
+                console.error('Failed to connect to agent:', error);
                 this.agentClient = null;
                 this.memoryClient = null;
                 this.initializationPromise = null;
-                return false;
+                throw error; // エラーを上位に伝播させる
             }
         });
     }
@@ -69,13 +57,28 @@ class MastraService {
         this.memoryClient = null;
         this.initializationPromise = null;
     }
+    updateSettings(settings) {
+        if (settings.agentId) {
+            this.agentId = settings.agentId;
+            this.agentClient = null;
+            this.memoryClient = null;
+            this.initializationPromise = null;
+            // 設定変更後は明示的に初期化を要求
+            this.initialize().catch(error => {
+                console.error('Failed to initialize after settings update:', error);
+            });
+        }
+        if (settings.resourceId) {
+            this.resourceId = settings.resourceId;
+        }
+    }
     ensureInitialized() {
         return __awaiter(this, void 0, void 0, function* () {
             if (!this.agentClient || !this.memoryClient) {
-                yield this.initialize();
-            }
-            if (!this.agentClient || !this.memoryClient) {
-                throw new Error('Failed to connect to xibo-agent');
+                const initialized = yield this.initialize();
+                if (!initialized) {
+                    throw new Error(`Failed to connect to agent: ${this.agentId}`);
+                }
             }
         });
     }
@@ -88,8 +91,8 @@ class MastraService {
                 // streamモードで通信
                 const response = yield this.agentClient.stream({
                     messages: [{ role: 'user', content: message }],
-                    threadId: 'xibo',
-                    resourceId: this.userId
+                    threadId: this.agentId,
+                    resourceId: this.resourceId
                 });
                 console.log('Stream response received');
                 // ストリームデータを処理
@@ -108,7 +111,7 @@ class MastraService {
                 return fullResponse;
             }
             catch (error) {
-                console.error('Error sending message to xibo-agent:', error);
+                console.error('Error sending message to agent:', error);
                 throw error;
             }
         });
@@ -122,20 +125,20 @@ class MastraService {
             try {
                 console.log('Getting conversation threads...');
                 const threads = yield this.memoryClient.getMemoryThreads({
-                    resourceId: this.userId,
-                    agentId: 'xibo'
+                    resourceId: this.resourceId,
+                    agentId: this.agentId
                 });
                 console.log('Raw threads from API:', threads);
                 const mappedThreads = yield Promise.all(threads.map((thread) => __awaiter(this, void 0, void 0, function* () {
                     var _a, _b, _c;
                     console.log('Processing thread:', thread);
-                    const threadDetails = yield this.memoryClient.getMemoryThread(thread.id, 'xibo').get();
+                    const threadDetails = yield this.memoryClient.getMemoryThread(thread.id, this.agentId).get();
                     console.log('Thread details:', threadDetails);
                     const messages = threadDetails.messages || [];
                     const lastMessage = messages[messages.length - 1];
                     const metadata = {
-                        userId: this.userId,
-                        agentId: 'xibo',
+                        userId: this.resourceId,
+                        agentId: this.agentId,
                         memoryId: thread.id,
                         messageCount: messages.length,
                         createdAt: ((_a = threadDetails.metadata) === null || _a === void 0 ? void 0 : _a.createdAt) || new Date().toISOString(),
@@ -178,15 +181,15 @@ class MastraService {
                         createdAt: new Date().toISOString(),
                         lastUpdated: new Date().toISOString(),
                         messageCount: 0,
-                        userId: this.userId
+                        userId: this.resourceId
                     },
-                    resourceId: this.userId,
-                    agentId: 'xibo'
+                    resourceId: this.resourceId,
+                    agentId: this.agentId
                 });
                 console.log('Created thread from API:', thread);
                 const metadata = {
-                    userId: this.userId,
-                    agentId: 'xibo',
+                    userId: this.resourceId,
+                    agentId: this.agentId,
                     memoryId: thread.id,
                     messageCount: 0,
                     createdAt: thread.metadata.createdAt,
@@ -215,7 +218,7 @@ class MastraService {
             }
             try {
                 console.log('Deleting conversation thread:', threadId);
-                const thread = this.memoryClient.getMemoryThread(threadId, 'xibo');
+                const thread = this.memoryClient.getMemoryThread(threadId, this.agentId);
                 yield thread.delete();
                 console.log('Successfully deleted thread:', threadId);
             }
@@ -244,11 +247,11 @@ class MastraService {
                             createdAt: timestamp,
                             type: 'text'
                         }],
-                    agentId: 'xibo'
+                    agentId: this.agentId
                 });
                 console.log('Message saved successfully:', { savedMessage });
                 // スレッドの詳細を取得して新しいタイトルを確認
-                const thread = this.memoryClient.getMemoryThread(threadId, 'xibo');
+                const thread = this.memoryClient.getMemoryThread(threadId, this.agentId);
                 const details = yield thread.get();
                 console.log('Thread details after save:', details);
                 // タイトルが更新されている場合は、コールバックを呼び出す
@@ -270,11 +273,11 @@ class MastraService {
                 yield this.initialize();
             }
             try {
-                const thread = this.memoryClient.getMemoryThread(threadId, 'xibo');
+                const thread = this.memoryClient.getMemoryThread(threadId, this.agentId);
                 const updated = yield thread.update({
                     title,
                     metadata: { status: "active" },
-                    resourceId: this.userId
+                    resourceId: this.resourceId
                 });
                 console.log('Updated thread:', updated);
             }
@@ -293,7 +296,7 @@ class MastraService {
             try {
                 console.log('Getting messages for thread:', threadId);
                 // 直接APIを呼び出してメッセージを取得
-                const response = yield fetch(`${this.endpoint}/api/memory/threads/${threadId}/messages?agentId=xibo`);
+                const response = yield fetch(`${this.endpoint}/api/memory/threads/${threadId}/messages?agentId=${this.agentId}`);
                 if (!response.ok) {
                     throw new Error(`Failed to fetch messages: ${response.statusText}`);
                 }
@@ -326,7 +329,7 @@ class MastraService {
             var _a, _b;
             console.log('Getting conversation thread:', threadId);
             try {
-                const thread = yield this.memoryClient.getMemoryThread(threadId, 'xibo');
+                const thread = yield this.memoryClient.getMemoryThread(threadId, this.agentId);
                 console.log('Thread object:', thread);
                 const details = yield thread.get();
                 console.log('Raw thread data:', details);
@@ -338,8 +341,8 @@ class MastraService {
                     title: details.title || '新しい会話',
                     messages: messages,
                     metadata: {
-                        userId: this.userId,
-                        agentId: 'xibo',
+                        userId: this.resourceId,
+                        agentId: this.agentId,
                         memoryId: details.id,
                         messageCount: messages.length,
                         createdAt: ((_a = details.metadata) === null || _a === void 0 ? void 0 : _a.createdAt) || new Date().toISOString(),
@@ -363,7 +366,7 @@ class MastraService {
             }
             try {
                 const response = yield this.memoryClient.generateResponse({
-                    agentId: 'xibo',
+                    agentId: this.agentId,
                     threadId,
                     message: content
                 });

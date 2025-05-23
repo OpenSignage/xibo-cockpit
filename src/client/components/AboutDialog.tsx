@@ -13,7 +13,9 @@ const AboutDialog: React.FC<AboutDialogProps> = ({ isOpen, onClose }) => {
   const buildDate = new Date(BUILD_INFO.buildTime).toLocaleDateString('ja-JP', {
     year: 'numeric',
     month: '2-digit',
-    day: '2-digit'
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit'
   });
 
   return (
@@ -25,7 +27,7 @@ const AboutDialog: React.FC<AboutDialogProps> = ({ isOpen, onClose }) => {
             <h2>xibo-Cockpit</h2>
             <div className="version-info">
               Version: {VERSION}<br />
-              Build: {BUILD_INFO.buildHash} {buildDate}
+              Build: {buildDate}
             </div>
           </div>
           

@@ -8,11 +8,11 @@ export const getCurrentTimestamp = (): number => {
   return Date.now();
 };
 
-export const createConversation = (title: string = '新しい会話'): Conversation => {
+export const createConversation = (title: string = '新しい会話', agentId: string = 'xibo'): Conversation => {
   const now = new Date().toISOString();
   const metadata: ConversationMetadata = {
     userId: 'captain',
-    agentId: 'xibo',
+    agentId,
     messageCount: 0,
     createdAt: now,
     lastUpdated: now

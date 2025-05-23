@@ -228,35 +228,22 @@ const Navbar: React.FC<NavbarProps> = ({
     const diffMinutes = Math.floor(diff / (1000 * 60));
     const diffHours = Math.floor(diff / (1000 * 60 * 60));
     const diffDays = Math.floor(diff / (1000 * 60 * 60 * 24));
+    const diffWeeks = Math.floor(diffDays / 7);
     const diffMonths = Math.floor(diffDays / 30);
     const diffYears = Math.floor(diffDays / 365);
 
-    // 日付が変わっているかチェック
-    const isDifferentDay = messageDate.getDate() !== now.getDate() ||
-                          messageDate.getMonth() !== now.getMonth() ||
-                          messageDate.getFullYear() !== now.getFullYear();
-
-    if (isDifferentDay) {
-      // 日付が異なる場合は年月日時分を表示
-      return messageDate.toLocaleString('ja-JP', {
-        year: 'numeric',
-        month: '2-digit',
-        day: '2-digit',
-        hour: '2-digit',
-        minute: '2-digit'
-      });
-    }
-
-    // 同じ日の場合は相対時間を表示
     if (diffMinutes < 60) {
       return `${diffMinutes}分前`;
     } else if (diffHours < 24) {
       return `${diffHours}時間前`;
+    } else if (diffDays < 7) {
+      return `${diffDays}日前`;
+    } else if (diffWeeks < 4) {
+      return `${diffWeeks}週間前`;
+    } else if (diffMonths < 12) {
+      return `${diffMonths}ヶ月前`;
     } else {
-      return messageDate.toLocaleString('ja-JP', {
-        hour: '2-digit',
-        minute: '2-digit'
-      });
+      return `${diffYears}年前`;
     }
   };
 

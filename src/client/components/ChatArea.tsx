@@ -12,6 +12,7 @@ interface ChatAreaProps {
   conversationId: string | null;
   settings: UserSettings;
   onUpdateConversation: (conversation: Conversation) => void;
+  error: { message: string; details?: string } | null;
 }
 
 interface MessageComponentProps {
@@ -22,7 +23,8 @@ const ChatArea: React.FC<ChatAreaProps> = ({
   mastraService,
   conversationId,
   settings,
-  onUpdateConversation
+  onUpdateConversation,
+  error
 }) => {
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -151,7 +153,7 @@ const ChatArea: React.FC<ChatAreaProps> = ({
           fullResponse = text;
           setStreamedResponse(text);
         }
-      });
+      }, currentConversation.id);
 
       if (!isMountedRef.current || signal.aborted) return;
 
@@ -410,7 +412,21 @@ const ChatArea: React.FC<ChatAreaProps> = ({
   return (
     <div className="chat-area">
       <div className="chat-messages">
-        {!currentConversation ? (
+        {error ? (
+          <div className="message-container error">
+            <div className="message-flex error">
+              <div className="message-content error">
+                <div className="error-title">{error.message}</div>
+                {error.details && (
+                  <div className="error-details">{error.details}</div>
+                )}
+                <div className="error-help">
+                  詳細な情報は開発者ツールのコンソールを確認してください。
+                </div>
+              </div>
+            </div>
+          </div>
+        ) : !currentConversation ? (
           <div className="empty-state">
             <img src="/images/logo.jpg" alt="Xibo Cockpit Logo" className="empty-state-logo" />
             <p>新しい会話ボタンを押して会話を開始してください。</p>

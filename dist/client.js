@@ -8784,6 +8784,33 @@ body {
   max-width: 100%;
 }
 
+.message-content.error {
+  background-color: var(--error-color);
+  color: white;
+  width: 100%;
+  max-width: 100%;
+  padding: 1.5rem;
+}
+
+.error-title {
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}
+
+.error-details {
+  margin-bottom: 1rem;
+  opacity: 0.9;
+}
+
+.error-help {
+  font-size: 0.9rem;
+  opacity: 0.8;
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+  padding-top: 0.5rem;
+  margin-top: 0.5rem;
+}
+
 .send-button {
   padding: 0.75rem 1.5rem;
   background-color: var(--accent-color);
@@ -8931,27 +8958,34 @@ body {
   color: var(--text-primary);
 }
 
-.settings-dialog label {
+.settings-group {
+  margin-bottom: 1rem;
+}
+
+.settings-group label {
   display: block;
-  font-size: 0.875rem;
-  font-weight: 500;
   margin-bottom: 0.5rem;
   color: var(--text-primary);
 }
 
-.settings-dialog select,
-.settings-dialog input {
+.settings-group input[type="text"],
+.settings-group input[type="password"],
+.settings-group select {
   width: 100%;
   padding: 0.5rem;
   border: 1px solid var(--border-color);
-  border-radius: 0.375rem;
+  border-radius: 0.25rem;
   background-color: var(--bg-primary);
   color: var(--text-primary);
-  margin-bottom: 1rem;
 }
 
-.settings-dialog select:focus,
-.settings-dialog input:focus {
+.settings-group input[type="checkbox"] {
+  margin-right: 0.5rem;
+}
+
+.settings-group input[type="text"]:focus,
+.settings-group input[type="password"]:focus,
+.settings-group select:focus {
   outline: none;
   border-color: var(--accent-color);
 }
@@ -9268,7 +9302,37 @@ body {
 
 .about-trademark a:hover {
   text-decoration: underline;
-} `, "",{"version":3,"sources":["webpack://./src/client/styles.css"],"names":[],"mappings":"AAAA,YAAY;AACZ;EACE,oBAAoB;EACpB,sBAAsB;EACtB,kBAAkB;EAClB,uBAAuB;EACvB,oBAAoB;EACpB,uBAAuB;EACvB,sBAAsB;EACtB,wBAAwB;AAC1B;;AAEA,WAAW;AACX;EACE,uBAAuB;EACvB,yBAAyB;EACzB,qBAAqB;EACrB,uBAAuB;EACvB,uBAAuB;EACvB,uBAAuB;EACvB,sBAAsB;EACtB,wBAAwB;AAC1B;;AAEA,iBAAiB;AACjB;EACE,aAAa;EACb,aAAa;EACb,mCAAmC;AACrC;;AAEA;EACE,YAAY;EACZ,qCAAqC;EACrC,2CAA2C;EAC3C,aAAa;EACb,sBAAsB;EACtB,gBAAgB;AAClB;;AAEA;EACE,OAAO;EACP,aAAa;EACb,sBAAsB;EACtB,gBAAgB;AAClB;;AAEA,iBAAiB;AACjB;EACE,aAAa;EACb,sBAAsB;EACtB,YAAY;EACZ,gBAAgB;AAClB;;AAEA;EACE,aAAa;EACb,4CAA4C;EAC5C,aAAa;EACb,mBAAmB;EACnB,WAAW;AACb;;AAEA;EACE,WAAW;EACX,YAAY;EACZ,mBAAmB;AACrB;;AAEA;EACE,iBAAiB;EACjB,gBAAgB;EAChB,0BAA0B;AAC5B;;AAEA;EACE,eAAe;EACf,YAAY;EACZ,gBAAgB;EAChB,qCAAqC;EACrC,YAAY;EACZ,YAAY;EACZ,uBAAuB;EACvB,eAAe;EACf,aAAa;EACb,mBAAmB;EACnB,uBAAuB;EACvB,WAAW;AACb;;AAEA;EACE,YAAY;AACd;;AAEA;EACE,OAAO;EACP,gBAAgB;EAChB,eAAe;AACjB;;AAEA;EACE,gBAAgB;EAChB,qBAAqB;EACrB,uBAAuB;EACvB,eAAe;EACf,aAAa;EACb,sBAAsB;EACtB,YAAY;AACd;;AAEA;EACE,mCAAmC;AACrC;;AAEA;EACE,mCAAmC;AACrC;;AAEA;EACE,eAAe;EACf,0BAA0B;EAC1B,mBAAmB;EACnB,gBAAgB;EAChB,uBAAuB;AACzB;;AAEA;EACE,mBAAmB;EACnB,4BAA4B;AAC9B;;AAEA;EACE,aAAa;EACb,yCAAyC;AAC3C;;AAEA;EACE,eAAe;EACf,WAAW;EACX,gBAAgB;EAChB,mCAAmC;EACnC,0BAA0B;EAC1B,qCAAqC;EACrC,uBAAuB;EACvB,eAAe;EACf,aAAa;EACb,mBAAmB;EACnB,uBAAuB;EACvB,WAAW;AACb;;AAEA;EACE,qCAAqC;AACvC;;AAEA;EACE,SAAS;EACT;8EAC4E;EAC5E,mCAAmC;EACnC,kCAAkC;EAClC,eAAe;AACjB;;AAEA,iBAAiB;AACjB;EACE,UAAU;EACV,WAAW;AACb;;AAEA;EACE,+BAA+B;AACjC;;AAEA;EACE,gBAAgB;EAChB,kBAAkB;AACpB;;AAEA;EACE,gBAAgB;AAClB;;AAEA,qBAAqB;AACrB;EACE,iBAAiB;EACjB,gBAAgB;AAClB;;AAEA;;;;;;EAME,kBAAkB;EAClB,mBAAmB;EACnB,gBAAgB;AAClB;;AAEA;EACE,mBAAmB;AACrB;;AAEA;;EAEE,cAAc;EACd,oBAAoB;AACtB;;AAEA;EACE,gBAAgB;AAClB;;AAEA;EACE,0BAA0B;EAC1B,qBAAqB;AACvB;;AAEA;EACE,0BAA0B;AAC5B;;AAEA;EACE,0CAA0C;EAC1C,kBAAkB;EAClB,cAAc;EACd,4BAA4B;EAC5B,qBAAqB;AACvB;;AAEA;EACE,WAAW;EACX,yBAAyB;EACzB,cAAc;AAChB;;AAEA;EACE,yBAAyB,EAAE,kBAAkB;AAC/C;;AAEA;EACE,mCAAmC;AACrC;;AAEA;;EAEE,qCAAqC;EACrC,eAAe;EACf,gBAAgB;AAClB;;AAEA;EACE,iBAAiB;EACjB,cAAc,EAAE,kBAAkB;AACpC;;AAEA;EACE,0BAA0B;AAC5B;;AAEA,iBAAiB;AACjB;EACE,yBAAyB,EAAE,kBAAkB;AAC/C;;AAEA;EACE,mCAAmC;AACrC;;AAEA;EACE,cAAc,EAAE,mBAAmB;AACrC;;AAEA;EACE,0BAA0B;AAC5B;;AAEA;EACE,oCAAoC;EACpC,sBAAsB;EACtB,sBAAsB;EACtB,sBAAsB;AACxB;;AAEA;EACE,oCAAoC;EACpC,aAAa;EACb,qBAAqB;EACrB,gBAAgB;EAChB,cAAc;AAChB;;AAEA;EACE,6BAA6B;EAC7B,UAAU;AACZ;;AAEA;EACE,eAAe;EACf,cAAc;EACd,iBAAiB;AACnB;;AAEA,wBAAwB;AACxB;EACE,4BAA4B;EAC5B,WAAW;EACX,aAAa;AACf;;AAEA,iBAAiB;AACjB;EACE,aAAa;EACb,sBAAsB;EACtB,YAAY;EACZ,mCAAmC;AACrC;;AAEA;EACE,OAAO;EACP,gBAAgB;EAChB,aAAa;AACf;;AAEA;EACE,aAAa;EACb,sBAAsB;EACtB,mBAAmB;EACnB,uBAAuB;EACvB,4BAA4B;EAC5B,kBAAkB;EAClB,aAAa;EACb,gBAAgB;AAClB;;AAEA;EACE,YAAY;EACZ,aAAa;EACb,mBAAmB;EACnB,mBAAmB;AACrB;;AAEA;EACE,iBAAiB;EACjB,gBAAgB;AAClB;;AAEA;EACE,aAAa;EACb,yCAAyC;EACzC,qCAAqC;EACrC,aAAa;EACb,WAAW;AACb;;AAEA;EACE,OAAO;EACP,uBAAuB;EACvB,qCAAqC;EACrC,uBAAuB;EACvB,mCAAmC;EACnC,0BAA0B;EAC1B,uBAAuB;EACvB,2BAA2B;EAC3B,4BAA4B;EAC5B,gBAAgB;EAChB,eAAe;EACf,oBAAoB;EACpB,sBAAsB;EACtB,gBAAgB;AAClB;;AAEA;EACE,aAAa;EACb,iCAAiC;AACnC;;AAEA;EACE,UAAU;AACZ;;AAEA;EACE,+BAA+B;EAC/B,kBAAkB;AACpB;;AAEA;EACE,+BAA+B;EAC/B,kBAAkB;AACpB;;AAEA;EACE,iCAAiC;AACnC;;AAEA;EACE,mBAAmB;EACnB,aAAa;AACf;;AAEA;EACE,aAAa;EACb,SAAS;AACX;;AAEA;EACE,yBAAyB;AAC3B;;AAEA;EACE,aAAa;EACb,qBAAqB;EACrB,cAAc;EACd,qBAAqB;AACvB;;AAEA;EACE,qCAAqC;EACrC,YAAY;EACZ,iBAAiB;EACjB,cAAc;EACd,qBAAqB;AACvB;;AAEA;EACE,qCAAqC;EACrC,0BAA0B;EAC1B,WAAW;EACX,eAAe;AACjB;;AAEA;EACE,uBAAuB;EACvB,qCAAqC;EACrC,YAAY;EACZ,YAAY;EACZ,uBAAuB;EACvB,eAAe;EACf,mBAAmB;EACnB,eAAe;EACf,iBAAiB;EACjB,yBAAyB;AAC3B;;AAEA;EACE,qCAAqC;EACrC,YAAY;EACZ,YAAY;EACZ,8BAA8B;AAChC;;AAEA;EACE;IACE,YAAY;EACd;EACA;IACE,UAAU;EACZ;EACA;IACE,YAAY;EACd;AACF;;AAEA;EACE,YAAY;AACd;;AAEA,iBAAiB;AACjB;EACE,aAAa;EACb,mBAAmB;EACnB,8BAA8B;EAC9B,WAAW;AACb;;AAEA;EACE,gBAAgB;EAChB,4BAA4B;EAC5B,gBAAgB;EAChB,YAAY;EACZ,eAAe;EACf,aAAa;EACb,mBAAmB;EACnB,uBAAuB;EACvB,WAAW;AACb;;AAEA;EACE,0BAA0B;AAC5B;;AAEA;EACE,WAAW;EACX,eAAe;EACf,qCAAqC;EACrC,uBAAuB;EACvB,mCAAmC;EACnC,0BAA0B;AAC5B;;AAEA;EACE,aAAa;EACb,iCAAiC;AACnC;;AAEA,cAAc;AACd;EACE,eAAe;EACf,QAAQ;EACR,WAAW;AACb;;AAEA;EACE,eAAe;EACf,mCAAmC;EACnC,qCAAqC;EACrC,uBAAuB;EACvB,wCAAwC;EACxC,WAAW;EACX,gBAAgB;AAClB;;AAEA;EACE,4BAA4B;AAC9B;;AAEA;EACE,WAAW;EACX,oBAAoB;EACpB,gBAAgB;EAChB,gBAAgB;EAChB,YAAY;EACZ,eAAe;EACf,aAAa;EACb,mBAAmB;EACnB,WAAW;EACX,0BAA0B;EAC1B,mBAAmB;AACrB;;AAEA;EACE,qCAAqC;AACvC;;AAEA;EACE,yBAAyB;AAC3B;;AAEA,iBAAiB;AACjB;EACE,eAAe;EACf,QAAQ;EACR,oCAAoC;EACpC,WAAW;AACb;;AAEA;EACE,eAAe;EACf,QAAQ;EACR,SAAS;EACT,gCAAgC;EAChC,mCAAmC;EACnC,qBAAqB;EACrB,eAAe;EACf,YAAY;EACZ,WAAW;EACX,wCAAwC;EACxC,gBAAgB;EAChB,gBAAgB;AAClB;;AAEA;EACE,kBAAkB;EAClB,gBAAgB;EAChB,mBAAmB;EACnB,0BAA0B;AAC5B;;AAEA;EACE,cAAc;EACd,mBAAmB;EACnB,gBAAgB;EAChB,qBAAqB;EACrB,0BAA0B;AAC5B;;AAEA;;EAEE,WAAW;EACX,eAAe;EACf,qCAAqC;EACrC,uBAAuB;EACvB,mCAAmC;EACnC,0BAA0B;EAC1B,mBAAmB;AACrB;;AAEA;;EAEE,aAAa;EACb,iCAAiC;AACnC;;AAEA;EACE,aAAa;EACb,uBAAuB;EACvB,WAAW;EACX,gBAAgB;AAClB;;AAEA;EACE,oBAAoB;EACpB,uBAAuB;EACvB,eAAe;AACjB;;AAEA;EACE,6BAA6B;EAC7B,0BAA0B;EAC1B,qCAAqC;AACvC;;AAEA;EACE,qCAAqC;EACrC,YAAY;EACZ,YAAY;EACZ,gBAAgB;AAClB;;AAEA;EACE,YAAY;AACd;;AAEA,mBAAmB;AACnB;EACE,aAAa;EACb,mBAAmB;EACnB,mBAAmB;EACnB,WAAW;EACX,YAAY;EACZ,kBAAkB;AACpB;;AAEA;EACE,kBAAkB;EAClB,4BAA4B;EAC5B,OAAO;AACT;;AAEA;EACE,aAAa;EACb,mBAAmB;EACnB,WAAW;EACX,OAAO;EACP,yBAAyB;AAC3B;;AAEA;EACE,4BAA4B;EAC5B,uBAAuB;EACvB,YAAY;EACZ,eAAe;EACf,gBAAgB;EAChB,oBAAoB;EACpB,mBAAmB;EACnB,kBAAkB;EAClB,SAAS;EACT,QAAQ;EACR,gCAAgC;AAClC;;AAEA;EACE,4BAA4B;EAC5B,uBAAuB;EACvB,YAAY;EACZ,eAAe;EACf,gBAAgB;EAChB,oBAAoB;EACpB,mBAAmB;AACrB;;AAEA;;EAEE,0BAA0B;AAC5B;;AAEA;;EAEE,uBAAuB;EACvB,mBAAmB;AACrB;;AAEA;EACE,kBAAkB;EAClB,YAAY;EACZ,SAAS;EACT,2BAA2B;EAC3B,qBAAqB;EACrB,uBAAuB;EACvB,kBAAkB;EAClB,sBAAsB;EACtB,mCAAmC;EACnC,0BAA0B;EAC1B,mBAAmB;EACnB,UAAU;AACZ;;AAEA;;EAEE,uBAAuB;AACzB;;AAEA;EACE,4BAA4B;AAC9B;;AAEA,mBAAmB;AACnB;EACE,eAAe;EACf,QAAQ;EACR,oCAAoC;EACpC,WAAW;AACb;;AAEA;EACE,eAAe;EACf,QAAQ;EACR,SAAS;EACT,gCAAgC;EAChC,mCAAmC;EACnC,qBAAqB;EACrB,eAAe;EACf,YAAY;EACZ,WAAW;EACX,wCAAwC;AAC1C;;AAEA;EACE,kBAAkB;EAClB,gBAAgB;EAChB,mBAAmB;EACnB,0BAA0B;AAC5B;;AAEA;EACE,4BAA4B;EAC5B,mBAAmB;AACrB;;AAEA;EACE,aAAa;EACb,yBAAyB;EACzB,WAAW;AACb;;AAEA;EACE,oBAAoB;EACpB,uBAAuB;EACvB,eAAe;AACjB;;AAEA;EACE,6BAA6B;EAC7B,0BAA0B;EAC1B,qCAAqC;AACvC;;AAEA;EACE,oCAAoC;EACpC,YAAY;EACZ,YAAY;AACd;;AAEA;EACE,YAAY;AACd;;AAEA,iBAAiB;AACjB;EACE,cAAc;EACd,qBAAqB;EACrB,gBAAgB;EAChB,mCAAmC;EACnC,qCAAqC;AACvC;;AAEA;EACE,aAAa;EACb,8BAA8B;EAC9B,mBAAmB;EACnB,oBAAoB;EACpB,yBAAyB,EAAE,kBAAkB;EAC7C,4CAA4C;AAC9C;;AAEA;EACE,yBAAyB,EAAE,kBAAkB;AAC/C;;AAEA;EACE,mBAAmB;EACnB,cAAc,EAAE,kBAAkB;EAClC,sBAAsB;EACtB,gBAAgB;AAClB;;AAEA;EACE,cAAc,EAAE,mBAAmB;AACrC;;AAEA;EACE,gBAAgB;EAChB,YAAY;EACZ,4BAA4B;EAC5B,eAAe;EACf,gBAAgB;EAChB,mBAAmB;EACnB,2BAA2B;AAC7B;;AAEA;EACE,0BAA0B;AAC5B;;AAEA;EACE,SAAS;EACT,aAAa;EACb,gBAAgB;EAChB,mCAAmC;EACnC,0BAA0B;AAC5B;;AAEA,oBAAoB;AACpB;EACE,gBAAgB;EAChB,kBAAkB;AACpB;;AAEA;EACE,kBAAkB;EAClB,sBAAsB;AACxB;;AAEA;EACE,YAAY;EACZ,gBAAgB;EAChB,mBAAmB;AACrB;;AAEA;EACE,kBAAkB;EAClB,gBAAgB;EAChB,eAAe;EACf,mBAAmB;EACnB,0BAA0B;AAC5B;;AAEA;EACE,mBAAmB;EACnB,4BAA4B;EAC5B,gBAAgB;AAClB;;AAEA;EACE,kBAAkB;EAClB,sBAAsB;EACtB,4BAA4B;EAC5B,mBAAmB;EACnB,gBAAgB;AAClB;;AAEA;EACE,mBAAmB;EACnB,kBAAkB;AACpB;;AAEA;EACE,mBAAmB;EACnB,gBAAgB;EAChB,sBAAsB;EACtB,0BAA0B;AAC5B;;AAEA;EACE,mBAAmB;EACnB,4BAA4B;EAC5B,gBAAgB;AAClB;;AAEA;EACE,0BAA0B;EAC1B,qBAAqB;AACvB;;AAEA;EACE,0BAA0B;AAC5B;;AAEA;EACE,mBAAmB;EACnB,oBAAoB;EACpB,yCAAyC;EACzC,kBAAkB;EAClB,mBAAmB;EACnB,4BAA4B;EAC5B,gBAAgB;AAClB;;AAEA;EACE,0BAA0B;EAC1B,qBAAqB;AACvB;;AAEA;EACE,0BAA0B;AAC5B","sourcesContent":["/* ベーススタイル */\n:root {\n  --text-primary: #333;\n  --text-secondary: #666;\n  --bg-primary: #fff;\n  --bg-secondary: #f5f5f5;\n  --border-color: #ddd;\n  --accent-color: #3b82f6;\n  --error-color: #ef4444;\n  --success-color: #10b981;\n}\n\n/* ダークモード */\n.dark {\n  --text-primary: #f1f5f9;\n  --text-secondary: #94a3b8;\n  --bg-primary: #1e293b;\n  --bg-secondary: #111827;\n  --border-color: #334155;\n  --accent-color: #3b82f6;\n  --error-color: #ef4444;\n  --success-color: #10b981;\n}\n\n/* レイアウトの基本スタイル */\n.app-container {\n  display: flex;\n  height: 100vh;\n  background-color: var(--bg-primary);\n}\n\n.sidebar {\n  width: 300px;\n  background-color: var(--bg-secondary);\n  border-right: 1px solid var(--border-color);\n  display: flex;\n  flex-direction: column;\n  overflow: hidden;\n}\n\n.main-content {\n  flex: 1;\n  display: flex;\n  flex-direction: column;\n  overflow: hidden;\n}\n\n/* ナビゲーションのスタイル */\n.navbar {\n  display: flex;\n  flex-direction: column;\n  height: 100%;\n  overflow: hidden;\n}\n\n.navbar-header {\n  padding: 1rem;\n  border-bottom: 1px solid var(--border-color);\n  display: flex;\n  align-items: center;\n  gap: 0.5rem;\n}\n\n.navbar-logo {\n  width: 64px;\n  height: 64px;\n  object-fit: contain;\n}\n\n.navbar-title {\n  font-size: 1.5rem;\n  font-weight: 600;\n  color: var(--text-primary);\n}\n\n.navbar-new-chat {\n  font-size: 1rem;\n  margin: 1rem;\n  padding: 0.75rem;\n  background-color: var(--accent-color);\n  color: white;\n  border: none;\n  border-radius: 0.375rem;\n  cursor: pointer;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  gap: 0.5rem;\n}\n\n.navbar-new-chat:hover {\n  opacity: 0.9;\n}\n\n.navbar-conversations {\n  flex: 1;\n  overflow-y: auto;\n  padding: 0.5rem;\n}\n\n.navbar-conversation {\n  padding: 0.75rem;\n  margin-bottom: 0.5rem;\n  border-radius: 0.375rem;\n  cursor: pointer;\n  display: flex;\n  flex-direction: column;\n  gap: 0.25rem;\n}\n\n.navbar-conversation:hover {\n  background-color: var(--bg-primary);\n}\n\n.navbar-conversation.active {\n  background-color: var(--bg-primary);\n}\n\n.navbar-conversation-title {\n  font-size: 1rem;\n  color: var(--text-primary);\n  white-space: nowrap;\n  overflow: hidden;\n  text-overflow: ellipsis;\n}\n\n.navbar-conversation-date {\n  font-size: 0.875rem;\n  color: var(--text-secondary);\n}\n\n.navbar-footer {\n  padding: 1rem;\n  border-top: 1px solid var(--border-color);\n}\n\n.navbar-settings {\n  font-size: 1rem;\n  width: 100%;\n  padding: 0.75rem;\n  background-color: var(--bg-primary);\n  color: var(--text-primary);\n  border: 1px solid var(--border-color);\n  border-radius: 0.375rem;\n  cursor: pointer;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  gap: 0.5rem;\n}\n\n.navbar-settings:hover {\n  background-color: var(--bg-secondary);\n}\n\nbody {\n  margin: 0;\n  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,\n    Ubuntu, Cantarell, 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;\n  -webkit-font-smoothing: antialiased;\n  -moz-osx-font-smoothing: grayscale;\n  font-size: 16px;\n}\n\n/* スクロールバーのスタイル */\n::-webkit-scrollbar {\n  width: 8px;\n  height: 8px;\n}\n\n::-webkit-scrollbar-track {\n  background: var(--bg-secondary);\n}\n\n::-webkit-scrollbar-thumb {\n  background: #888;\n  border-radius: 4px;\n}\n\n::-webkit-scrollbar-thumb:hover {\n  background: #666;\n}\n\n/* マークダウンコンテンツのスタイル */\n.markdown-content {\n  font-size: 1.1rem;\n  line-height: 1.6;\n}\n\n.markdown-content h1,\n.markdown-content h2,\n.markdown-content h3,\n.markdown-content h4,\n.markdown-content h5,\n.markdown-content h6 {\n  margin-top: 1.5rem;\n  margin-bottom: 1rem;\n  font-weight: 600;\n}\n\n.markdown-content p {\n  margin-bottom: 1rem;\n}\n\n.markdown-content ul,\n.markdown-content ol {\n  margin: 1rem 0;\n  padding-left: 1.5rem;\n}\n\n.markdown-content li {\n  margin: 0.5rem 0;\n}\n\n.markdown-content a {\n  color: var(--accent-color);\n  text-decoration: none;\n}\n\n.markdown-content a:hover {\n  text-decoration: underline;\n}\n\n.markdown-content blockquote {\n  border-left: 4px solid var(--border-color);\n  padding-left: 1rem;\n  margin: 1rem 0;\n  color: var(--text-secondary);\n  white-space: pre-wrap;\n}\n\n.markdown-content table {\n  width: 100%;\n  border-collapse: collapse;\n  margin: 1rem 0;\n}\n\n.markdown-content thead {\n  background-color: #e5e7eb; /* ライトモード用の薄いグレー */\n}\n\n.markdown-content tbody {\n  background-color: var(--bg-primary);\n}\n\n.markdown-content th,\n.markdown-content td {\n  border: 1px solid var(--border-color);\n  padding: 0.5rem;\n  text-align: left;\n}\n\n.markdown-content th {\n  font-weight: bold;\n  color: #1f2937; /* ライトモード用の濃いグレー */\n}\n\n.markdown-content td {\n  color: var(--text-primary);\n}\n\n/* ダークモード用のスタイル */\n.dark .markdown-content thead {\n  background-color: #374151; /* ダークモード用の濃いグレー */\n}\n\n.dark .markdown-content tbody {\n  background-color: var(--bg-primary);\n}\n\n.dark .markdown-content th {\n  color: #f3f4f6; /* ダークモード用の明るいグレー */\n}\n\n.dark .markdown-content td {\n  color: var(--text-primary);\n}\n\n.markdown-content code {\n  background-color: var(--bg-tertiary);\n  padding: 0.2rem 0.4rem;\n  border-radius: 0.25rem;\n  font-family: monospace;\n}\n\n.markdown-content pre {\n  background-color: var(--bg-tertiary);\n  padding: 1rem;\n  border-radius: 0.5rem;\n  overflow-x: auto;\n  margin: 1rem 0;\n}\n\n.markdown-content pre code {\n  background-color: transparent;\n  padding: 0;\n}\n\n.markdown-content img {\n  max-width: 100%;\n  display: block;\n  margin: 1rem auto;\n}\n\n/* コードブロックのコピーボタンのスタイル */\n.markdown-content div.relative button.absolute {\n  border-width: 0px !important;\n  top: 0.5rem;\n  right: 0.5rem;\n}\n\n/* チャットエリアのスタイル */\n.chat-area {\n  display: flex;\n  flex-direction: column;\n  height: 100%;\n  background-color: var(--bg-primary);\n}\n\n.chat-messages {\n  flex: 1;\n  overflow-y: auto;\n  padding: 1rem;\n}\n\n.empty-state {\n  display: flex;\n  flex-direction: column;\n  align-items: center;\n  justify-content: center;\n  color: var(--text-secondary);\n  text-align: center;\n  padding: 2rem;\n  margin-top: 30vh;\n}\n\n.empty-state-logo {\n  width: 120px;\n  height: 120px;\n  margin-bottom: 2rem;\n  object-fit: contain;\n}\n\n.empty-state p {\n  font-size: 1.3rem;\n  line-height: 1.5;\n}\n\n.chat-input-area {\n  padding: 1rem;\n  border-top: 1px solid var(--border-color);\n  background-color: var(--bg-secondary);\n  display: flex;\n  gap: 0.5rem;\n}\n\n.chat-textarea {\n  flex: 1;\n  padding: 0.5rem 0.75rem;\n  border: 1px solid var(--border-color);\n  border-radius: 0.375rem;\n  background-color: var(--bg-primary);\n  color: var(--text-primary);\n  resize: none !important;\n  min-height: 40px !important;\n  max-height: 140px !important;\n  line-height: 1.2;\n  font-size: 1rem;\n  font-family: inherit;\n  box-sizing: border-box;\n  overflow-y: auto;\n}\n\n.chat-textarea:focus {\n  outline: none;\n  border-color: var(--accent-color);\n}\n\n.chat-textarea::-webkit-scrollbar {\n  width: 8px;\n}\n\n.chat-textarea::-webkit-scrollbar-track {\n  background: var(--bg-secondary);\n  border-radius: 4px;\n}\n\n.chat-textarea::-webkit-scrollbar-thumb {\n  background: var(--border-color);\n  border-radius: 4px;\n}\n\n.chat-textarea::-webkit-scrollbar-thumb:hover {\n  background: var(--text-secondary);\n}\n\n.message-container {\n  margin-bottom: 1rem;\n  padding: 1rem;\n}\n\n.message-flex {\n  display: flex;\n  gap: 1rem;\n}\n\n.message-flex.user {\n  justify-content: flex-end;\n}\n\n.message-content {\n  padding: 1rem;\n  border-radius: 0.5rem;\n  max-width: 60%;\n  word-wrap: break-word;\n}\n\n.message-content.user {\n  background-color: var(--accent-color);\n  color: white;\n  margin-left: auto;\n  max-width: 60%;\n  white-space: pre-wrap;\n}\n\n.message-content.assistant {\n  background-color: var(--bg-secondary);\n  color: var(--text-primary);\n  width: 100%;\n  max-width: 100%;\n}\n\n.send-button {\n  padding: 0.75rem 1.5rem;\n  background-color: var(--accent-color);\n  color: white;\n  border: none;\n  border-radius: 0.375rem;\n  cursor: pointer;\n  white-space: nowrap;\n  font-size: 1rem;\n  font-weight: bold;\n  transition: all 0.2s ease;\n}\n\n.send-button:disabled {\n  background-color: var(--accent-color);\n  opacity: 0.8;\n  cursor: wait;\n  animation: pulse 1.5s infinite;\n}\n\n@keyframes pulse {\n  0% {\n    opacity: 0.8;\n  }\n  50% {\n    opacity: 1;\n  }\n  100% {\n    opacity: 0.8;\n  }\n}\n\n.send-button:hover:not(:disabled) {\n  opacity: 0.9;\n}\n\n/* 会話リストの追加スタイル */\n.navbar-conversation-header {\n  display: flex;\n  align-items: center;\n  justify-content: space-between;\n  width: 100%;\n}\n\n.navbar-conversation-menu {\n  padding: 0.25rem;\n  color: var(--text-secondary);\n  background: none;\n  border: none;\n  cursor: pointer;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  z-index: 30;\n}\n\n.navbar-conversation-menu:hover {\n  color: var(--text-primary);\n}\n\n.navbar-conversation-input {\n  width: 100%;\n  padding: 0.5rem;\n  border: 1px solid var(--border-color);\n  border-radius: 0.375rem;\n  background-color: var(--bg-primary);\n  color: var(--text-primary);\n}\n\n.navbar-conversation-input:focus {\n  outline: none;\n  border-color: var(--accent-color);\n}\n\n/* メニューのスタイル */\n.menu-overlay {\n  position: fixed;\n  inset: 0;\n  z-index: 40;\n}\n\n.menu-container {\n  position: fixed;\n  background-color: var(--bg-primary);\n  border: 1px solid var(--border-color);\n  border-radius: 0.375rem;\n  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);\n  z-index: 50;\n  min-width: 200px;\n}\n\n.menu-container.settings-menu {\n  transform: translateY(-100%);\n}\n\n.menu-container button {\n  width: 100%;\n  padding: 0.5rem 1rem;\n  text-align: left;\n  background: none;\n  border: none;\n  cursor: pointer;\n  display: flex;\n  align-items: center;\n  gap: 0.5rem;\n  color: var(--text-primary);\n  white-space: nowrap;\n}\n\n.menu-container button:hover {\n  background-color: var(--bg-secondary);\n}\n\n.menu-container button.text-red-600 {\n  color: var(--error-color);\n}\n\n/* 設定ダイアログのスタイル */\n.settings-dialog-overlay {\n  position: fixed;\n  inset: 0;\n  background-color: rgba(0, 0, 0, 0.5);\n  z-index: 50;\n}\n\n.settings-dialog {\n  position: fixed;\n  top: 50%;\n  left: 50%;\n  transform: translate(-50%, -50%);\n  background-color: var(--bg-primary);\n  border-radius: 0.5rem;\n  padding: 1.5rem;\n  width: 24rem;\n  z-index: 51;\n  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);\n  max-height: 90vh;\n  overflow-y: auto;\n}\n\n.settings-dialog h2 {\n  font-size: 1.25rem;\n  font-weight: 600;\n  margin-bottom: 1rem;\n  color: var(--text-primary);\n}\n\n.settings-dialog label {\n  display: block;\n  font-size: 0.875rem;\n  font-weight: 500;\n  margin-bottom: 0.5rem;\n  color: var(--text-primary);\n}\n\n.settings-dialog select,\n.settings-dialog input {\n  width: 100%;\n  padding: 0.5rem;\n  border: 1px solid var(--border-color);\n  border-radius: 0.375rem;\n  background-color: var(--bg-primary);\n  color: var(--text-primary);\n  margin-bottom: 1rem;\n}\n\n.settings-dialog select:focus,\n.settings-dialog input:focus {\n  outline: none;\n  border-color: var(--accent-color);\n}\n\n.settings-dialog-buttons {\n  display: flex;\n  justify-content: center;\n  gap: 0.5rem;\n  margin-top: 1rem;\n}\n\n.settings-dialog-buttons button {\n  padding: 0.5rem 1rem;\n  border-radius: 0.375rem;\n  cursor: pointer;\n}\n\n.settings-dialog-buttons button.cancel {\n  background-color: transparent;\n  color: var(--text-primary);\n  border: 1px solid var(--border-color);\n}\n\n.settings-dialog-buttons button.save {\n  background-color: var(--accent-color);\n  color: white;\n  border: none;\n  min-width: 100px;\n}\n\n.settings-dialog-buttons button:hover {\n  opacity: 0.9;\n}\n\n/* メッセージヘッダーのスタイル */\n.message-header {\n  display: flex;\n  align-items: center;\n  margin-top: 0.25rem;\n  width: 100%;\n  height: 24px;\n  position: relative;\n}\n\n.message-timestamp {\n  font-size: 0.75rem;\n  color: var(--text-secondary);\n  flex: 1;\n}\n\n.message-actions {\n  display: flex;\n  align-items: center;\n  gap: 0.5rem;\n  flex: 1;\n  justify-content: flex-end;\n}\n\n.message-collapse {\n  color: var(--text-secondary);\n  background: transparent;\n  border: none;\n  cursor: pointer;\n  padding: 0.25rem;\n  display: inline-flex;\n  align-items: center;\n  position: absolute;\n  left: 50%;\n  top: 50%;\n  transform: translate(-50%, -50%);\n}\n\n.message-copy {\n  color: var(--text-secondary);\n  background: transparent;\n  border: none;\n  cursor: pointer;\n  padding: 0.25rem;\n  display: inline-flex;\n  align-items: center;\n}\n\n.message-collapse:hover,\n.message-copy:hover {\n  color: var(--text-primary);\n}\n\n.message-collapse i,\n.message-copy i {\n  background: transparent;\n  font-size: 0.875rem;\n}\n\n.copy-tooltip {\n  position: absolute;\n  bottom: 100%;\n  left: 50%;\n  transform: translateX(-50%);\n  margin-bottom: 0.5rem;\n  padding: 0.25rem 0.5rem;\n  font-size: 0.75rem;\n  border-radius: 0.25rem;\n  background-color: var(--bg-primary);\n  color: var(--text-primary);\n  white-space: nowrap;\n  z-index: 3;\n}\n\n.dark .message-collapse i,\n.dark .message-copy i {\n  background: transparent;\n}\n\n.dark .message-timestamp {\n  color: var(--text-secondary);\n}\n\n/* 削除確認ダイアログのスタイル */\n.delete-dialog-overlay {\n  position: fixed;\n  inset: 0;\n  background-color: rgba(0, 0, 0, 0.5);\n  z-index: 50;\n}\n\n.delete-dialog {\n  position: fixed;\n  top: 50%;\n  left: 50%;\n  transform: translate(-50%, -50%);\n  background-color: var(--bg-primary);\n  border-radius: 0.5rem;\n  padding: 1.5rem;\n  width: 24rem;\n  z-index: 51;\n  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);\n}\n\n.delete-dialog h3 {\n  font-size: 1.25rem;\n  font-weight: 600;\n  margin-bottom: 1rem;\n  color: var(--text-primary);\n}\n\n.delete-dialog p {\n  color: var(--text-secondary);\n  margin-bottom: 1rem;\n}\n\n.delete-dialog-buttons {\n  display: flex;\n  justify-content: flex-end;\n  gap: 0.5rem;\n}\n\n.delete-dialog-buttons button {\n  padding: 0.5rem 1rem;\n  border-radius: 0.375rem;\n  cursor: pointer;\n}\n\n.delete-dialog-buttons button.cancel {\n  background-color: transparent;\n  color: var(--text-primary);\n  border: 1px solid var(--border-color);\n}\n\n.delete-dialog-buttons button.delete {\n  background-color: var(--error-color);\n  color: white;\n  border: none;\n}\n\n.delete-dialog-buttons button:hover {\n  opacity: 0.9;\n}\n\n/* コードブロックのスタイル */\n.code-block {\n  margin: 1rem 0;\n  border-radius: 0.5rem;\n  overflow: hidden;\n  background-color: var(--bg-primary);\n  border: 1px solid var(--border-color);\n}\n\n.code-block-header {\n  display: flex;\n  justify-content: space-between;\n  align-items: center;\n  padding: 0.5rem 1rem;\n  background-color: #e5e7eb; /* ライトモード用の薄いグレー */\n  border-bottom: 1px solid var(--border-color);\n}\n\n.dark .code-block-header {\n  background-color: #374151; /* ダークモード用の濃いグレー */\n}\n\n.code-block-language {\n  font-size: 1.125rem;\n  color: #1f2937; /* ライトモード用の濃いグレー */\n  font-family: monospace;\n  font-weight: 500;\n}\n\n.dark .code-block-language {\n  color: #f3f4f6; /* ダークモード用の明るいグレー */\n}\n\n.code-block-copy {\n  background: none;\n  border: none;\n  color: var(--text-secondary);\n  cursor: pointer;\n  padding: 0.25rem;\n  font-size: 0.875rem;\n  transition: color 0.2s ease;\n}\n\n.code-block-copy:hover {\n  color: var(--text-primary);\n}\n\n.code-block-content {\n  margin: 0;\n  padding: 1rem;\n  overflow-x: auto;\n  background-color: var(--bg-primary);\n  color: var(--text-primary);\n}\n\n/* Aboutダイアログのスタイル */\n.about-dialog-content {\n  padding: 0.75rem;\n  text-align: center;\n}\n\n.about-header {\n  text-align: center;\n  margin-bottom: 1.25rem;\n}\n\n.about-logo {\n  width: 128px;\n  margin-bottom: 0;\n  object-fit: contain;\n}\n\n.about-header h2 {\n  font-size: 1.25rem;\n  font-weight: 600;\n  margin-top: 2px;\n  margin-bottom: 20px;\n  color: var(--text-primary);\n}\n\n.version-info {\n  font-size: 0.875rem;\n  color: var(--text-secondary);\n  line-height: 1.4;\n}\n\n.about-copyright {\n  text-align: center;\n  margin-bottom: 1.25rem;\n  color: var(--text-secondary);\n  font-size: 0.875rem;\n  line-height: 1.4;\n}\n\n.about-section {\n  margin-bottom: 1rem;\n  text-align: center;\n}\n\n.about-section h3 {\n  font-size: 0.875rem;\n  font-weight: 600;\n  margin-bottom: 0.25rem;\n  color: var(--text-primary);\n}\n\n.about-section p {\n  font-size: 0.875rem;\n  color: var(--text-secondary);\n  line-height: 1.4;\n}\n\n.about-section a {\n  color: var(--accent-color);\n  text-decoration: none;\n}\n\n.about-section a:hover {\n  text-decoration: underline;\n}\n\n.about-trademark {\n  margin-top: 1.25rem;\n  padding-top: 0.75rem;\n  border-top: 1px solid var(--border-color);\n  text-align: center;\n  font-size: 0.875rem;\n  color: var(--text-secondary);\n  line-height: 1.4;\n}\n\n.about-trademark a {\n  color: var(--accent-color);\n  text-decoration: none;\n}\n\n.about-trademark a:hover {\n  text-decoration: underline;\n} "],"sourceRoot":""}]);
+}
+
+.error-message {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  padding: 2rem;
+  text-align: center;
+  color: var(--error-color);
+}
+
+.error-message p {
+  margin-bottom: 1rem;
+  font-size: 1.1rem;
+}
+
+.error-message button {
+  padding: 0.5rem 1rem;
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.error-message button:hover {
+  background-color: var(--primary-color-dark);
+} `, "",{"version":3,"sources":["webpack://./src/client/styles.css"],"names":[],"mappings":"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","sourcesContent":["/* ベーススタイル */\n:root {\n  --text-primary: #333;\n  --text-secondary: #666;\n  --bg-primary: #fff;\n  --bg-secondary: #f5f5f5;\n  --border-color: #ddd;\n  --accent-color: #3b82f6;\n  --error-color: #ef4444;\n  --success-color: #10b981;\n}\n\n/* ダークモード */\n.dark {\n  --text-primary: #f1f5f9;\n  --text-secondary: #94a3b8;\n  --bg-primary: #1e293b;\n  --bg-secondary: #111827;\n  --border-color: #334155;\n  --accent-color: #3b82f6;\n  --error-color: #ef4444;\n  --success-color: #10b981;\n}\n\n/* レイアウトの基本スタイル */\n.app-container {\n  display: flex;\n  height: 100vh;\n  background-color: var(--bg-primary);\n}\n\n.sidebar {\n  width: 300px;\n  background-color: var(--bg-secondary);\n  border-right: 1px solid var(--border-color);\n  display: flex;\n  flex-direction: column;\n  overflow: hidden;\n}\n\n.main-content {\n  flex: 1;\n  display: flex;\n  flex-direction: column;\n  overflow: hidden;\n}\n\n/* ナビゲーションのスタイル */\n.navbar {\n  display: flex;\n  flex-direction: column;\n  height: 100%;\n  overflow: hidden;\n}\n\n.navbar-header {\n  padding: 1rem;\n  border-bottom: 1px solid var(--border-color);\n  display: flex;\n  align-items: center;\n  gap: 0.5rem;\n}\n\n.navbar-logo {\n  width: 64px;\n  height: 64px;\n  object-fit: contain;\n}\n\n.navbar-title {\n  font-size: 1.5rem;\n  font-weight: 600;\n  color: var(--text-primary);\n}\n\n.navbar-new-chat {\n  font-size: 1rem;\n  margin: 1rem;\n  padding: 0.75rem;\n  background-color: var(--accent-color);\n  color: white;\n  border: none;\n  border-radius: 0.375rem;\n  cursor: pointer;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  gap: 0.5rem;\n}\n\n.navbar-new-chat:hover {\n  opacity: 0.9;\n}\n\n.navbar-conversations {\n  flex: 1;\n  overflow-y: auto;\n  padding: 0.5rem;\n}\n\n.navbar-conversation {\n  padding: 0.75rem;\n  margin-bottom: 0.5rem;\n  border-radius: 0.375rem;\n  cursor: pointer;\n  display: flex;\n  flex-direction: column;\n  gap: 0.25rem;\n}\n\n.navbar-conversation:hover {\n  background-color: var(--bg-primary);\n}\n\n.navbar-conversation.active {\n  background-color: var(--bg-primary);\n}\n\n.navbar-conversation-title {\n  font-size: 1rem;\n  color: var(--text-primary);\n  white-space: nowrap;\n  overflow: hidden;\n  text-overflow: ellipsis;\n}\n\n.navbar-conversation-date {\n  font-size: 0.875rem;\n  color: var(--text-secondary);\n}\n\n.navbar-footer {\n  padding: 1rem;\n  border-top: 1px solid var(--border-color);\n}\n\n.navbar-settings {\n  font-size: 1rem;\n  width: 100%;\n  padding: 0.75rem;\n  background-color: var(--bg-primary);\n  color: var(--text-primary);\n  border: 1px solid var(--border-color);\n  border-radius: 0.375rem;\n  cursor: pointer;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  gap: 0.5rem;\n}\n\n.navbar-settings:hover {\n  background-color: var(--bg-secondary);\n}\n\nbody {\n  margin: 0;\n  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,\n    Ubuntu, Cantarell, 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;\n  -webkit-font-smoothing: antialiased;\n  -moz-osx-font-smoothing: grayscale;\n  font-size: 16px;\n}\n\n/* スクロールバーのスタイル */\n::-webkit-scrollbar {\n  width: 8px;\n  height: 8px;\n}\n\n::-webkit-scrollbar-track {\n  background: var(--bg-secondary);\n}\n\n::-webkit-scrollbar-thumb {\n  background: #888;\n  border-radius: 4px;\n}\n\n::-webkit-scrollbar-thumb:hover {\n  background: #666;\n}\n\n/* マークダウンコンテンツのスタイル */\n.markdown-content {\n  font-size: 1.1rem;\n  line-height: 1.6;\n}\n\n.markdown-content h1,\n.markdown-content h2,\n.markdown-content h3,\n.markdown-content h4,\n.markdown-content h5,\n.markdown-content h6 {\n  margin-top: 1.5rem;\n  margin-bottom: 1rem;\n  font-weight: 600;\n}\n\n.markdown-content p {\n  margin-bottom: 1rem;\n}\n\n.markdown-content ul,\n.markdown-content ol {\n  margin: 1rem 0;\n  padding-left: 1.5rem;\n}\n\n.markdown-content li {\n  margin: 0.5rem 0;\n}\n\n.markdown-content a {\n  color: var(--accent-color);\n  text-decoration: none;\n}\n\n.markdown-content a:hover {\n  text-decoration: underline;\n}\n\n.markdown-content blockquote {\n  border-left: 4px solid var(--border-color);\n  padding-left: 1rem;\n  margin: 1rem 0;\n  color: var(--text-secondary);\n  white-space: pre-wrap;\n}\n\n.markdown-content table {\n  width: 100%;\n  border-collapse: collapse;\n  margin: 1rem 0;\n}\n\n.markdown-content thead {\n  background-color: #e5e7eb; /* ライトモード用の薄いグレー */\n}\n\n.markdown-content tbody {\n  background-color: var(--bg-primary);\n}\n\n.markdown-content th,\n.markdown-content td {\n  border: 1px solid var(--border-color);\n  padding: 0.5rem;\n  text-align: left;\n}\n\n.markdown-content th {\n  font-weight: bold;\n  color: #1f2937; /* ライトモード用の濃いグレー */\n}\n\n.markdown-content td {\n  color: var(--text-primary);\n}\n\n/* ダークモード用のスタイル */\n.dark .markdown-content thead {\n  background-color: #374151; /* ダークモード用の濃いグレー */\n}\n\n.dark .markdown-content tbody {\n  background-color: var(--bg-primary);\n}\n\n.dark .markdown-content th {\n  color: #f3f4f6; /* ダークモード用の明るいグレー */\n}\n\n.dark .markdown-content td {\n  color: var(--text-primary);\n}\n\n.markdown-content code {\n  background-color: var(--bg-tertiary);\n  padding: 0.2rem 0.4rem;\n  border-radius: 0.25rem;\n  font-family: monospace;\n}\n\n.markdown-content pre {\n  background-color: var(--bg-tertiary);\n  padding: 1rem;\n  border-radius: 0.5rem;\n  overflow-x: auto;\n  margin: 1rem 0;\n}\n\n.markdown-content pre code {\n  background-color: transparent;\n  padding: 0;\n}\n\n.markdown-content img {\n  max-width: 100%;\n  display: block;\n  margin: 1rem auto;\n}\n\n/* コードブロックのコピーボタンのスタイル */\n.markdown-content div.relative button.absolute {\n  border-width: 0px !important;\n  top: 0.5rem;\n  right: 0.5rem;\n}\n\n/* チャットエリアのスタイル */\n.chat-area {\n  display: flex;\n  flex-direction: column;\n  height: 100%;\n  background-color: var(--bg-primary);\n}\n\n.chat-messages {\n  flex: 1;\n  overflow-y: auto;\n  padding: 1rem;\n}\n\n.empty-state {\n  display: flex;\n  flex-direction: column;\n  align-items: center;\n  justify-content: center;\n  color: var(--text-secondary);\n  text-align: center;\n  padding: 2rem;\n  margin-top: 30vh;\n}\n\n.empty-state-logo {\n  width: 120px;\n  height: 120px;\n  margin-bottom: 2rem;\n  object-fit: contain;\n}\n\n.empty-state p {\n  font-size: 1.3rem;\n  line-height: 1.5;\n}\n\n.chat-input-area {\n  padding: 1rem;\n  border-top: 1px solid var(--border-color);\n  background-color: var(--bg-secondary);\n  display: flex;\n  gap: 0.5rem;\n}\n\n.chat-textarea {\n  flex: 1;\n  padding: 0.5rem 0.75rem;\n  border: 1px solid var(--border-color);\n  border-radius: 0.375rem;\n  background-color: var(--bg-primary);\n  color: var(--text-primary);\n  resize: none !important;\n  min-height: 40px !important;\n  max-height: 140px !important;\n  line-height: 1.2;\n  font-size: 1rem;\n  font-family: inherit;\n  box-sizing: border-box;\n  overflow-y: auto;\n}\n\n.chat-textarea:focus {\n  outline: none;\n  border-color: var(--accent-color);\n}\n\n.chat-textarea::-webkit-scrollbar {\n  width: 8px;\n}\n\n.chat-textarea::-webkit-scrollbar-track {\n  background: var(--bg-secondary);\n  border-radius: 4px;\n}\n\n.chat-textarea::-webkit-scrollbar-thumb {\n  background: var(--border-color);\n  border-radius: 4px;\n}\n\n.chat-textarea::-webkit-scrollbar-thumb:hover {\n  background: var(--text-secondary);\n}\n\n.message-container {\n  margin-bottom: 1rem;\n  padding: 1rem;\n}\n\n.message-flex {\n  display: flex;\n  gap: 1rem;\n}\n\n.message-flex.user {\n  justify-content: flex-end;\n}\n\n.message-content {\n  padding: 1rem;\n  border-radius: 0.5rem;\n  max-width: 60%;\n  word-wrap: break-word;\n}\n\n.message-content.user {\n  background-color: var(--accent-color);\n  color: white;\n  margin-left: auto;\n  max-width: 60%;\n  white-space: pre-wrap;\n}\n\n.message-content.assistant {\n  background-color: var(--bg-secondary);\n  color: var(--text-primary);\n  width: 100%;\n  max-width: 100%;\n}\n\n.message-content.error {\n  background-color: var(--error-color);\n  color: white;\n  width: 100%;\n  max-width: 100%;\n  padding: 1.5rem;\n}\n\n.error-title {\n  font-size: 1.2rem;\n  font-weight: bold;\n  margin-bottom: 0.5rem;\n}\n\n.error-details {\n  margin-bottom: 1rem;\n  opacity: 0.9;\n}\n\n.error-help {\n  font-size: 0.9rem;\n  opacity: 0.8;\n  border-top: 1px solid rgba(255, 255, 255, 0.2);\n  padding-top: 0.5rem;\n  margin-top: 0.5rem;\n}\n\n.send-button {\n  padding: 0.75rem 1.5rem;\n  background-color: var(--accent-color);\n  color: white;\n  border: none;\n  border-radius: 0.375rem;\n  cursor: pointer;\n  white-space: nowrap;\n  font-size: 1rem;\n  font-weight: bold;\n  transition: all 0.2s ease;\n}\n\n.send-button:disabled {\n  background-color: var(--accent-color);\n  opacity: 0.8;\n  cursor: wait;\n  animation: pulse 1.5s infinite;\n}\n\n@keyframes pulse {\n  0% {\n    opacity: 0.8;\n  }\n  50% {\n    opacity: 1;\n  }\n  100% {\n    opacity: 0.8;\n  }\n}\n\n.send-button:hover:not(:disabled) {\n  opacity: 0.9;\n}\n\n/* 会話リストの追加スタイル */\n.navbar-conversation-header {\n  display: flex;\n  align-items: center;\n  justify-content: space-between;\n  width: 100%;\n}\n\n.navbar-conversation-menu {\n  padding: 0.25rem;\n  color: var(--text-secondary);\n  background: none;\n  border: none;\n  cursor: pointer;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  z-index: 30;\n}\n\n.navbar-conversation-menu:hover {\n  color: var(--text-primary);\n}\n\n.navbar-conversation-input {\n  width: 100%;\n  padding: 0.5rem;\n  border: 1px solid var(--border-color);\n  border-radius: 0.375rem;\n  background-color: var(--bg-primary);\n  color: var(--text-primary);\n}\n\n.navbar-conversation-input:focus {\n  outline: none;\n  border-color: var(--accent-color);\n}\n\n/* メニューのスタイル */\n.menu-overlay {\n  position: fixed;\n  inset: 0;\n  z-index: 40;\n}\n\n.menu-container {\n  position: fixed;\n  background-color: var(--bg-primary);\n  border: 1px solid var(--border-color);\n  border-radius: 0.375rem;\n  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);\n  z-index: 50;\n  min-width: 200px;\n}\n\n.menu-container.settings-menu {\n  transform: translateY(-100%);\n}\n\n.menu-container button {\n  width: 100%;\n  padding: 0.5rem 1rem;\n  text-align: left;\n  background: none;\n  border: none;\n  cursor: pointer;\n  display: flex;\n  align-items: center;\n  gap: 0.5rem;\n  color: var(--text-primary);\n  white-space: nowrap;\n}\n\n.menu-container button:hover {\n  background-color: var(--bg-secondary);\n}\n\n.menu-container button.text-red-600 {\n  color: var(--error-color);\n}\n\n/* 設定ダイアログのスタイル */\n.settings-dialog-overlay {\n  position: fixed;\n  inset: 0;\n  background-color: rgba(0, 0, 0, 0.5);\n  z-index: 50;\n}\n\n.settings-dialog {\n  position: fixed;\n  top: 50%;\n  left: 50%;\n  transform: translate(-50%, -50%);\n  background-color: var(--bg-primary);\n  border-radius: 0.5rem;\n  padding: 1.5rem;\n  width: 24rem;\n  z-index: 51;\n  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);\n  max-height: 90vh;\n  overflow-y: auto;\n}\n\n.settings-dialog h2 {\n  font-size: 1.25rem;\n  font-weight: 600;\n  margin-bottom: 1rem;\n  color: var(--text-primary);\n}\n\n.settings-group {\n  margin-bottom: 1rem;\n}\n\n.settings-group label {\n  display: block;\n  margin-bottom: 0.5rem;\n  color: var(--text-primary);\n}\n\n.settings-group input[type=\"text\"],\n.settings-group input[type=\"password\"],\n.settings-group select {\n  width: 100%;\n  padding: 0.5rem;\n  border: 1px solid var(--border-color);\n  border-radius: 0.25rem;\n  background-color: var(--bg-primary);\n  color: var(--text-primary);\n}\n\n.settings-group input[type=\"checkbox\"] {\n  margin-right: 0.5rem;\n}\n\n.settings-group input[type=\"text\"]:focus,\n.settings-group input[type=\"password\"]:focus,\n.settings-group select:focus {\n  outline: none;\n  border-color: var(--accent-color);\n}\n\n.settings-dialog-buttons {\n  display: flex;\n  justify-content: center;\n  gap: 0.5rem;\n  margin-top: 1rem;\n}\n\n.settings-dialog-buttons button {\n  padding: 0.5rem 1rem;\n  border-radius: 0.375rem;\n  cursor: pointer;\n}\n\n.settings-dialog-buttons button.cancel {\n  background-color: transparent;\n  color: var(--text-primary);\n  border: 1px solid var(--border-color);\n}\n\n.settings-dialog-buttons button.save {\n  background-color: var(--accent-color);\n  color: white;\n  border: none;\n  min-width: 100px;\n}\n\n.settings-dialog-buttons button:hover {\n  opacity: 0.9;\n}\n\n/* メッセージヘッダーのスタイル */\n.message-header {\n  display: flex;\n  align-items: center;\n  margin-top: 0.25rem;\n  width: 100%;\n  height: 24px;\n  position: relative;\n}\n\n.message-timestamp {\n  font-size: 0.75rem;\n  color: var(--text-secondary);\n  flex: 1;\n}\n\n.message-actions {\n  display: flex;\n  align-items: center;\n  gap: 0.5rem;\n  flex: 1;\n  justify-content: flex-end;\n}\n\n.message-collapse {\n  color: var(--text-secondary);\n  background: transparent;\n  border: none;\n  cursor: pointer;\n  padding: 0.25rem;\n  display: inline-flex;\n  align-items: center;\n  position: absolute;\n  left: 50%;\n  top: 50%;\n  transform: translate(-50%, -50%);\n}\n\n.message-copy {\n  color: var(--text-secondary);\n  background: transparent;\n  border: none;\n  cursor: pointer;\n  padding: 0.25rem;\n  display: inline-flex;\n  align-items: center;\n}\n\n.message-collapse:hover,\n.message-copy:hover {\n  color: var(--text-primary);\n}\n\n.message-collapse i,\n.message-copy i {\n  background: transparent;\n  font-size: 0.875rem;\n}\n\n.copy-tooltip {\n  position: absolute;\n  bottom: 100%;\n  left: 50%;\n  transform: translateX(-50%);\n  margin-bottom: 0.5rem;\n  padding: 0.25rem 0.5rem;\n  font-size: 0.75rem;\n  border-radius: 0.25rem;\n  background-color: var(--bg-primary);\n  color: var(--text-primary);\n  white-space: nowrap;\n  z-index: 3;\n}\n\n.dark .message-collapse i,\n.dark .message-copy i {\n  background: transparent;\n}\n\n.dark .message-timestamp {\n  color: var(--text-secondary);\n}\n\n/* 削除確認ダイアログのスタイル */\n.delete-dialog-overlay {\n  position: fixed;\n  inset: 0;\n  background-color: rgba(0, 0, 0, 0.5);\n  z-index: 50;\n}\n\n.delete-dialog {\n  position: fixed;\n  top: 50%;\n  left: 50%;\n  transform: translate(-50%, -50%);\n  background-color: var(--bg-primary);\n  border-radius: 0.5rem;\n  padding: 1.5rem;\n  width: 24rem;\n  z-index: 51;\n  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);\n}\n\n.delete-dialog h3 {\n  font-size: 1.25rem;\n  font-weight: 600;\n  margin-bottom: 1rem;\n  color: var(--text-primary);\n}\n\n.delete-dialog p {\n  color: var(--text-secondary);\n  margin-bottom: 1rem;\n}\n\n.delete-dialog-buttons {\n  display: flex;\n  justify-content: flex-end;\n  gap: 0.5rem;\n}\n\n.delete-dialog-buttons button {\n  padding: 0.5rem 1rem;\n  border-radius: 0.375rem;\n  cursor: pointer;\n}\n\n.delete-dialog-buttons button.cancel {\n  background-color: transparent;\n  color: var(--text-primary);\n  border: 1px solid var(--border-color);\n}\n\n.delete-dialog-buttons button.delete {\n  background-color: var(--error-color);\n  color: white;\n  border: none;\n}\n\n.delete-dialog-buttons button:hover {\n  opacity: 0.9;\n}\n\n/* コードブロックのスタイル */\n.code-block {\n  margin: 1rem 0;\n  border-radius: 0.5rem;\n  overflow: hidden;\n  background-color: var(--bg-primary);\n  border: 1px solid var(--border-color);\n}\n\n.code-block-header {\n  display: flex;\n  justify-content: space-between;\n  align-items: center;\n  padding: 0.5rem 1rem;\n  background-color: #e5e7eb; /* ライトモード用の薄いグレー */\n  border-bottom: 1px solid var(--border-color);\n}\n\n.dark .code-block-header {\n  background-color: #374151; /* ダークモード用の濃いグレー */\n}\n\n.code-block-language {\n  font-size: 1.125rem;\n  color: #1f2937; /* ライトモード用の濃いグレー */\n  font-family: monospace;\n  font-weight: 500;\n}\n\n.dark .code-block-language {\n  color: #f3f4f6; /* ダークモード用の明るいグレー */\n}\n\n.code-block-copy {\n  background: none;\n  border: none;\n  color: var(--text-secondary);\n  cursor: pointer;\n  padding: 0.25rem;\n  font-size: 0.875rem;\n  transition: color 0.2s ease;\n}\n\n.code-block-copy:hover {\n  color: var(--text-primary);\n}\n\n.code-block-content {\n  margin: 0;\n  padding: 1rem;\n  overflow-x: auto;\n  background-color: var(--bg-primary);\n  color: var(--text-primary);\n}\n\n/* Aboutダイアログのスタイル */\n.about-dialog-content {\n  padding: 0.75rem;\n  text-align: center;\n}\n\n.about-header {\n  text-align: center;\n  margin-bottom: 1.25rem;\n}\n\n.about-logo {\n  width: 128px;\n  margin-bottom: 0;\n  object-fit: contain;\n}\n\n.about-header h2 {\n  font-size: 1.25rem;\n  font-weight: 600;\n  margin-top: 2px;\n  margin-bottom: 20px;\n  color: var(--text-primary);\n}\n\n.version-info {\n  font-size: 0.875rem;\n  color: var(--text-secondary);\n  line-height: 1.4;\n}\n\n.about-copyright {\n  text-align: center;\n  margin-bottom: 1.25rem;\n  color: var(--text-secondary);\n  font-size: 0.875rem;\n  line-height: 1.4;\n}\n\n.about-section {\n  margin-bottom: 1rem;\n  text-align: center;\n}\n\n.about-section h3 {\n  font-size: 0.875rem;\n  font-weight: 600;\n  margin-bottom: 0.25rem;\n  color: var(--text-primary);\n}\n\n.about-section p {\n  font-size: 0.875rem;\n  color: var(--text-secondary);\n  line-height: 1.4;\n}\n\n.about-section a {\n  color: var(--accent-color);\n  text-decoration: none;\n}\n\n.about-section a:hover {\n  text-decoration: underline;\n}\n\n.about-trademark {\n  margin-top: 1.25rem;\n  padding-top: 0.75rem;\n  border-top: 1px solid var(--border-color);\n  text-align: center;\n  font-size: 0.875rem;\n  color: var(--text-secondary);\n  line-height: 1.4;\n}\n\n.about-trademark a {\n  color: var(--accent-color);\n  text-decoration: none;\n}\n\n.about-trademark a:hover {\n  text-decoration: underline;\n}\n\n.error-message {\n  display: flex;\n  flex-direction: column;\n  align-items: center;\n  justify-content: center;\n  height: 100%;\n  padding: 2rem;\n  text-align: center;\n  color: var(--error-color);\n}\n\n.error-message p {\n  margin-bottom: 1rem;\n  font-size: 1.1rem;\n}\n\n.error-message button {\n  padding: 0.5rem 1rem;\n  background-color: var(--primary-color);\n  color: white;\n  border: none;\n  border-radius: 4px;\n  cursor: pointer;\n  transition: background-color 0.2s;\n}\n\n.error-message button:hover {\n  background-color: var(--primary-color-dark);\n} "],"sourceRoot":""}]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -104357,12 +104421,66 @@ const Navbar_1 = __importDefault(__webpack_require__(/*! ./components/Navbar */ 
 const SettingsDialog_1 = __webpack_require__(/*! ./components/SettingsDialog */ "./src/client/components/SettingsDialog.tsx");
 const mastraService_1 = __webpack_require__(/*! ../services/mastraService */ "./src/services/mastraService.ts");
 const default_1 = __webpack_require__(/*! ../config/default */ "./src/config/default.ts");
+const utils_1 = __webpack_require__(/*! ../utils */ "./src/utils/index.ts");
 const DeleteConfirmDialog_1 = __importDefault(__webpack_require__(/*! ./components/DeleteConfirmDialog */ "./src/client/components/DeleteConfirmDialog.tsx"));
 const App = () => {
-    const [mastraService] = (0, react_1.useState)(() => new mastraService_1.MastraService(default_1.DEFAULT_SETTINGS.endpoint));
+    const [settings, setSettings] = (0, react_1.useState)(() => {
+        return (0, utils_1.getLocalStorage)('userSettings', default_1.DEFAULT_SETTINGS);
+    });
+    // settingsが変更されたときにMastraServiceを再初期化
+    const [mastraService, setMastraService] = (0, react_1.useState)(() => {
+        return new mastraService_1.MastraService(settings.endpoint, settings.agent, settings.defaultAdmin);
+    });
+    (0, react_1.useEffect)(() => {
+        // settingsが変更されたときにMastraServiceを更新
+        const newService = new mastraService_1.MastraService(settings.endpoint, settings.agent, settings.defaultAdmin);
+        setMastraService(newService);
+        // 新しいサービスで初期化を実行
+        const initializeNewService = () => __awaiter(void 0, void 0, void 0, function* () {
+            try {
+                const initialized = yield newService.initialize();
+                if (!initialized) {
+                    throw new Error('エージェントサーバーに接続できません。サーバーが起動しているか確認してください。');
+                }
+                const threads = yield newService.getConversationThreads();
+                if (isMountedRef.current) {
+                    console.log('Fetched conversations:', threads);
+                    setConversations(threads);
+                    setError(null);
+                    if (threads.length > 0) {
+                        setCurrentConversationId(threads[0].id);
+                    }
+                }
+            }
+            catch (error) {
+                console.error('Error initializing new service:', error);
+                if (isMountedRef.current) {
+                    let errorMessage = '予期せぬエラーが発生しました';
+                    let errorDetails = '';
+                    if (error instanceof Error) {
+                        if (error.message.includes('Failed to fetch')) {
+                            errorMessage = 'ネットワーク接続を確認してください';
+                            errorDetails = 'エージェントサーバーに接続できません。ネットワーク接続とサーバーの状態を確認してください。';
+                        }
+                        else if (error.message.includes('Agent')) {
+                            errorMessage = 'エージェントが見つかりません';
+                            errorDetails = '指定されたエージェントが存在しません。設定を確認してください。';
+                        }
+                        else {
+                            errorMessage = error.message;
+                        }
+                    }
+                    setError({
+                        message: errorMessage,
+                        details: errorDetails
+                    });
+                }
+            }
+        });
+        initializeNewService();
+    }, [settings]);
     const [conversations, setConversations] = (0, react_1.useState)([]);
     const [currentConversationId, setCurrentConversationId] = (0, react_1.useState)(null);
-    const [settings, setSettings] = (0, react_1.useState)(default_1.DEFAULT_SETTINGS);
     const [isSettingsOpen, setIsSettingsOpen] = (0, react_1.useState)(false);
     const [deleteConfirmState, setDeleteConfirmState] = (0, react_1.useState)({
         isOpen: false,
@@ -104374,6 +104492,7 @@ const App = () => {
         const savedTheme = localStorage.getItem('theme');
         return savedTheme || 'light';
     });
+    const [error, setError] = (0, react_1.useState)(null);
     // コンポーネントのマウント状態を管理
     (0, react_1.useEffect)(() => {
         isMountedRef.current = true;
@@ -104401,7 +104520,7 @@ const App = () => {
             console.error('Error updating conversation:', error);
         }
     }), []);
-    // 会話の初期化
+    // 会話の初期化（初回のみ）
     (0, react_1.useEffect)(() => {
         if (initRef.current)
             return;
@@ -104410,11 +104529,15 @@ const App = () => {
             if (!isMountedRef.current)
                 return;
             try {
-                yield mastraService.initialize();
+                const initialized = yield mastraService.initialize();
+                if (!initialized) {
+                    throw new Error('エージェントサーバーに接続できません。サーバーが起動しているか確認してください。');
+                }
                 const threads = yield mastraService.getConversationThreads();
                 if (isMountedRef.current) {
                     console.log('Fetched conversations:', threads);
                     setConversations(threads);
+                    setError(null);
                     if (threads.length > 0) {
                         setCurrentConversationId(threads[0].id);
                     }
@@ -104422,10 +104545,31 @@ const App = () => {
             }
             catch (error) {
                 console.error('Error initializing conversations:', error);
+                if (isMountedRef.current) {
+                    let errorMessage = '予期せぬエラーが発生しました';
+                    let errorDetails = '';
+                    if (error instanceof Error) {
+                        if (error.message.includes('Failed to fetch')) {
+                            errorMessage = 'ネットワーク接続を確認してください';
+                            errorDetails = 'エージェントサーバーに接続できません。ネットワーク接続とサーバーの状態を確認してください。';
+                        }
+                        else if (error.message.includes('Agent')) {
+                            errorMessage = 'エージェントが見つかりません';
+                            errorDetails = '指定されたエージェントが存在しません。設定を確認してください。';
+                        }
+                        else {
+                            errorMessage = error.message;
+                        }
+                    }
+                    setError({
+                        message: errorMessage,
+                        details: errorDetails
+                    });
+                }
             }
         });
         initializeConversations();
-    }, []);
+    }, [mastraService]);
     const handleNewConversation = () => __awaiter(void 0, void 0, void 0, function* () {
         if (!isMountedRef.current)
             return;
@@ -104485,7 +104629,13 @@ const App = () => {
             return;
         console.log('Settings changed:', newSettings);
         setSettings(newSettings);
+        (0, utils_1.setLocalStorage)('userSettings', newSettings);
+        setCurrentTheme(newSettings.darkMode ? 'dark' : 'light');
         mastraService.updateEndpoint(newSettings.endpoint);
+        mastraService.updateSettings({
+            agentId: newSettings.agent,
+            resourceId: newSettings.defaultAdmin
+        });
         setIsSettingsOpen(false);
     };
     return ((0, jsx_runtime_1.jsxs)("div", { className: `app-container ${currentTheme === 'dark' ? 'dark' : ''}`, children: [(0, jsx_runtime_1.jsx)("div", { className: "sidebar", children: (0, jsx_runtime_1.jsx)(Navbar_1.default, { conversations: conversations, activeConversationId: currentConversationId, onConversationSelect: setCurrentConversationId, onNewConversation: handleNewConversation, onDeleteConversation: handleDeleteConversation, onOpenSettings: () => setIsSettingsOpen(true), onThemeChange: setCurrentTheme, currentTheme: currentTheme, onDeleteConfirm: (conversationId) => {
@@ -104502,7 +104652,7 @@ const App = () => {
                         if (isMountedRef.current) {
                             setConversations(prev => prev.map(conv => conv.id === updatedConversation.id ? updatedConversation : conv));
                         }
-                    } }) }), (0, jsx_runtime_1.jsx)(SettingsDialog_1.SettingsDialog, { isOpen: isSettingsOpen, onClose: () => setIsSettingsOpen(false), settings: settings, onSettingsChange: handleSettingsChange, currentTheme: currentTheme, onThemeChange: setCurrentTheme }), (0, jsx_runtime_1.jsx)(DeleteConfirmDialog_1.default, { isOpen: deleteConfirmState.isOpen, onClose: () => setDeleteConfirmState(prev => (Object.assign(Object.assign({}, prev), { isOpen: false }))), onConfirm: () => {
+                    }, error: error }) }), (0, jsx_runtime_1.jsx)(SettingsDialog_1.SettingsDialog, { isOpen: isSettingsOpen, onClose: () => setIsSettingsOpen(false), settings: settings, onSettingsChange: handleSettingsChange, currentTheme: currentTheme, onThemeChange: setCurrentTheme }), (0, jsx_runtime_1.jsx)(DeleteConfirmDialog_1.default, { isOpen: deleteConfirmState.isOpen, onClose: () => setDeleteConfirmState(prev => (Object.assign(Object.assign({}, prev), { isOpen: false }))), onConfirm: () => {
                     if (deleteConfirmState.conversationId) {
                         handleDeleteConversation(deleteConfirmState.conversationId);
                     }
@@ -104536,9 +104686,11 @@ const AboutDialog = ({ isOpen, onClose }) => {
     const buildDate = new Date(version_1.BUILD_INFO.buildTime).toLocaleDateString('ja-JP', {
         year: 'numeric',
         month: '2-digit',
-        day: '2-digit'
+        day: '2-digit',
+        hour: '2-digit',
+        minute: '2-digit'
     });
-    return ((0, jsx_runtime_1.jsx)("div", { className: "settings-dialog-overlay", onClick: onClose, children: (0, jsx_runtime_1.jsxs)("div", { className: "settings-dialog", onClick: e => e.stopPropagation(), children: [(0, jsx_runtime_1.jsxs)("div", { className: "about-dialog-content", children: [(0, jsx_runtime_1.jsxs)("div", { className: "about-header", children: [(0, jsx_runtime_1.jsx)("img", { src: "/images/logo.jpg", alt: "Xibo Cockpit Logo", className: "about-logo" }), (0, jsx_runtime_1.jsx)("h2", { children: "xibo-Cockpit" }), (0, jsx_runtime_1.jsxs)("div", { className: "version-info", children: ["Version: ", version_1.VERSION, (0, jsx_runtime_1.jsx)("br", {}), "Build: ", version_1.BUILD_INFO.buildHash, " ", buildDate] })] }), (0, jsx_runtime_1.jsxs)("div", { className: "about-copyright", children: ["Copyright 2025 \u00A9 All rights reserved", (0, jsx_runtime_1.jsx)("br", {}), "Open Source Digital Signage Initiative"] }), (0, jsx_runtime_1.jsxs)("div", { className: "about-section", children: [(0, jsx_runtime_1.jsx)("h3", { children: "License:" }), (0, jsx_runtime_1.jsxs)("p", { children: ["Elastic License 2.0 (ELv2)", (0, jsx_runtime_1.jsx)("br", {}), (0, jsx_runtime_1.jsx)("a", { href: "https://www.elastic.co/licensing/elastic-license", target: "_blank", rel: "noopener noreferrer", children: "https://www.elastic.co/licensing/elastic-license" })] })] }), (0, jsx_runtime_1.jsxs)("div", { className: "about-section", children: [(0, jsx_runtime_1.jsx)("h3", { children: "Github:" }), (0, jsx_runtime_1.jsx)("p", { children: (0, jsx_runtime_1.jsx)("a", { href: "https://github.com/OpenSignage/xibo-cockpit", target: "_blank", rel: "noopener noreferrer", children: "https://github.com/OpenSignage/xibo-cockpit" }) })] }), (0, jsx_runtime_1.jsxs)("div", { className: "about-section", children: [(0, jsx_runtime_1.jsx)("h3", { children: "Official web site:" }), (0, jsx_runtime_1.jsx)("p", { children: (0, jsx_runtime_1.jsx)("a", { href: "https://www.open-signage.org", target: "_blank", rel: "noopener noreferrer", children: "https://www.open-signage.org" }) })] }), (0, jsx_runtime_1.jsxs)("div", { className: "about-trademark", children: ["Xibo is trademark of Xibo Signage Ltd.", (0, jsx_runtime_1.jsx)("br", {}), (0, jsx_runtime_1.jsx)("a", { href: "https://xibosignage.com/", target: "_blank", rel: "noopener noreferrer", children: "https://xibosignage.com/" })] })] }), (0, jsx_runtime_1.jsx)("div", { className: "settings-dialog-buttons", children: (0, jsx_runtime_1.jsx)("button", { className: "save", onClick: onClose, children: "\u9589\u3058\u308B" }) })] }) }));
+    return ((0, jsx_runtime_1.jsx)("div", { className: "settings-dialog-overlay", onClick: onClose, children: (0, jsx_runtime_1.jsxs)("div", { className: "settings-dialog", onClick: e => e.stopPropagation(), children: [(0, jsx_runtime_1.jsxs)("div", { className: "about-dialog-content", children: [(0, jsx_runtime_1.jsxs)("div", { className: "about-header", children: [(0, jsx_runtime_1.jsx)("img", { src: "/images/logo.jpg", alt: "Xibo Cockpit Logo", className: "about-logo" }), (0, jsx_runtime_1.jsx)("h2", { children: "xibo-Cockpit" }), (0, jsx_runtime_1.jsxs)("div", { className: "version-info", children: ["Version: ", version_1.VERSION, (0, jsx_runtime_1.jsx)("br", {}), "Build: ", buildDate] })] }), (0, jsx_runtime_1.jsxs)("div", { className: "about-copyright", children: ["Copyright 2025 \u00A9 All rights reserved", (0, jsx_runtime_1.jsx)("br", {}), "Open Source Digital Signage Initiative"] }), (0, jsx_runtime_1.jsxs)("div", { className: "about-section", children: [(0, jsx_runtime_1.jsx)("h3", { children: "License:" }), (0, jsx_runtime_1.jsxs)("p", { children: ["Elastic License 2.0 (ELv2)", (0, jsx_runtime_1.jsx)("br", {}), (0, jsx_runtime_1.jsx)("a", { href: "https://www.elastic.co/licensing/elastic-license", target: "_blank", rel: "noopener noreferrer", children: "https://www.elastic.co/licensing/elastic-license" })] })] }), (0, jsx_runtime_1.jsxs)("div", { className: "about-section", children: [(0, jsx_runtime_1.jsx)("h3", { children: "Github:" }), (0, jsx_runtime_1.jsx)("p", { children: (0, jsx_runtime_1.jsx)("a", { href: "https://github.com/OpenSignage/xibo-cockpit", target: "_blank", rel: "noopener noreferrer", children: "https://github.com/OpenSignage/xibo-cockpit" }) })] }), (0, jsx_runtime_1.jsxs)("div", { className: "about-section", children: [(0, jsx_runtime_1.jsx)("h3", { children: "Official web site:" }), (0, jsx_runtime_1.jsx)("p", { children: (0, jsx_runtime_1.jsx)("a", { href: "https://www.open-signage.org", target: "_blank", rel: "noopener noreferrer", children: "https://www.open-signage.org" }) })] }), (0, jsx_runtime_1.jsxs)("div", { className: "about-trademark", children: ["Xibo is trademark of Xibo Signage Ltd.", (0, jsx_runtime_1.jsx)("br", {}), (0, jsx_runtime_1.jsx)("a", { href: "https://xibosignage.com/", target: "_blank", rel: "noopener noreferrer", children: "https://xibosignage.com/" })] })] }), (0, jsx_runtime_1.jsx)("div", { className: "settings-dialog-buttons", children: (0, jsx_runtime_1.jsx)("button", { className: "save", onClick: onClose, children: "\u9589\u3058\u308B" }) })] }) }));
 };
 exports.AboutDialog = AboutDialog;
 
@@ -104572,7 +104724,7 @@ const react_1 = __webpack_require__(/*! react */ "./node_modules/react/index.js"
 const react_markdown_1 = __importDefault(__webpack_require__(/*! react-markdown */ "./node_modules/react-markdown/index.js"));
 const remark_gfm_1 = __importDefault(__webpack_require__(/*! remark-gfm */ "./node_modules/remark-gfm/index.js"));
 const uuid_1 = __webpack_require__(/*! uuid */ "./node_modules/uuid/dist/cjs-browser/index.js");
-const ChatArea = ({ mastraService, conversationId, settings, onUpdateConversation }) => {
+const ChatArea = ({ mastraService, conversationId, settings, onUpdateConversation, error }) => {
     const [input, setInput] = (0, react_1.useState)('');
     const [isLoading, setIsLoading] = (0, react_1.useState)(false);
     const [streamedResponse, setStreamedResponse] = (0, react_1.useState)('');
@@ -104679,7 +104831,7 @@ const ChatArea = ({ mastraService, conversationId, settings, onUpdateConversatio
                     fullResponse = text;
                     setStreamedResponse(text);
                 }
-            });
+            }, currentConversation.id);
             if (!isMountedRef.current || signal.aborted)
                 return;
             const assistantMessage = {
@@ -104813,7 +104965,7 @@ const ChatArea = ({ mastraService, conversationId, settings, onUpdateConversatio
                                 minute: '2-digit'
                             }) }), (0, jsx_runtime_1.jsxs)("div", { className: "message-actions", children: [shouldShowCollapse && ((0, jsx_runtime_1.jsx)("button", { onClick: toggleCollapse, className: "message-collapse", title: isCollapsed ? '展開する' : '折りたたむ', children: (0, jsx_runtime_1.jsx)("i", { className: `fa-solid fa-angles-${isCollapsed ? 'down' : 'up'}` }) })), (0, jsx_runtime_1.jsx)("button", { onClick: handleCopy, className: "message-copy", title: "\u30AF\u30EA\u30C3\u30D7\u30DC\u30FC\u30C9\u306B\u30B3\u30D4\u30FC", children: (0, jsx_runtime_1.jsx)("i", { className: "fa-regular fa-copy" }) }), showCopied && ((0, jsx_runtime_1.jsx)("div", { className: "copy-tooltip", children: "Copied!" }))] })] })) : ((0, jsx_runtime_1.jsx)("div", { className: "message-header", children: (0, jsx_runtime_1.jsxs)("div", { className: "message-actions", children: [(0, jsx_runtime_1.jsx)("button", { onClick: handleCopy, className: "message-copy", title: "\u30AF\u30EA\u30C3\u30D7\u30DC\u30FC\u30C9\u306B\u30B3\u30D4\u30FC", children: (0, jsx_runtime_1.jsx)("i", { className: "fa-regular fa-copy" }) }), (0, jsx_runtime_1.jsx)("button", { onClick: handleCopyToInput, className: "message-copy", title: "\u5165\u529B\u6B04\u306B\u30B3\u30D4\u30FC", children: (0, jsx_runtime_1.jsx)("i", { className: "fa-regular fa-keyboard" }) })] }) }))] }));
     };
-    return ((0, jsx_runtime_1.jsxs)("div", { className: "chat-area", children: [(0, jsx_runtime_1.jsxs)("div", { className: "chat-messages", children: [!currentConversation ? ((0, jsx_runtime_1.jsxs)("div", { className: "empty-state", children: [(0, jsx_runtime_1.jsx)("img", { src: "/images/logo.jpg", alt: "Xibo Cockpit Logo", className: "empty-state-logo" }), (0, jsx_runtime_1.jsx)("p", { children: "\u65B0\u3057\u3044\u4F1A\u8A71\u30DC\u30BF\u30F3\u3092\u62BC\u3057\u3066\u4F1A\u8A71\u3092\u958B\u59CB\u3057\u3066\u304F\u3060\u3055\u3044\u3002" })] })) : ((0, jsx_runtime_1.jsxs)(jsx_runtime_1.Fragment, { children: [currentConversation.messages.map((message) => ((0, jsx_runtime_1.jsx)(MessageComponent, { message: message }, message.id))), streamedResponse && ((0, jsx_runtime_1.jsx)("div", { className: `message-container assistant`, children: (0, jsx_runtime_1.jsx)("div", { className: `message-flex assistant`, children: (0, jsx_runtime_1.jsx)("div", { className: `message-content assistant`, children: (0, jsx_runtime_1.jsx)("div", { className: "relative", children: (0, jsx_runtime_1.jsx)("div", { className: "markdown-content overflow-x-auto", children: (0, jsx_runtime_1.jsx)(react_markdown_1.default, { remarkPlugins: [remark_gfm_1.default], children: streamedResponse }) }) }) }) }) }))] })), (0, jsx_runtime_1.jsx)("div", { ref: endOfMessagesRef })] }), (0, jsx_runtime_1.jsxs)("div", { className: "chat-input-area", children: [(0, jsx_runtime_1.jsx)("textarea", { ref: inputRef, value: input, onChange: (e) => setInput(e.target.value), onKeyPress: (e) => {
+    return ((0, jsx_runtime_1.jsxs)("div", { className: "chat-area", children: [(0, jsx_runtime_1.jsxs)("div", { className: "chat-messages", children: [error ? ((0, jsx_runtime_1.jsx)("div", { className: "message-container error", children: (0, jsx_runtime_1.jsx)("div", { className: "message-flex error", children: (0, jsx_runtime_1.jsxs)("div", { className: "message-content error", children: [(0, jsx_runtime_1.jsx)("div", { className: "error-title", children: error.message }), error.details && ((0, jsx_runtime_1.jsx)("div", { className: "error-details", children: error.details })), (0, jsx_runtime_1.jsx)("div", { className: "error-help", children: "\u8A73\u7D30\u306A\u60C5\u5831\u306F\u958B\u767A\u8005\u30C4\u30FC\u30EB\u306E\u30B3\u30F3\u30BD\u30FC\u30EB\u3092\u78BA\u8A8D\u3057\u3066\u304F\u3060\u3055\u3044\u3002" })] }) }) })) : !currentConversation ? ((0, jsx_runtime_1.jsxs)("div", { className: "empty-state", children: [(0, jsx_runtime_1.jsx)("img", { src: "/images/logo.jpg", alt: "Xibo Cockpit Logo", className: "empty-state-logo" }), (0, jsx_runtime_1.jsx)("p", { children: "\u65B0\u3057\u3044\u4F1A\u8A71\u30DC\u30BF\u30F3\u3092\u62BC\u3057\u3066\u4F1A\u8A71\u3092\u958B\u59CB\u3057\u3066\u304F\u3060\u3055\u3044\u3002" })] })) : ((0, jsx_runtime_1.jsxs)(jsx_runtime_1.Fragment, { children: [currentConversation.messages.map((message) => ((0, jsx_runtime_1.jsx)(MessageComponent, { message: message }, message.id))), streamedResponse && ((0, jsx_runtime_1.jsx)("div", { className: `message-container assistant`, children: (0, jsx_runtime_1.jsx)("div", { className: `message-flex assistant`, children: (0, jsx_runtime_1.jsx)("div", { className: `message-content assistant`, children: (0, jsx_runtime_1.jsx)("div", { className: "relative", children: (0, jsx_runtime_1.jsx)("div", { className: "markdown-content overflow-x-auto", children: (0, jsx_runtime_1.jsx)(react_markdown_1.default, { remarkPlugins: [remark_gfm_1.default], children: streamedResponse }) }) }) }) }) }))] })), (0, jsx_runtime_1.jsx)("div", { ref: endOfMessagesRef })] }), (0, jsx_runtime_1.jsxs)("div", { className: "chat-input-area", children: [(0, jsx_runtime_1.jsx)("textarea", { ref: inputRef, value: input, onChange: (e) => setInput(e.target.value), onKeyPress: (e) => {
                             if (e.key === 'Enter' && !e.shiftKey && !isComposing) {
                                 e.preventDefault();
                                 handleSendMessage(input);
@@ -104922,34 +105074,26 @@ const Navbar = ({ conversations, activeConversationId, onConversationSelect, onN
         const diffMinutes = Math.floor(diff / (1000 * 60));
         const diffHours = Math.floor(diff / (1000 * 60 * 60));
         const diffDays = Math.floor(diff / (1000 * 60 * 60 * 24));
+        const diffWeeks = Math.floor(diffDays / 7);
         const diffMonths = Math.floor(diffDays / 30);
         const diffYears = Math.floor(diffDays / 365);
-        // 日付が変わっているかチェック
-        const isDifferentDay = messageDate.getDate() !== now.getDate() ||
-            messageDate.getMonth() !== now.getMonth() ||
-            messageDate.getFullYear() !== now.getFullYear();
-        if (isDifferentDay) {
-            // 日付が異なる場合は年月日時分を表示
-            return messageDate.toLocaleString('ja-JP', {
-                year: 'numeric',
-                month: '2-digit',
-                day: '2-digit',
-                hour: '2-digit',
-                minute: '2-digit'
-            });
-        }
-        // 同じ日の場合は相対時間を表示
         if (diffMinutes < 60) {
             return `${diffMinutes}分前`;
         }
         else if (diffHours < 24) {
             return `${diffHours}時間前`;
         }
+        else if (diffDays < 7) {
+            return `${diffDays}日前`;
+        }
+        else if (diffWeeks < 4) {
+            return `${diffWeeks}週間前`;
+        }
+        else if (diffMonths < 12) {
+            return `${diffMonths}ヶ月前`;
+        }
         else {
-            return messageDate.toLocaleString('ja-JP', {
-                hour: '2-digit',
-                minute: '2-digit'
-            });
+            return `${diffYears}年前`;
         }
     };
     const handleMenuClick = (e, conversationId) => {
@@ -105045,17 +105189,43 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.SettingsDialog = void 0;
 const jsx_runtime_1 = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
 const react_1 = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+const TIMEZONES = [
+    { value: 'Asia/Tokyo', label: 'Tokyo, Japan' },
+    { value: 'America/New_York', label: 'New York, USA' },
+    { value: 'Europe/London', label: 'London, UK' },
+    { value: 'Asia/Shanghai', label: 'Shanghai, China' },
+    { value: 'Australia/Sydney', label: 'Sydney, Australia' }
+];
+const LANGUAGES = [
+    { value: 'ja', label: '日本語' },
+    { value: 'en', label: 'English' }
+];
+const DISPLAY_MODES = [
+    { value: 'false', label: 'ライトモード' },
+    { value: 'true', label: 'ダークモード' }
+];
 const SettingsDialog = ({ isOpen, onClose, settings, onSettingsChange, currentTheme, onThemeChange }) => {
-    const [localSettings, setLocalSettings] = (0, react_1.useState)(settings);
-    const [localTheme, setLocalTheme] = (0, react_1.useState)(currentTheme);
+    const formRef = (0, react_1.useRef)(null);
     if (!isOpen)
         return null;
-    const handleSave = () => {
-        onSettingsChange(localSettings);
-        onThemeChange(localTheme);
-        onClose();
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        if (!formRef.current)
+            return;
+        const formData = new FormData(formRef.current);
+        const newSettings = {
+            endpoint: formData.get('endpoint'),
+            agent: formData.get('agent'),
+            timezone: formData.get('timezone'),
+            defaultAdmin: formData.get('defaultAdmin'),
+            defaultPassword: formData.get('defaultPassword'),
+            darkMode: formData.get('darkMode') === 'true',
+            language: formData.get('language')
+        };
+        onSettingsChange(newSettings);
+        onThemeChange(newSettings.darkMode ? 'dark' : 'light');
     };
-    return ((0, jsx_runtime_1.jsxs)(jsx_runtime_1.Fragment, { children: [(0, jsx_runtime_1.jsx)("div", { className: "settings-dialog-overlay", onClick: onClose }), (0, jsx_runtime_1.jsxs)("div", { className: "settings-dialog", children: [(0, jsx_runtime_1.jsx)("h2", { children: "\u8A2D\u5B9A" }), (0, jsx_runtime_1.jsxs)("div", { children: [(0, jsx_runtime_1.jsx)("label", { children: "\u30C6\u30FC\u30DE" }), (0, jsx_runtime_1.jsxs)("select", { value: localTheme, onChange: (e) => setLocalTheme(e.target.value), children: [(0, jsx_runtime_1.jsx)("option", { value: "light", children: "\u30E9\u30A4\u30C8\u30E2\u30FC\u30C9" }), (0, jsx_runtime_1.jsx)("option", { value: "dark", children: "\u30C0\u30FC\u30AF\u30E2\u30FC\u30C9" })] })] }), (0, jsx_runtime_1.jsxs)("div", { children: [(0, jsx_runtime_1.jsx)("label", { children: "API\u30A8\u30F3\u30C9\u30DD\u30A4\u30F3\u30C8" }), (0, jsx_runtime_1.jsx)("input", { type: "text", value: localSettings.endpoint, onChange: (e) => setLocalSettings(Object.assign(Object.assign({}, localSettings), { endpoint: e.target.value })) })] }), (0, jsx_runtime_1.jsxs)("div", { children: [(0, jsx_runtime_1.jsx)("label", { children: "\u8A00\u8A9E" }), (0, jsx_runtime_1.jsxs)("select", { value: localSettings.language, onChange: (e) => setLocalSettings(Object.assign(Object.assign({}, localSettings), { language: e.target.value })), children: [(0, jsx_runtime_1.jsx)("option", { value: "ja", children: "\u65E5\u672C\u8A9E" }), (0, jsx_runtime_1.jsx)("option", { value: "en", children: "English" })] })] }), (0, jsx_runtime_1.jsxs)("div", { className: "settings-dialog-buttons", children: [(0, jsx_runtime_1.jsx)("button", { onClick: onClose, className: "cancel", children: "\u30AD\u30E3\u30F3\u30BB\u30EB" }), (0, jsx_runtime_1.jsx)("button", { onClick: handleSave, className: "save", children: "\u4FDD\u5B58" })] })] })] }));
+    return ((0, jsx_runtime_1.jsx)("div", { className: "settings-dialog-overlay", onClick: onClose, children: (0, jsx_runtime_1.jsxs)("div", { className: "settings-dialog", onClick: e => e.stopPropagation(), children: [(0, jsx_runtime_1.jsx)("h2", { children: "\u74B0\u5883\u8A2D\u5B9A" }), (0, jsx_runtime_1.jsxs)("form", { ref: formRef, onSubmit: handleSubmit, children: [(0, jsx_runtime_1.jsx)("div", { className: "settings-group", children: (0, jsx_runtime_1.jsxs)("label", { children: ["\u8868\u793A\u30E2\u30FC\u30C9", (0, jsx_runtime_1.jsx)("select", { name: "darkMode", defaultValue: settings.darkMode.toString(), children: DISPLAY_MODES.map(mode => ((0, jsx_runtime_1.jsx)("option", { value: mode.value, children: mode.label }, mode.value))) })] }) }), (0, jsx_runtime_1.jsx)("div", { className: "settings-group", children: (0, jsx_runtime_1.jsxs)("label", { children: ["\u8868\u793A\u8A00\u8A9E", (0, jsx_runtime_1.jsx)("select", { name: "language", defaultValue: settings.language, children: LANGUAGES.map(lang => ((0, jsx_runtime_1.jsx)("option", { value: lang.value, children: lang.label }, lang.value))) })] }) }), (0, jsx_runtime_1.jsx)("div", { className: "settings-group", children: (0, jsx_runtime_1.jsxs)("label", { children: ["\u30BF\u30A4\u30E0\u30BE\u30FC\u30F3", (0, jsx_runtime_1.jsx)("select", { name: "timezone", defaultValue: settings.timezone, children: TIMEZONES.map(tz => ((0, jsx_runtime_1.jsx)("option", { value: tz.value, children: tz.label }, tz.value))) })] }) }), (0, jsx_runtime_1.jsx)("div", { className: "settings-group", children: (0, jsx_runtime_1.jsxs)("label", { children: ["Agent\u30A2\u30C9\u30EC\u30B9", (0, jsx_runtime_1.jsx)("input", { type: "text", name: "endpoint", defaultValue: settings.endpoint, placeholder: "http://localhost:4111" })] }) }), (0, jsx_runtime_1.jsx)("div", { className: "settings-group", children: (0, jsx_runtime_1.jsxs)("label", { children: ["Agent\u540D", (0, jsx_runtime_1.jsx)("input", { type: "text", name: "agent", defaultValue: settings.agent, placeholder: "xibo" })] }) }), (0, jsx_runtime_1.jsx)("div", { className: "settings-group", children: (0, jsx_runtime_1.jsxs)("label", { children: ["\u30C7\u30D5\u30A9\u30EB\u30C8\u7BA1\u7406\u8005", (0, jsx_runtime_1.jsx)("input", { type: "text", name: "defaultAdmin", defaultValue: settings.defaultAdmin, placeholder: "captain" })] }) }), (0, jsx_runtime_1.jsx)("div", { className: "settings-group", children: (0, jsx_runtime_1.jsxs)("label", { children: ["\u30C7\u30D5\u30A9\u30EB\u30C8\u30D1\u30B9\u30EF\u30FC\u30C9", (0, jsx_runtime_1.jsx)("input", { type: "password", name: "defaultPassword", defaultValue: settings.defaultPassword, placeholder: "administrator" })] }) }), (0, jsx_runtime_1.jsxs)("div", { className: "settings-dialog-buttons", children: [(0, jsx_runtime_1.jsx)("button", { type: "button", onClick: onClose, children: "\u30AD\u30E3\u30F3\u30BB\u30EB" }), (0, jsx_runtime_1.jsx)("button", { type: "submit", className: "save", children: "\u4FDD\u5B58" })] })] })] }) }));
 };
 exports.SettingsDialog = SettingsDialog;
 
@@ -105155,6 +105325,10 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.SERVER_CONFIG = exports.DEFAULT_SETTINGS = void 0;
 exports.DEFAULT_SETTINGS = {
     endpoint: 'http://localhost:4111',
+    agent: 'xibo',
+    timezone: 'Asia/Tokyo',
+    defaultAdmin: 'captain',
+    defaultPassword: 'administrator',
     darkMode: true,
     language: 'ja'
 };
@@ -105180,9 +105354,7 @@ exports.BUILD_INFO = exports.VERSION = void 0;
 exports.VERSION = '0.8.0';
 // ビルド情報
 exports.BUILD_INFO = {
-    buildTime: new Date().toISOString(),
-    buildHash: ({"NODE_ENV":"development"}).VITE_GIT_HASH || 'unknown',
-    buildNumber: ({"NODE_ENV":"development"}).VITE_BUILD_NUMBER || 'unknown'
+    buildTime: ({"NODE_ENV":"development"}).VITE_BUILD_TIME || new Date().toISOString()
 };
 
 
@@ -105209,12 +105381,13 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.MastraService = void 0;
 const client_js_1 = __webpack_require__(/*! @mastra/client-js */ "./node_modules/@mastra/client-js/dist/index.cjs");
 class MastraService {
-    constructor(endpoint) {
+    constructor(endpoint, agentId, resourceId = 'captain') {
         this.agentClient = null;
         this.memoryClient = null;
-        this.userId = 'captain'; // 将来的にユーザー認証で置き換え
         this.initializationPromise = null;
         this.endpoint = endpoint;
+        this.agentId = agentId;
+        this.resourceId = resourceId;
     }
     initialize() {
         return __awaiter(this, void 0, void 0, function* () {
@@ -105233,30 +105406,18 @@ class MastraService {
                 const client = new client_js_1.MastraClient({
                     baseUrl: this.endpoint
                 });
-                // 利用可能なエージェントの一覧を取得
-                const agents = yield client.getAgents();
-                console.log('Available agents:', Object.entries(agents).map(([id, agent]) => ({
-                    id,
-                    name: agent.name,
-                    provider: agent.provider,
-                    modelId: agent.modelId
-                })));
-                // IDが'xibo'のエージェントを取得
-                const xiboAgentId = 'xibo';
-                if (!agents[xiboAgentId]) {
-                    throw new Error('xibo-agent not found');
-                }
-                this.agentClient = client.getAgent(xiboAgentId);
+                // エージェントクライアントの初期化
+                this.agentClient = client.getAgent(this.agentId);
                 this.memoryClient = client;
-                console.log('Connected to xibo-agent at', this.endpoint);
+                console.log(`Initialized connection to ${this.agentId} at ${this.endpoint}`);
                 return true;
             }
             catch (error) {
-                console.error('Failed to connect to xibo-agent:', error);
+                console.error('Failed to initialize agent client:', error);
                 this.agentClient = null;
                 this.memoryClient = null;
                 this.initializationPromise = null;
-                return false;
+                throw error;
             }
         });
     }
@@ -105266,27 +105427,48 @@ class MastraService {
         this.memoryClient = null;
         this.initializationPromise = null;
     }
+    updateSettings(settings) {
+        let needsReinitialize = false;
+        if (settings.agentId && settings.agentId !== this.agentId) {
+            this.agentId = settings.agentId;
+            needsReinitialize = true;
+        }
+        if (settings.resourceId && settings.resourceId !== this.resourceId) {
+            this.resourceId = settings.resourceId;
+            needsReinitialize = true;
+        }
+        if (needsReinitialize) {
+            this.agentClient = null;
+            this.memoryClient = null;
+            this.initializationPromise = null;
+            // 設定変更後は明示的に初期化を要求
+            this.initialize().catch(error => {
+                console.error('Failed to initialize after settings update:', error);
+                throw error; // エラーを上位に伝播させる
+            });
+        }
+    }
     ensureInitialized() {
         return __awaiter(this, void 0, void 0, function* () {
             if (!this.agentClient || !this.memoryClient) {
-                yield this.initialize();
-            }
-            if (!this.agentClient || !this.memoryClient) {
-                throw new Error('Failed to connect to xibo-agent');
+                const initialized = yield this.initialize();
+                if (!initialized) {
+                    throw new Error(`Failed to connect to agent: ${this.agentId}`);
+                }
             }
         });
     }
-    sendMessage(message, onStreamUpdate) {
+    sendMessage(message, onStreamUpdate, threadId) {
         return __awaiter(this, void 0, void 0, function* () {
             yield this.ensureInitialized();
             try {
                 let fullResponse = '';
-                console.log('Sending message to agent:', { message });
+                console.log('Sending message to agent:', { message, threadId });
                 // streamモードで通信
                 const response = yield this.agentClient.stream({
                     messages: [{ role: 'user', content: message }],
-                    threadId: 'xibo',
-                    resourceId: this.userId
+                    threadId: threadId || this.agentId, // threadIdが指定されていない場合はagentIdを使用
+                    resourceId: this.resourceId
                 });
                 console.log('Stream response received');
                 // ストリームデータを処理
@@ -105305,7 +105487,7 @@ class MastraService {
                 return fullResponse;
             }
             catch (error) {
-                console.error('Error sending message to xibo-agent:', error);
+                console.error('Error sending message to agent:', error);
                 throw error;
             }
         });
@@ -105319,20 +105501,20 @@ class MastraService {
             try {
                 console.log('Getting conversation threads...');
                 const threads = yield this.memoryClient.getMemoryThreads({
-                    resourceId: this.userId,
-                    agentId: 'xibo'
+                    resourceId: this.resourceId,
+                    agentId: this.agentId
                 });
                 console.log('Raw threads from API:', threads);
                 const mappedThreads = yield Promise.all(threads.map((thread) => __awaiter(this, void 0, void 0, function* () {
                     var _a, _b, _c;
                     console.log('Processing thread:', thread);
-                    const threadDetails = yield this.memoryClient.getMemoryThread(thread.id, 'xibo').get();
+                    const threadDetails = yield this.memoryClient.getMemoryThread(thread.id, this.agentId).get();
                     console.log('Thread details:', threadDetails);
                     const messages = threadDetails.messages || [];
                     const lastMessage = messages[messages.length - 1];
                     const metadata = {
-                        userId: this.userId,
-                        agentId: 'xibo',
+                        userId: this.resourceId,
+                        agentId: this.agentId,
                         memoryId: thread.id,
                         messageCount: messages.length,
                         createdAt: ((_a = threadDetails.metadata) === null || _a === void 0 ? void 0 : _a.createdAt) || new Date().toISOString(),
@@ -105375,15 +105557,16 @@ class MastraService {
                         createdAt: new Date().toISOString(),
                         lastUpdated: new Date().toISOString(),
                         messageCount: 0,
-                        userId: this.userId
+                        userId: this.resourceId,
+                        agentId: this.agentId
                     },
-                    resourceId: this.userId,
-                    agentId: 'xibo'
+                    resourceId: this.resourceId,
+                    agentId: this.agentId
                 });
                 console.log('Created thread from API:', thread);
                 const metadata = {
-                    userId: this.userId,
-                    agentId: 'xibo',
+                    userId: this.resourceId,
+                    agentId: this.agentId,
                     memoryId: thread.id,
                     messageCount: 0,
                     createdAt: thread.metadata.createdAt,
@@ -105412,7 +105595,7 @@ class MastraService {
             }
             try {
                 console.log('Deleting conversation thread:', threadId);
-                const thread = this.memoryClient.getMemoryThread(threadId, 'xibo');
+                const thread = this.memoryClient.getMemoryThread(threadId, this.agentId);
                 yield thread.delete();
                 console.log('Successfully deleted thread:', threadId);
             }
@@ -105441,11 +105624,11 @@ class MastraService {
                             createdAt: timestamp,
                             type: 'text'
                         }],
-                    agentId: 'xibo'
+                    agentId: this.agentId
                 });
                 console.log('Message saved successfully:', { savedMessage });
                 // スレッドの詳細を取得して新しいタイトルを確認
-                const thread = this.memoryClient.getMemoryThread(threadId, 'xibo');
+                const thread = this.memoryClient.getMemoryThread(threadId, this.agentId);
                 const details = yield thread.get();
                 console.log('Thread details after save:', details);
                 // タイトルが更新されている場合は、コールバックを呼び出す
@@ -105467,11 +105650,11 @@ class MastraService {
                 yield this.initialize();
             }
             try {
-                const thread = this.memoryClient.getMemoryThread(threadId, 'xibo');
+                const thread = this.memoryClient.getMemoryThread(threadId, this.agentId);
                 const updated = yield thread.update({
                     title,
                     metadata: { status: "active" },
-                    resourceId: this.userId
+                    resourceId: this.resourceId
                 });
                 console.log('Updated thread:', updated);
             }
@@ -105490,7 +105673,7 @@ class MastraService {
             try {
                 console.log('Getting messages for thread:', threadId);
                 // 直接APIを呼び出してメッセージを取得
-                const response = yield fetch(`${this.endpoint}/api/memory/threads/${threadId}/messages?agentId=xibo`);
+                const response = yield fetch(`${this.endpoint}/api/memory/threads/${threadId}/messages?agentId=${this.agentId}`);
                 if (!response.ok) {
                     throw new Error(`Failed to fetch messages: ${response.statusText}`);
                 }
@@ -105523,7 +105706,7 @@ class MastraService {
             var _a, _b;
             console.log('Getting conversation thread:', threadId);
             try {
-                const thread = yield this.memoryClient.getMemoryThread(threadId, 'xibo');
+                const thread = yield this.memoryClient.getMemoryThread(threadId, this.agentId);
                 console.log('Thread object:', thread);
                 const details = yield thread.get();
                 console.log('Raw thread data:', details);
@@ -105535,8 +105718,8 @@ class MastraService {
                     title: details.title || '新しい会話',
                     messages: messages,
                     metadata: {
-                        userId: this.userId,
-                        agentId: 'xibo',
+                        userId: this.resourceId,
+                        agentId: this.agentId,
                         memoryId: details.id,
                         messageCount: messages.length,
                         createdAt: ((_a = details.metadata) === null || _a === void 0 ? void 0 : _a.createdAt) || new Date().toISOString(),
@@ -105560,7 +105743,7 @@ class MastraService {
             }
             try {
                 const response = yield this.memoryClient.generateResponse({
-                    agentId: 'xibo',
+                    agentId: this.agentId,
                     threadId,
                     message: content
                 });
@@ -105574,6 +105757,74 @@ class MastraService {
     }
 }
 exports.MastraService = MastraService;
+
+
+/***/ }),
+
+/***/ "./src/utils/index.ts":
+/*!****************************!*\
+  !*** ./src/utils/index.ts ***!
+  \****************************/
+/***/ ((__unused_webpack_module, exports) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.setLocalStorage = exports.getLocalStorage = exports.createMessage = exports.createConversation = exports.getCurrentTimestamp = exports.generateId = void 0;
+const generateId = () => {
+    return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+};
+exports.generateId = generateId;
+const getCurrentTimestamp = () => {
+    return Date.now();
+};
+exports.getCurrentTimestamp = getCurrentTimestamp;
+const createConversation = (title = '新しい会話', agentId = 'xibo') => {
+    const now = new Date().toISOString();
+    const metadata = {
+        userId: 'captain',
+        agentId,
+        messageCount: 0,
+        createdAt: now,
+        lastUpdated: now
+    };
+    return {
+        id: crypto.randomUUID(),
+        title,
+        messages: [],
+        metadata
+    };
+};
+exports.createConversation = createConversation;
+const createMessage = (content, role) => {
+    return {
+        id: crypto.randomUUID(),
+        role,
+        content,
+        timestamp: new Date().toISOString()
+    };
+};
+exports.createMessage = createMessage;
+const getLocalStorage = (key, defaultValue) => {
+    try {
+        const item = window.localStorage.getItem(key);
+        return item ? JSON.parse(item) : defaultValue;
+    }
+    catch (error) {
+        console.error('Error reading from localStorage:', error);
+        return defaultValue;
+    }
+};
+exports.getLocalStorage = getLocalStorage;
+const setLocalStorage = (key, value) => {
+    try {
+        window.localStorage.setItem(key, JSON.stringify(value));
+    }
+    catch (error) {
+        console.error('Error writing to localStorage:', error);
+    }
+};
+exports.setLocalStorage = setLocalStorage;
 
 
 /***/ })
