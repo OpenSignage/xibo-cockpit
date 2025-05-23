@@ -2,6 +2,10 @@ import { UserSettings } from '../types';
 
 export const DEFAULT_SETTINGS: UserSettings = {
   endpoint: 'http://localhost:4111',
+  agent: 'xibo',
+  timezone: 'Asia/Tokyo',
+  defaultAdmin: 'captain',
+  defaultPassword: 'administrator',
   darkMode: true,
   language: 'ja'
 };
